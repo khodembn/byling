@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Payment" ADD COLUMN     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ADD COLUMN     "rejectReason" TEXT,
+ADD COLUMN     "reviewedAt" TIMESTAMP(3);

@@ -1,0 +1,321 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+ 
+}
+
+// ENUMS
+
+enum UserRole {
+  RESIDENT
+  PURCHASE_MANAGER
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  AWAITING_PAYMENT
+  PURCHASING
+  READY_FOR_DELIVERY
+  COMPLETED
+  CANCELLED
+}
+
+enum CampaignProductStatus {
+  OPEN
+  THRESHOLD_REACHED
+  AWAITING_PAYMENT
+  REOPEN_THRESHOLD
+  PURCHASING
+  COMPLETED
+  CANCELLED
+}
+
+enum OrderStatus {
+  CART
+  SUBMITTED
+  INITIAL_INVOICED
+  PAID
+  FINAL_INVOICED
+  READY_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum NotificationType {
+  THRESHOLD_REACHED
+  PAYMENT_REQUEST
+  PAYMENT_APPROVED
+  PAYMENT_REJECTED
+  REOPEN_THRESHOLD
+  DELIVERY_READY
+  GENERAL
+}
+
+enum InvoiceType {
+  INITIAL
+  FINAL
+}
+
+enum ProductUnit {
+  PIECE
+  KG
+  GRAM
+  LITER
+  PACK
+}
+
+// BUILDING
+
+model Building {
+  buildingId   Int    @id @default(autoincrement())
+  buildingName String
+  postalCode   String @unique
+  address      String
+
+  users     User[]
+  campaigns Campaign[]
+}
+
+// USER
+
+model User {
+  userId   Int    @id @default(autoincrement())
+  fullName String
+  mobile   String @unique
+  password String
+
+  unitNumber  String?
+
+  floorNumber String?
+
+  email String?
+
+  role  UserRole
+
+  isDeleted Boolean @default(false)
+
+  deletedAt DateTime?
+
+  buildingId Int
+
+  building   Building @relation(fields: [buildingId], references: [buildingId])
+
+  orders        UserOrder[]
+  
+  notifications Notification[]
+
+  managedCampaigns Campaign[] @relation("CampaignManager")
+}
+
+// CAMPAIGN
+
+model Campaign {
+  campaignId Int @id @default(autoincrement())
+
+  title  String
+  status CampaignStatus
+
+  createdAt DateTime @default(now())
+
+  paymentDeadline DateTime?
+paymentCardNumber String?
+paymentCardHolder String?
+paymentMessage    String?
+
+reopenedCount Int @default(0)
+completedAt DateTime?
+
+  buildingId    Int
+  managerUserId Int
+
+  building Building @relation(fields: [buildingId], references: [buildingId])
+
+  manager User @relation("CampaignManager", fields: [managerUserId], references: [userId])
+
+  campaignProducts CampaignProduct[]
+  orders           UserOrder[]
+  announcements    Announcement[]
+}
+
+// PRODUCT
+
+model Product {
+  productId Int @id @default(autoincrement())
+
+  productName String 
+
+  slug String @unique
+
+  unit ProductUnit
+
+  weightPerUnit Int
+
+  imageUrl String?
+
+  description String?
+
+  isActive Boolean @default(true)
+
+  campaignProducts CampaignProduct[]
+}
+
+// CAMPAIGN PRODUCT
+
+model CampaignProduct {
+  campaignProductId Int @id @default(autoincrement())
+
+  marketPriceSnapshot Decimal @db.Decimal(12, 2)
+
+  bulkPrice Decimal @db.Decimal(12, 2)
+  shippingCost Decimal? @db.Decimal(12,2)
+  thresholdQuantity Int
+
+  currentQuantity Int @default(0)
+
+  confirmedQuantity Int @default(0)
+
+  status CampaignProductStatus
+
+  campaignId Int
+  productId  Int
+
+  campaign Campaign @relation(fields: [campaignId], references: [campaignId])
+
+  product Product @relation(fields: [productId], references: [productId])
+
+  orderItems OrderItem[]
+}
+
+// USER ORDER
+
+model UserOrder {
+  userOrderId Int @id @default(autoincrement())
+
+  status    OrderStatus
+  createdAt DateTime    @default(now())
+
+  userId     Int
+  campaignId Int
+
+  user     User     @relation(fields: [userId], references: [userId])
+  campaign Campaign @relation(fields: [campaignId], references: [campaignId])
+
+  orderItems OrderItem[]
+
+  payment Payment?
+  invoice Invoice?
+}
+
+// ORDER ITEM
+
+model OrderItem {
+  orderItemId Int @id @default(autoincrement())
+
+  quantity Int
+
+  unitPriceSnapshot Decimal @db.Decimal(12, 2)
+
+  createdAt DateTime @default(now())
+
+  campaignProductId Int
+  userOrderId       Int
+
+  campaignProduct CampaignProduct @relation(fields: [campaignProductId], references: [campaignProductId])
+
+  userOrder UserOrder @relation(fields: [userOrderId], references: [userOrderId])
+}
+
+// PAYMENT
+
+model Payment {
+  paymentId Int @id @default(autoincrement())
+
+  amount Decimal @db.Decimal(12, 2)
+
+  paymentStatus PaymentStatus
+
+  paidAt DateTime?
+
+
+  transactionRef String
+
+  receiptImage String?
+
+   reviewedAt DateTime?
+  rejectReason String?
+  createdAt DateTime @default(now())
+
+  userOrderId Int @unique
+
+  userOrder UserOrder @relation(fields: [userOrderId], references: [userOrderId])
+}
+
+// INVOICE
+
+model Invoice {
+  invoiceId Int @id @default(autoincrement())
+
+  productCost Decimal @db.Decimal(12, 2)
+
+  shippingCost Decimal @db.Decimal(12, 2)
+
+  commissionCost Decimal @db.Decimal(12, 2)
+
+  savingAmount Decimal @db.Decimal(12, 2)
+
+  finalAmount Decimal @db.Decimal(12, 2)
+
+  invoiceType InvoiceType
+
+  createdAt DateTime @default(now())
+
+  userOrderId Int @unique
+
+  userOrder UserOrder @relation(fields: [userOrderId], references: [userOrderId])
+}
+
+// NOTIFICATION
+
+model Notification {
+  notificationId Int @id @default(autoincrement())
+
+  title String
+
+  message String
+
+  type NotificationType
+
+  isRead Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  userId Int
+
+  user User @relation(fields: [userId], references: [userId])
+}
+
+// ANNOUNCEMENT
+
+model Announcement {
+  announcementId Int @id @default(autoincrement())
+
+  title String
+
+  message String
+
+  createdAt DateTime @default(now())
+
+  campaignId Int
+
+  campaign Campaign @relation(fields: [campaignId], references: [campaignId])
+}
