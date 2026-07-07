@@ -1,7 +1,7 @@
 
 import { useState } from "react";
-import api from "../api/axios";
-import "../styles/login.css";
+import api from "../../api/axios";
+import "../../styles/login.css";
 import { Link } from "react-router-dom";
 
 
@@ -20,7 +20,6 @@ export default function Login() {
 
      // console.log("LOGIN SUCCESS:", res.data);
 
-   
       localStorage.setItem("token", res.data.token);
       window.location.href = "/";
 
@@ -65,10 +64,10 @@ export default function Login() {
         </div>
 
         <div className="login-footer">
-         با ورود به سامانه، قوانین و شرایط استفاده از سامانه را می‌پذیرم
+        با ورود به سامانه، قوانین و شرایط استفاده از سامانه را می‌پذیرم
         </div>
         <div className="top-message">
-           هنوز ثبت نام نکرده‌اید؟
+          هنوز ثبت نام نکرده‌اید؟
     <Link to="/register"> ثبت نام کنید </Link>
 
     </div>

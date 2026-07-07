@@ -7,10 +7,9 @@ function App() {
 export default App;*/
 import { Routes, Route } from "react-router-dom";
 
-import Home from "./pages/home";
-import Register from "./pages/Register";
-import Login from "./pages/login";
-
+import Home from "./pages/shared/home";
+import Register from "./pages/auth/Register";
+import Login from "./pages/auth/Login";
 function App() {
   return (
     <Routes>

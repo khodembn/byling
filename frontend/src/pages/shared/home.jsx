@@ -1,5 +1,5 @@
-import "../styles/home.css";
-import heroImage from "../images/hero.png";
+import "../../styles/home.css";
+import heroImage from "../../assets/images/hero.png";
 import { Link } from "react-router-dom";
 
 
