@@ -1,0 +1,63 @@
+.dashboard-section{
+
+    background:#173853;
+
+    border-radius:24px;
+
+    padding:30px;
+
+    margin-bottom:30px;
+}
+
+.dashboard-section h3{
+
+    color:#FFD54F;
+
+    margin-bottom:25px;
+
+    font-size:22px;
+}
+
+.dashboard-section h2{
+
+    color:#FFD54F;
+
+    margin-bottom:20px;
+
+    font-size:20px;
+}
+
+.dashboard-section table{
+
+    width:100%;
+
+    border-collapse:collapse;
+}
+
+.dashboard-section th{
+
+    color:#FFD54F;
+
+    padding:12px;
+
+    text-align:right;
+}
+
+.dashboard-section td{
+
+    padding:12px;
+
+    border-top:1px solid rgba(255,255,255,.08);
+}
+
+.dashboard-section ul{
+
+    list-style:none;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+}
+

@@ -1,5 +1,7 @@
 
 import { useState } from "react";
+import { useAuth } from "../../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 import api from "../../api/axios";
 import "../../styles/login.css";
 import { Link } from "react-router-dom";
@@ -10,18 +12,23 @@ export default function Login() {
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
-      const res = await api.post("/auth/login", {
-        mobile,
-        password,
-      });
+    const res = await api.post("/auth/login", {
+    mobile,
+    password,
+});
 
-     // console.log("LOGIN SUCCESS:", res.data);
+    login(res.data.token, res.data.user);
 
-      localStorage.setItem("token", res.data.token);
-      window.location.href = "/";
+    if (res.data.user.role === "PURCHASE_MANAGER") {
+      navigate("/purchase/dashboard");
+    }  else {
+      navigate("/resident/dashboard");
+    }
 
     } catch (err) {
       setMessage(err.response?.data?.message || "خطا در ورود");

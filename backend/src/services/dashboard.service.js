@@ -709,6 +709,8 @@ return {
 
   },
 
+  quickActions,
+
   activeCampaign:
 
     activeCampaign
