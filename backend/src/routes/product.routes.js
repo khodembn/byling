@@ -7,6 +7,7 @@ import {
   getProductById,
 } from "../controllers/product.controller.js";
 
+import productUpload from "../middlewares/productUpload.middleware.js";
 const router = express.Router();
 
 
@@ -14,6 +15,7 @@ router.post(
   "/",
   authMiddleware,
   roleMiddleware("PURCHASE_MANAGER"),
+  productUpload.single("image"),
   createProduct
 );
 

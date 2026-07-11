@@ -12,8 +12,6 @@ import path from "path";
 import paymentRoutes from "./routes/payment.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 
-
-
 const app = express();
 app.use(cors({
   origin: "http://localhost:5173",
@@ -37,10 +35,10 @@ app.use("/api/campaign", campaignRoutes);
 app.use("/api/product", productRoutes);
 app.use("/api/campaign-product", campaignProductRoutes);
 app.use("/api/order", orderRoutes);
-app.use("/api/notifications",notificationRoutes);
-app.use("/uploads",express.static(path.resolve("uploads")));
+app.use("/api/notifications", notificationRoutes);
+app.use("/uploads", express.static(path.resolve("uploads")));
 app.use("/api/payment", paymentRoutes);
-app.use("/api/dashboard",dashboardRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 
 export default app;

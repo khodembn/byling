@@ -6,9 +6,21 @@ import Register from "./pages/auth/Register";
 
 import ResidentDashboard from "./pages/resident/Dashboard";
 import PurchaseDashboard from "./pages/purchaseManager/Dashboard";
+import Campaigns from "./pages/purchaseManager/Campaigns";
+import CreateCampaign from "./pages/purchaseManager/CreateCampaign";
+import CampaignDetails from "./pages/purchaseManager/CampaignDetails";
+import CampaignView from "./pages/purchaseManager/CampaignView";
 
 import ResidentLayout from "./layouts/ResidentLayout";
 import PurchaseManagerLayout from "./layouts/PurchaseManagerLayout";
+import ResidentCampaigns from "./pages/resident/Campaigns";
+import ResidentCampaignView from "./pages/resident/ResidentCampaignView";
+import ResidentCart from "./pages/resident/ResidentCart";
+import ResidentOrders from "./pages/resident/ResidentOrders";
+import PaymentPage from "./pages/resident/PaymentPage";
+import ResidentPayments from "./pages/resident/ResidentPayments";
+import ResidentNotifications from "./pages/resident/ResidentNotifications";
+
 
 import PrivateRoute from "./routes/privateRoutes";
 import RoleRoute from "./routes/RoleRoute";
@@ -38,6 +50,54 @@ function App() {
           path="/resident/dashboard"
           element={<ResidentDashboard />}
         />
+
+        <Route
+          path="/resident/campaigns"
+          element={<ResidentCampaigns />}
+        />
+
+        <Route
+          path="/resident/campaign/:id"
+          element={<ResidentCampaignView />}
+        />
+
+        <Route
+
+          path="/resident/cart/:campaignId"
+
+          element={<ResidentCart />}
+
+        />
+
+        <Route
+          path="/resident/cart"
+          element={<ResidentCart />}
+        />
+
+        <Route
+          path="/resident/orders"
+          element={<ResidentOrders />}
+        />
+
+
+        <Route
+
+          path="/resident/payment/:orderId"
+
+          element={<PaymentPage />}
+
+        />
+
+        <Route
+          path="/resident/payments"
+          element={<ResidentPayments />}
+        />
+
+        <Route
+          path="/resident/notifications"
+          element={<ResidentNotifications />}
+        />
+
       </Route>
 
       {/* Purchase Manager */}
@@ -56,6 +116,28 @@ function App() {
           element={<PurchaseDashboard />}
         />
       </Route>
+
+      <Route
+        path="/purchase/campaigns"
+        element={<Campaigns />}
+      />
+
+      <Route
+        path="/purchase/campaign/create"
+        element={<CreateCampaign />}
+      />
+
+      <Route
+        path="/purchase/campaign/:id"
+        element={<CampaignDetails />}
+      />
+      <Route
+
+        path="/purchase/campaign/:id/view"
+
+        element={<CampaignView />}
+
+      />
 
     </Routes>
   );

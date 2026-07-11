@@ -9,7 +9,7 @@ export default function Navbar() {
     <header className="navbar-dashboard">
 
       <div>
-    سلام {user?.fullName || "کاربر"}
+        سلام {user?.fullName || "کاربر"}
       </div>
 
       <div>

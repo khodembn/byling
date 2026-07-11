@@ -30,7 +30,7 @@ export const calculateInvoice = (order) => {
     const shippingPerUnit =
       item.campaignProduct.thresholdQuantity > 0
         ? Number(item.campaignProduct.shippingCost ?? 0) /
-          item.campaignProduct.thresholdQuantity
+        item.campaignProduct.thresholdQuantity
         : 0;
 
     const shipping =
@@ -50,6 +50,9 @@ export const calculateInvoice = (order) => {
 
       productName:
         item.campaignProduct.product.productName,
+
+      imageUrl:
+        item.campaignProduct.product.imageUrl,
 
       quantity:
         item.quantity,

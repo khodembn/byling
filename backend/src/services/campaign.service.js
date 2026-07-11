@@ -37,6 +37,50 @@ export const createCampaign = async (
 
 
 
+export const getResidentCampaigns = async (userId) => {
+  // پیدا کردن ساختمان ساکن
+  const user = await prisma.user.findUnique({
+    where: {
+      userId,
+    },
+    select: {
+      buildingId: true,
+    },
+  });
+
+  if (!user) {
+    throw new Error("کاربر پیدا نشد.");
+  }
+
+  // دریافت کمپین‌های ساختمان
+  const campaigns = await prisma.campaign.findMany({
+    where: {
+      buildingId: user.buildingId,
+      status: {
+        in: [
+          "ACTIVE",
+          "AWAITING_PAYMENT",
+          "PURCHASING",
+          "READY_FOR_DELIVERY",
+        ],
+      },
+    },
+    include: {
+      manager: {
+        select: {
+          fullName: true,
+          mobile: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return campaigns;
+};
+
 export const getAllCampaigns = async () => {
   return await prisma.campaign.findMany({
     include: {
@@ -58,11 +102,10 @@ export const getAllCampaigns = async () => {
   });
 };
 
-export const getCampaignById = async (campaignId) => {
+export const getCampaignById = async (campaignId, user) => {
   const campaign = await prisma.campaign.findUnique({
     where: {
       campaignId,
-      user
     },
 
     include: {
@@ -81,13 +124,13 @@ export const getCampaignById = async (campaignId) => {
     throw new Error("کمپین پیدا نشد");
   }
 
-    if (campaign.buildingId !== user.buildingId) {
+  // بررسی دسترسی
+  if (campaign.buildingId !== user.buildingId) {
     throw new Error("دسترسی ندارید");
-}
+  }
 
   return campaign;
 };
-
 export const getMyCampaigns = async (user) => {
   return await prisma.campaign.findMany({
     where: {
@@ -118,7 +161,7 @@ export const getCampaignProducts = async (campaignId, user) => {
     throw new Error("کمپین پیدا نشد");
   }
 
-  
+
   if (campaign.buildingId !== user.buildingId) {
     throw new Error("دسترسی ندارید");
   }
@@ -140,9 +183,9 @@ export const getCampaignProducts = async (campaignId, user) => {
     bulkPrice: Number(p.bulkPrice),
     shippingCost: Number(p.shippingCost ?? 0),
 
-    saving: 
-    Number(p.marketPriceSnapshot) -
-    Number(p.bulkPrice),
+    saving:
+      Number(p.marketPriceSnapshot) -
+      Number(p.bulkPrice),
 
     savingPercent:
       ((Number(p.marketPriceSnapshot) -
@@ -475,12 +518,12 @@ export const cancelUnpaidOrders = async (
     );
 
   });
-  
+
   if (unpaidOrders.length === 0) {
-  throw new Error(
-    "هیچ سفارش پرداخت‌ نشده‌ای برای لغو وجود ندارد."
-  );
-}
+    throw new Error(
+      "هیچ سفارش پرداخت‌ نشده‌ای برای لغو وجود ندارد."
+    );
+  }
   await prisma.$transaction(async (tx) => {
 
     for (const order of unpaidOrders) {
@@ -496,8 +539,8 @@ export const cancelUnpaidOrders = async (
         },
 
       });
-      
- 
+
+
       if (
         order.payment &&
         order.payment.paymentStatus === "PENDING"
@@ -589,7 +632,7 @@ export const cancelUnpaidOrders = async (
       missingQuantity: Math.max(
         0,
         product.thresholdQuantity -
-          product.currentQuantity
+        product.currentQuantity
       ),
 
       thresholdReached:
@@ -654,84 +697,84 @@ export const reopenCampaign = async (
       "کمپین قابل بازگشایی نیست."
     );
   }
-await prisma.$transaction(async (tx) => {
+  await prisma.$transaction(async (tx) => {
 
-  // فعال شدن دوباره کمپین
-  await tx.campaign.update({
+    // فعال شدن دوباره کمپین
+    await tx.campaign.update({
 
-    where: {
-      campaignId: campaign.campaignId,
-    },
-
-    data: {
-
-      status: "ACTIVE",
-
-      paymentDeadline: new Date(paymentDeadline),
-
-      reopenedCount: {
-        increment: 1,
+      where: {
+        campaignId: campaign.campaignId,
       },
 
-    },
+      data: {
 
-  });
+        status: "ACTIVE",
 
-  // فقط محصولاتی که حد نصابشان از بین رفته
-  // دوباره OPEN می‌شوند.
-  // بقیه چون هنوز AWAITING_PAYMENT هستند
-  // اصلاً آپدیت نمی‌شوند.
+        paymentDeadline: new Date(paymentDeadline),
 
-  for (const product of campaign.campaignProducts) {
-
-    if (
-      product.currentQuantity <
-      product.thresholdQuantity
-    ) {
-
-      await tx.campaignProduct.update({
-
-        where: {
-          campaignProductId:
-            product.campaignProductId,
+        reopenedCount: {
+          increment: 1,
         },
 
-        data: {
+      },
 
-          status: "OPEN",
+    });
 
-        },
+    // فقط محصولاتی که حد نصابشان از بین رفته
+    // دوباره OPEN می‌شوند.
+    // بقیه چون هنوز AWAITING_PAYMENT هستند
+    // اصلاً آپدیت نمی‌شوند.
 
-      });
+    for (const product of campaign.campaignProducts) {
+
+      if (
+        product.currentQuantity <
+        product.thresholdQuantity
+      ) {
+
+        await tx.campaignProduct.update({
+
+          where: {
+            campaignProductId:
+              product.campaignProductId,
+          },
+
+          data: {
+
+            status: "OPEN",
+
+          },
+
+        });
+
+      }
 
     }
 
+  });
+  for (const resident of campaign.building.users) {
+
+    await createNotification({
+
+      userId: resident.userId,
+
+      title: "بازگشایی کمپین",
+
+      message,
+
+      type: "REOPEN_THRESHOLD",
+
+    });
+
   }
 
-});
-for (const resident of campaign.building.users) {
+  return {
 
-  await createNotification({
+    success: true,
 
-    userId: resident.userId,
+    message: "کمپین با موفقیت دوباره فعال شد.",
 
-    title: "بازگشایی کمپین",
-
-    message,
-
-    type: "REOPEN_THRESHOLD",
-
-  });
-
-}
-
-return {
-
-  success: true,
-
-  message: "کمپین با موفقیت دوباره فعال شد.",
-
-};
+  };
 };
 export const checkPurchasing = async (
   user,
@@ -783,7 +826,7 @@ export const checkPurchasing = async (
       (order) =>
 
         order.status !== "CART" &&
-        order.status !== "PAID"&&
+        order.status !== "PAID" &&
         order.status !== "CANCELLED"
 
     );

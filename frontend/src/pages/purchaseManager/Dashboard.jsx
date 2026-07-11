@@ -14,20 +14,20 @@ export default function PurchaseManagerDashboard() {
 
 
 
-useEffect(() => {
-  async function fetchDashboard() {
-    try {
-      const data = await getPurchaseDashboard();
-      setDashboard(data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    async function fetchDashboard() {
+      try {
+        const data = await getPurchaseDashboard();
+        setDashboard(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
     }
-  }
 
-  fetchDashboard();
-}, []);
+    fetchDashboard();
+  }, []);
 
   if (loading) {
     return <h2>در حال بارگذاری...</h2>;
@@ -49,8 +49,8 @@ useEffect(() => {
           <DashboardCard
             title="ساکنین فعال"
             value={dashboard.buildingStatus.activeResidents}
-             icon="👥"
-             color="#78C26D"
+            icon="👥"
+            color="#78C26D"
           />
 
           <DashboardCard
@@ -104,41 +104,41 @@ useEffect(() => {
 
       <DashboardSection title="عملیات سریع">
 
-  <div className="quick-actions">
+        <div className="quick-actions">
 
-    {dashboard.quickActions.createCampaign && (
-      <button>
-        ایجاد کمپین جدید
-      </button>
-    )}
+          {dashboard.quickActions.createCampaign && (
+            <button>
+              ایجاد کمپین جدید
+            </button>
+          )}
 
-    {dashboard.quickActions.checkPayments && (
-      <button>
-        بررسی پرداخت‌ها
-      </button>
-    )}
+          {dashboard.quickActions.checkPayments && (
+            <button>
+              بررسی پرداخت‌ها
+            </button>
+          )}
 
-    {dashboard.quickActions.startPurchasing && (
-      <button>
-        شروع خرید عمده
-      </button>
-    )}
+          {dashboard.quickActions.startPurchasing && (
+            <button>
+              شروع خرید عمده
+            </button>
+          )}
 
-    {dashboard.quickActions.readyForDelivery && (
-      <button>
-        آماده‌سازی تحویل
-      </button>
-    )}
+          {dashboard.quickActions.readyForDelivery && (
+            <button>
+              آماده‌سازی تحویل
+            </button>
+          )}
 
-    {dashboard.quickActions.deliverOrders && (
-      <button>
-        ثبت تحویل سفارش‌ها
-      </button>
-    )}
+          {dashboard.quickActions.deliverOrders && (
+            <button>
+              ثبت تحویل سفارش‌ها
+            </button>
+          )}
 
-  </div>
+        </div>
 
-</DashboardSection>
+      </DashboardSection>
 
       {/* اقدامات */}
       <DashboardSection title="اقدامات">
@@ -190,7 +190,7 @@ useEffect(() => {
 
           <tbody>
             {dashboard.latestOrders.map((order, index) => (
-            <tr key={`${order.userId}-${order.campaignTitle}-${index}`}>
+              <tr key={`${order.userId}-${order.campaignTitle}-${index}`}>
                 <td>{order.fullName}</td>
                 <td>{order.campaignTitle}</td>
                 <td>{order.status}</td>
@@ -214,7 +214,7 @@ useEffect(() => {
 
           <tbody>
             {dashboard.latestPayments.map((payment, index) => (
-            <tr key={`${payment.userId}-${payment.campaignTitle}-${index}`}>
+              <tr key={`${payment.userId}-${payment.campaignTitle}-${index}`}>
                 <td>{payment.fullName}</td>
                 <td>{payment.campaignTitle}</td>
                 <td>{payment.amount}</td>

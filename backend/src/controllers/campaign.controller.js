@@ -54,6 +54,22 @@ export const getCampaignById = async (req, res) => {
   }
 };
 
+export const getResidentCampaigns = async (req, res) => {
+  try {
+    const result = await campaignService.getResidentCampaigns(req.user.userId);
+
+    res.json({
+      success: true,
+      campaigns: result,
+    });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
 export const getMyCampaigns = async (req, res) => {
   try {
     const result =
@@ -127,42 +143,42 @@ export const requestPayment = async (
 };
 
 export const updatePaymentInfo =
-async (req, res, next) => {
+  async (req, res, next) => {
 
-  try {
+    try {
 
-    const campaign =
-      await campaignService.updatePaymentInfo(
+      const campaign =
+        await campaignService.updatePaymentInfo(
 
-        req.params.campaignId,
+          req.params.campaignId,
 
-        req.user,
+          req.user,
 
-        req.body
+          req.body
 
-      );
+        );
 
-    res.status(200).json({
+      res.status(200).json({
 
-      success: true,
+        success: true,
 
-      message:
-        "اطلاعات پرداخت ذخیره شد.",
+        message:
+          "اطلاعات پرداخت ذخیره شد.",
 
-      data: campaign,
+        data: campaign,
 
-    });
+      });
 
-  }
+    }
 
- catch (err) {
-    res.status(400).json({
-      success: false,
-      message: err.message,
-    });
-  }
+    catch (err) {
+      res.status(400).json({
+        success: false,
+        message: err.message,
+      });
+    }
 
-};
+  };
 export const cancelUnpaidOrders = async (
   req,
   res
@@ -233,40 +249,40 @@ export const reopenCampaign = async (
 
 };
 export const checkPurchasingController =
-async (req, res) => {
+  async (req, res) => {
 
-  try {
+    try {
 
-    const result =
-      await campaignService.checkPurchasing(
+      const result =
+        await campaignService.checkPurchasing(
 
-        req.user,
+          req.user,
 
-        req.params.campaignId
+          req.params.campaignId
 
-      );
+        );
 
-    res.json({
+      res.json({
 
-      success: true,
+        success: true,
 
-      data: result,
+        data: result,
 
-    });
+      });
 
-  } catch (err) {
+    } catch (err) {
 
-    res.status(400).json({
+      res.status(400).json({
 
-      success: false,
+        success: false,
 
-      message: err.message,
+        message: err.message,
 
-    });
+      });
 
-  }
+    }
 
-};
+  };
 
 export const startPurchasing = async (
   req,
@@ -288,7 +304,7 @@ export const startPurchasing = async (
 
     res.json(result);
 
-  }  catch (err) {
+  } catch (err) {
     res.status(400).json({
       success: false,
       message: err.message,
@@ -316,7 +332,7 @@ export const readyForDelivery = async (
 
     res.json(result);
 
-  } 
+  }
   catch (err) {
     res.status(400).json({
       success: false,
@@ -348,8 +364,8 @@ export const completeCampaign = async (
 
     res.json(result);
 
-  } 
-catch (err) {
+  }
+  catch (err) {
     res.status(400).json({
       success: false,
       message: err.message,

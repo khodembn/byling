@@ -5,163 +5,277 @@ import { createInitialInvoice } from "./invoice.service.js";
 
 
 export const createOrUpdateOrder = async (user, data) => {
-const { campaignId, items } = data;
+  const { campaignId, items } = data;
 
-if (!items || items.length === 0) {
-throw new Error("حداقل یک محصول باید انتخاب شود");
-}
+  if (!items || items.length === 0) {
+    throw new Error("حداقل یک محصول باید انتخاب شود");
+  }
 
-const campaign = await prisma.campaign.findUnique({
-where: { campaignId },
-});
-
-if (!campaign) {
-throw new Error("کمپین پیدا نشد");
-}
-/*if (campaign.status !== "OPEN") {
-  throw new Error(
-    "کمپین در حال حاضر بسته است و امکان ثبت یا ویرایش سفارش وجود ندارد."
-  );
-}*/
-
-if (campaign.buildingId !== user.buildingId) {
-throw new Error("دسترسی ندارید");
-}
-
-let order = await prisma.userOrder.findFirst({
-where: {
-userId: user.userId,
-campaignId,
-status: "CART",
-},
-});
-
-if (!order) {
-order = await prisma.userOrder.create({
-data: {
-userId: user.userId,
-campaignId,
-status: "CART",
-},
-});
-}
-
-for (const item of items) {
-const { campaignProductId, quantity } = item;
-
-
-const campaignProduct =
-  await prisma.campaignProduct.findUnique({
-    where: { campaignProductId },
+  const campaign = await prisma.campaign.findUnique({
+    where: { campaignId },
   });
 
-if (!campaignProduct) {
-  throw new Error(
-    `محصول ${campaignProductId} پیدا نشد`
-  );
-}
+  if (!campaign) {
+    throw new Error("کمپین پیدا نشد");
+  }
+  /*if (campaign.status !== "OPEN") {
+    throw new Error(
+      "کمپین در حال حاضر بسته است و امکان ثبت یا ویرایش سفارش وجود ندارد."
+    );
+  }*/
 
-if (
-  campaignProduct.campaignId !== campaignId
-) {
-  throw new Error(
-    `محصول ${campaignProductId} متعلق به این کمپین نیست`
-  );
+  if (campaign.buildingId !== user.buildingId) {
+    throw new Error("دسترسی ندارید");
+  }
 
-}
-
-if (campaign.status !== "ACTIVE") {
-  throw new Error(
-    "امکان ثبت سفارش در این کمپین وجود ندارد."
-  );
-}
-if (campaignProduct.status !== "OPEN") {
-  throw new Error(
-    `محصول ${campaignProduct.productName ?? campaignProductId} در حال حاضر قابل سفارش نیست.`
-  );
-}
-const existingItem =
-  await prisma.orderItem.findFirst({
+  let order = await prisma.userOrder.findFirst({
     where: {
-      userOrderId: order.userOrderId,
-      campaignProductId,
+      userId: user.userId,
+      campaignId,
+      status: "CART",
     },
   });
 
-if (quantity === 0) {
-  if (existingItem) {
-    await prisma.orderItem.delete({
-      where: {
-        orderItemId:
-          existingItem.orderItemId,
+  if (!order) {
+    order = await prisma.userOrder.create({
+      data: {
+        userId: user.userId,
+        campaignId,
+        status: "CART",
       },
     });
   }
 
-  continue;
-}
+  for (const item of items) {
+    const { campaignProductId, quantity } = item;
 
-if (existingItem) {
-  await prisma.orderItem.update({
+
+    const campaignProduct =
+      await prisma.campaignProduct.findUnique({
+        where: { campaignProductId },
+      });
+
+    if (!campaignProduct) {
+      throw new Error(
+        `محصول ${campaignProductId} پیدا نشد`
+      );
+    }
+
+    if (
+      campaignProduct.campaignId !== campaignId
+    ) {
+      throw new Error(
+        `محصول ${campaignProductId} متعلق به این کمپین نیست`
+      );
+
+    }
+
+    if (campaign.status !== "ACTIVE") {
+      throw new Error(
+        "امکان ثبت سفارش در این کمپین وجود ندارد."
+      );
+    }
+    if (campaignProduct.status !== "OPEN") {
+      throw new Error(
+        `محصول ${campaignProduct.productName ?? campaignProductId} در حال حاضر قابل سفارش نیست.`
+      );
+    }
+    const existingItem =
+      await prisma.orderItem.findFirst({
+        where: {
+          userOrderId: order.userOrderId,
+          campaignProductId,
+        },
+      });
+
+    if (quantity === 0) {
+      if (existingItem) {
+        await prisma.orderItem.delete({
+          where: {
+            orderItemId:
+              existingItem.orderItemId,
+          },
+        });
+      }
+
+      continue;
+    }
+
+    if (existingItem) {
+      await prisma.orderItem.update({
+        where: {
+          orderItemId:
+            existingItem.orderItemId,
+        },
+        data: {
+          quantity,
+          unitPriceSnapshot:
+            campaignProduct.bulkPrice,
+        },
+      });
+    } else {
+      await prisma.orderItem.create({
+        data: {
+          userOrderId:
+            order.userOrderId,
+          campaignProductId,
+          quantity,
+          unitPriceSnapshot:
+            campaignProduct.bulkPrice,
+        },
+      });
+    }
+
+
+  }
+
+  const remainingItems =
+    await prisma.orderItem.count({
+      where: {
+        userOrderId:
+          order.userOrderId,
+      },
+    });
+
+  if (remainingItems === 0) {
+    await prisma.userOrder.delete({
+      where: {
+        userOrderId:
+          order.userOrderId,
+      },
+    });
+
+
+    return {
+      orderDeleted: true,
+    };
+
+
+  }
+
+  return {
+    orderId: order.userOrderId,
+  };
+};
+
+export const getCart = async (userId) => {
+
+  const orders = await prisma.userOrder.findMany({
+
     where: {
-      orderItemId:
-        existingItem.orderItemId,
+
+      userId,
+
+      status: "CART",
+
+      orderItems: {
+        some: {},
+      },
+
+      campaign: {
+        status: "ACTIVE",
+      },
+
     },
-    data: {
-      quantity,
-      unitPriceSnapshot:
-        campaignProduct.bulkPrice,
+
+    include: {
+
+      campaign: {
+
+        select: {
+
+          campaignId: true,
+
+          title: true,
+
+        },
+
+      },
+
+      orderItems: {
+
+        include: {
+
+          campaignProduct: {
+
+            include: {
+
+              product: true,
+
+            },
+
+          },
+
+        },
+
+      },
+
     },
+
+    orderBy: {
+
+      createdAt: "desc",
+
+    },
+
   });
-} else {
-  await prisma.orderItem.create({
-    data: {
-      userOrderId:
-        order.userOrderId,
-      campaignProductId,
-      quantity,
-      unitPriceSnapshot:
-        campaignProduct.bulkPrice,
-    },
+
+
+  return orders.map(order => {
+
+    const invoice = calculateInvoice(order);
+
+    return {
+
+      orderId: order.userOrderId,
+
+      campaignId: order.campaignId,
+
+      campaignTitle: order.campaign.title,
+
+      payableAmount: invoice.payableAmount,
+
+      totalSaving: invoice.totalSaving,
+
+      totalShipping: invoice.totalShipping,
+
+      finalDiscount: invoice.finalDiscount,
+
+      itemCount: order.orderItems.length,
+
+      totalQuantity: order.orderItems.reduce(
+        (sum, item) => sum + item.quantity,
+        0
+      ),
+
+      items: order.orderItems.map(item => ({
+
+        campaignProductId: item.campaignProductId,
+
+        productName:
+          item.campaignProduct.product.productName,
+
+        imageUrl:
+          item.campaignProduct.product.imageUrl,
+
+        quantity: item.quantity,
+
+        unitPrice:
+          Number(item.unitPriceSnapshot),
+
+        totalPrice:
+          Number(item.unitPriceSnapshot) *
+          item.quantity,
+
+      })),
+      totalSaving: invoice.totalSaving,
+
+      payableAmount: invoice.payableAmount,
+    };
+
   });
-}
 
-
-}
-
-const remainingItems =
-await prisma.orderItem.count({
-where: {
-userOrderId:
-order.userOrderId,
-},
-});
-
-if (remainingItems === 0) {
-await prisma.userOrder.delete({
-where: {
-userOrderId:
-order.userOrderId,
-},
-});
-
-
-return {
-  orderDeleted: true,
 };
-
-
-}
-
-return {
-orderId: order.userOrderId,
-};
-};
-
-
-
-
-
 
 export const getMyOrder = async (
   user,
@@ -247,13 +361,13 @@ export const submitOrder = async (user, orderId) => {
     },
   });
   const dbUser = await prisma.user.findUnique({
-  where: {
-    userId: user.userId,
-  },
-  select: {
-    fullName: true,
-  },
-});
+    where: {
+      userId: user.userId,
+    },
+    select: {
+      fullName: true,
+    },
+  });
 
   for (const item of order.orderItems) {
 
@@ -334,25 +448,104 @@ export const submitOrder = async (user, orderId) => {
     },
   });
   const orderForInvoice =
-await prisma.userOrder.findUnique({
+    await prisma.userOrder.findUnique({
 
-  where: {
+      where: {
 
-    userOrderId: orderId,
+        userOrderId: orderId,
 
-  },
-
-  include: {
-
-    orderItems: {
+      },
 
       include: {
 
-        campaignProduct: {
+        orderItems: {
 
           include: {
 
-            product: true,
+            campaignProduct: {
+
+              include: {
+
+                product: true,
+
+              },
+
+            },
+
+          },
+
+        },
+
+      },
+
+    });
+
+  await createInitialInvoice(
+    orderForInvoice
+  );
+  // اطلاع به مسئول خرید
+  await createNotification({
+    userId: campaign.managerUserId,
+
+    title: "سفارش جدید",
+
+    message: `${dbUser.fullName} سفارش خود را ثبت نهایی کرد.`,
+
+
+    type: "GENERAL",
+  });
+
+  return {
+    success: true,
+    message: "سفارش نهایی شد",
+  };
+
+};
+export const getMyOrders = async (user) => {
+
+  const orders = await prisma.userOrder.findMany({
+
+    where: {
+
+      userId: user.userId,
+
+      status: {
+        not: "CART",
+      },
+
+    },
+
+    include: {
+
+      campaign: {
+
+        select: {
+
+          campaignId: true,
+
+          title: true,
+
+          status: true,
+
+        },
+
+      },
+
+
+      payment: true,
+
+
+      orderItems: {
+
+        include: {
+
+          campaignProduct: {
+
+            include: {
+
+              product: true,
+
+            },
 
           },
 
@@ -362,29 +555,47 @@ await prisma.userOrder.findUnique({
 
     },
 
-  },
 
-});
+    orderBy: {
 
-await createInitialInvoice(
-  orderForInvoice
-);
-  // اطلاع به مسئول خرید
-  await createNotification({
-    userId: campaign.managerUserId,
+      createdAt: "desc",
 
-    title: "سفارش جدید",
+    },
 
-   message: `${dbUser.fullName} سفارش خود را ثبت نهایی کرد.`,
-    
-    
-    type: "GENERAL",
   });
 
-  return {
-    success: true,
-    message: "سفارش نهایی شد",
-  };
+
+
+  return orders.map(order => ({
+
+    orderId: order.userOrderId,
+
+
+    campaignId: order.campaignId,
+
+
+    campaignTitle: order.campaign.title,
+
+
+    campaignStatus: order.campaign.status,
+
+
+    // وضعیت خود سفارش
+    status: order.status,
+
+
+    // وضعیت پرداخت کاربر
+    paymentStatus:
+      order.payment?.paymentStatus || null,
+
+
+    createdAt: order.createdAt,
+
+
+    preview: calculateInvoice(order),
+
+
+  }));
 
 };
 
@@ -472,7 +683,7 @@ export const cancelSubmittedOrder = async (
 
           status:
             updated.currentQuantity >=
-            updated.thresholdQuantity
+              updated.thresholdQuantity
 
               ? "THRESHOLD_REACHED"
 
@@ -533,6 +744,7 @@ export const cancelSubmittedOrder = async (
 
 };
 
+
 export const getOrderPreview = async (
   user,
   campaignId
@@ -560,12 +772,12 @@ export const getOrderPreview = async (
     throw new Error("سبد خرید خالی است");
   }
 
-const invoice =
-calculateInvoice(order);
+  const invoice =
+    calculateInvoice(order);
 
-return invoice;
+  return invoice;
 
 
 
- 
+
 };

@@ -1,12 +1,14 @@
 import express from "express";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import {
-   createOrUpdateOrder,
-   getMyOrder,
-   submitOrder,
-   getOrderPreview,
-   cancelSubmittedOrderController
- }
+  createOrUpdateOrder,
+  getMyOrder,
+  submitOrder,
+  getOrderPreview,
+  cancelSubmittedOrderController,
+  getCart,
+  getMyOrdersController
+}
   from "../controllers/order.controller.js";
 const router = express.Router();
 
@@ -27,6 +29,12 @@ router.post(
   submitOrder
 );
 
+router.get(
+  "/my-orders",
+  authMiddleware,
+  getMyOrdersController
+);
+
 router.delete(
   "/:orderId/cancel",
   authMiddleware,
@@ -39,6 +47,10 @@ router.get(
   getOrderPreview
 );
 
-
+router.get(
+  "/cart",
+  authMiddleware,
+  getCart
+);
 
 export default router;

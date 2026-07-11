@@ -2,9 +2,8 @@ import prisma from "../prisma/prisma.js";
 import { createNotification } from "./notification.service.js";
 import { calculateInvoice } from "./invoice-calculator.service.js";
 
-
 export const uploadReceipt = async (
-  campaignId,
+  orderId,
   user,
   data,
   file
@@ -14,7 +13,7 @@ export const uploadReceipt = async (
 
     where: {
 
-      campaignId: Number(campaignId),
+      userOrderId: Number(orderId),
 
       userId: user.userId,
 
@@ -80,12 +79,11 @@ export const uploadReceipt = async (
 
   }
 
-  const invoice =
-    calculateInvoice(order);
+  const invoice = calculateInvoice(order);
 
   // اگر قبلاً پرداخت تایید شده باشد
   if (
-    order.payment?.paymentStatus ==="APPROVED"
+    order.payment?.paymentStatus === "APPROVED"
   ) {
 
     throw new Error(
@@ -93,8 +91,10 @@ export const uploadReceipt = async (
     );
 
   }
+
+  // اگر هنوز در انتظار بررسی باشد
   if (
-    order.payment?.paymentStatus ==="PENDING"
+    order.payment?.paymentStatus === "PENDING"
   ) {
 
     throw new Error(
@@ -103,7 +103,7 @@ export const uploadReceipt = async (
 
   }
 
-  // اگر قبلاً پرداختی وجود داشته باشد
+  // اگر قبلاً پرداختی ثبت شده و رد شده باشد، بروزرسانی می‌شود
   if (order.payment) {
 
     const payment =
@@ -127,12 +127,14 @@ export const uploadReceipt = async (
           transactionRef:
             data.transactionRef,
 
-          receiptImage: file.path.replace(/\\/g, "/"),
-           
+          receiptImage:
+            file.path.replace(/\\/g, "/"),
 
           rejectReason: null,
 
           reviewedAt: null,
+
+          paidAt: null,
 
         },
 
@@ -150,43 +152,47 @@ export const uploadReceipt = async (
     };
 
   }
-  const payment =
-await prisma.payment.create({
 
-    data:{
+  const payment =
+    await prisma.payment.create({
+
+      data: {
 
         amount:
-        invoice.payableAmount,
+          invoice.payableAmount,
 
-        paymentStatus:"PENDING",
+        paymentStatus:
+          "PENDING",
 
         transactionRef:
-        data.transactionRef,
+          data.transactionRef,
 
         receiptImage:
-        file.path.replace(/\\/g,"/"),
+          file.path.replace(/\\/g, "/"),
 
         userOrderId:
-        order.userOrderId
+          order.userOrderId,
 
-    }
+      },
 
-});
+    });
 
-return{
+  return {
 
-    success:true,
+    success: true,
 
     message:
-    "پرداخت با موفقیت ثبت شد و در انتظار تایید مسئول خرید است.",
+      "پرداخت با موفقیت ثبت شد و در انتظار تایید مسئول خرید است.",
 
-    payment
+    payment,
+
+  };
+
 
 };
 
 
-  
-};export const getPaymentPreview = async (
+export const getPaymentPreview = async (
   user,
   campaignId
 ) => {
@@ -340,83 +346,149 @@ return{
 
 };
 
+export const getMyPayments = async (user) => {
+
+  const payments = await prisma.payment.findMany({
+
+    where: {
+
+      userOrder: {
+
+        userId: user.userId,
+
+      },
+
+    },
+
+    include: {
+
+      userOrder: {
+
+        include: {
+
+          campaign: {
+
+            select: {
+
+              title: true,
+
+            },
+
+          },
+
+        },
+
+      },
+
+    },
+
+    orderBy: {
+
+      createdAt: "desc",
+
+    },
+
+  });
+
+  return payments.map((payment) => ({
+
+    paymentId: payment.paymentId,
+
+    orderId: payment.userOrderId,
+
+    campaignTitle: payment.userOrder.campaign.title,
+
+    amount: Number(payment.amount),
+
+    paymentStatus: payment.paymentStatus,
+
+    rejectReason: payment.rejectReason,
+
+    createdAt: payment.createdAt,
+
+    receiptImage: payment.receiptImage,
+
+  }));
+
+};
+
 export const getPendingPayments = async (user) => {
 
-const payments = await prisma.payment.findMany({
+  const payments = await prisma.payment.findMany({
 
-  where:{
+    where: {
 
-    paymentStatus:"PENDING",
+      paymentStatus: "PENDING",
 
-    userOrder:{
+      userOrder: {
 
-      campaign:{
+        campaign: {
 
-        managerUserId:user.userId
+          managerUserId: user.userId
 
-      }
-
-    }
-
-  },
-
-  include:{
-
-    userOrder:{
-
-      include:{
-
-        user:true,
-
-        campaign:true
+        }
 
       }
 
+    },
+
+    include: {
+
+      userOrder: {
+
+        include: {
+
+          user: true,
+
+          campaign: true
+
+        }
+
+      }
+
+    },
+
+    orderBy: {
+
+      createdAt: "desc"
+
     }
 
-  },
+  });
+  const count = payments.length;
 
-  orderBy:{
+  const result = payments.map(payment => ({
 
-    createdAt:"desc"
-
-  }
-
-});
-const count = payments.length;
-
-const result = payments.map(payment=>({
-
-    paymentId:payment.paymentId,
+    paymentId: payment.paymentId,
 
     residentName:
-    payment.userOrder.user.fullName,
+      payment.userOrder.user.fullName,
 
     residentId:
-    payment.userOrder.user.userId,
+      payment.userOrder.user.userId,
 
     campaignId:
-    payment.userOrder.campaign.campaignId,
+      payment.userOrder.campaign.campaignId,
 
     campaignTitle:
-    payment.userOrder.campaign.title,
+      payment.userOrder.campaign.title,
 
-    amount:Number(payment.amount),
+    amount: Number(payment.amount),
 
-    createdAt:payment.createdAt,
+    createdAt: payment.createdAt,
 
     paymentStatus:
-    payment.paymentStatus
+      payment.paymentStatus
 
-}));
+  }));
 
-return{
+  return {
 
     count,
 
-    payments:result
+    payments: result
 
- };
+  };
 
 
 }
@@ -425,122 +497,122 @@ export const approvePayment = async (
   paymentId,
   user
 ) => {
-    const payment =
-await prisma.payment.findUnique({
+  const payment =
+    await prisma.payment.findUnique({
 
-  where:{
-    paymentId:Number(paymentId)
-  },
+      where: {
+        paymentId: Number(paymentId)
+      },
 
-  include:{
+      include: {
 
-    userOrder:{
+        userOrder: {
 
-      include:{
+          include: {
 
-        user:true,
+            user: true,
 
-        campaign:true
+            campaign: true
+
+          }
+
+        }
 
       }
 
-    }
+    });
 
-  }
-
-});
-
-if(!payment){
+  if (!payment) {
 
     throw new Error("پرداخت پیدا نشد.");
 
-}
-if(
-payment.userOrder.campaign.managerUserId
-!==user.userId
-){
+  }
+  if (
+    payment.userOrder.campaign.managerUserId
+    !== user.userId
+  ) {
 
-throw new Error(
-"دسترسی ندارید."
-);
+    throw new Error(
+      "دسترسی ندارید."
+    );
 
-}
+  }
 
-if(
-payment.paymentStatus!=="PENDING"
-){
+  if (
+    payment.paymentStatus !== "PENDING"
+  ) {
 
-throw new Error(
-"این پرداخت قبلاً بررسی شده است."
-);
+    throw new Error(
+      "این پرداخت قبلاً بررسی شده است."
+    );
 
-}
+  }
 
-await prisma.$transaction(
-async(tx)=>{
+  await prisma.$transaction(
+    async (tx) => {
 
-    await tx.payment.update({
+      await tx.payment.update({
 
-    where:{
-        paymentId:payment.paymentId
-    },
+        where: {
+          paymentId: payment.paymentId
+        },
 
-    data:{
+        data: {
 
-        paymentStatus:"APPROVED",
+          paymentStatus: "APPROVED",
 
-        reviewedAt:new Date(),
+          reviewedAt: new Date(),
 
-        paidAt:new Date()
+          paidAt: new Date()
 
-    }
+        }
 
-});
+      });
 
-await tx.userOrder.update({
+      await tx.userOrder.update({
 
-    where:{
-        userOrderId:
-        payment.userOrder.userOrderId
-    },
+        where: {
+          userOrderId:
+            payment.userOrder.userOrderId
+        },
 
-    data:{
+        data: {
 
-        status:"PAID"
+          status: "PAID"
 
-    }
+        }
 
-});
+      });
 
-    await tx.notification.create({
+      await tx.notification.create({
 
-    data:{
+        data: {
 
-        userId:
-        payment.userOrder.userId,
+          userId:
+            payment.userOrder.userId,
 
-        title:
-        "پرداخت تایید شد",
+          title:
+            "پرداخت تایید شد",
 
-        message:
-        "پرداخت شما تایید شد و سفارش وارد مرحله خرید شد.",
+          message:
+            "پرداخت شما تایید شد و سفارش وارد مرحله خرید شد.",
 
-        type:
-        "PAYMENT_APPROVED"
+          type:
+            "PAYMENT_APPROVED"
 
-    }
+        }
 
-});
-});
+      });
+    });
 
-return{
+  return {
 
-    success:true,
+    success: true,
 
     message:
-    "پرداخت با موفقیت تایید شد."
+      "پرداخت با موفقیت تایید شد."
 
-}; 
+  };
 }
 
 export const rejectPayment = async (
