@@ -1,12 +1,10 @@
-/* ---------- Overlay ---------- */
-
 .modal-overlay {
 
     position: fixed;
 
     inset: 0;
 
-    background: rgba(0, 0, 0, .45);
+    background: rgba(0, 0, 0, .6);
 
     display: flex;
 
@@ -14,41 +12,49 @@
 
     align-items: center;
 
-    z-index: 9999;
+    z-index: 1000;
 
-    padding: 25px;
+    direction: rtl;
+
+    padding: 20px;
 
 }
 
-/* ---------- Modal ---------- */
+
+
+
 
 .modal {
 
-    width: 100%;
+    width: 520px;
 
-    max-width: 700px;
+    max-width: 100%;
 
     max-height: 90vh;
 
     overflow-y: auto;
 
-    background: #fff;
+    background: #234d6c;
 
-    border-radius: 18px;
+    color: white;
 
-    box-shadow: 0 20px 60px rgba(0, 0, 0, .15);
+    border-radius: 20px;
 
-    animation: modalShow .25s ease;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, .45);
+
+    animation: modalFade .25s ease;
 
 }
 
-@keyframes modalShow {
+
+
+@keyframes modalFade {
 
     from {
 
         opacity: 0;
 
-        transform: translateY(20px);
+        transform: translateY(-25px);
 
     }
 
@@ -62,85 +68,114 @@
 
 }
 
-/* ---------- Header ---------- */
+
+
+
 
 .modal-header {
 
-    padding: 22px 28px;
+    background: #16384f;
 
-    border-bottom: 1px solid #ececec;
+    padding: 20px;
+
+    border-radius: 20px 20px 0 0;
+
+    text-align: center;
 
 }
+
+
 
 .modal-header h2 {
 
     margin: 0;
 
-    color: #222;
-
     font-size: 24px;
 
 }
 
-/* ---------- Body ---------- */
+
+
+
+
 
 .modal-body {
 
-    padding: 28px;
+    padding: 25px;
 
 }
+
+
 
 .modal-description {
 
-    color: #666;
+    background: rgba(255, 255, 255, .08);
 
-    line-height: 2;
-
-    margin-bottom: 25px;
-
-}
-
-/* ---------- Product Cards ---------- */
-
-.products-list {
-
-    display: grid;
-
-    gap: 15px;
-
-    margin-bottom: 30px;
-
-}
-
-.modal-product {
-
-    border: 1px solid #e7e7e7;
+    padding: 15px;
 
     border-radius: 12px;
 
-    padding: 18px;
+    line-height: 2;
 
-    background: #fafafa;
+    font-size: 15px;
 
-    transition: .2s;
+    color: #f1f1f1;
+
+}
+
+
+
+
+
+
+
+.products-list {
+
+    margin: 20px 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
 
 }
 
-.modal-product:hover {
 
-    border-color: #0ea5e9;
 
-    transform: translateY(-2px);
+
+
+
+
+.modal-product {
+
+    background: #1d415d;
+
+    border-radius: 15px;
+
+    padding: 15px;
+
+    border: 1px solid rgba(255, 255, 255, .1);
 
 }
+
+
 
 .modal-product h4 {
 
     margin: 0 0 15px;
 
-    color: #0f172a;
+    font-size: 18px;
+
+    color: white;
 
 }
+
+
+
+
+
+
 
 .product-row {
 
@@ -148,197 +183,186 @@
 
     justify-content: space-between;
 
-    margin-bottom: 8px;
+    align-items: center;
 
-    font-size: 15px;
+    padding: 8px 0;
+
+    border-bottom: 1px solid rgba(255, 255, 255, .08);
+
+    color: #e0e0e0;
 
 }
+
+
 
 .product-row:last-child {
 
-    margin-bottom: 0;
+    border-bottom: none;
 
 }
 
-.product-row span:first-child {
 
-    color: #666;
 
-}
 
-.product-row span:last-child {
 
-    font-weight: 600;
-
-}
 
 .product-row.missing {
 
-    color: #dc2626;
+    color: #ffcccb;
 
     font-weight: bold;
 
 }
 
-/* ---------- Empty ---------- */
 
-.empty-products {
 
-    background: #ecfeff;
 
-    border: 1px solid #bae6fd;
 
-    color: #0369a1;
+/* textarea */
 
-    border-radius: 10px;
-
-    padding: 16px;
-
-    margin-bottom: 25px;
-
-}
-
-/* ---------- Inputs ---------- */
-
-.modal label {
+label {
 
     display: block;
 
-    margin-bottom: 8px;
-
-    margin-top: 18px;
-
-    font-weight: 600;
-
-}
-
-.modal-input {
-
-    width: 100%;
-
-    padding: 12px;
-
-    border: 1px solid #d6d6d6;
-
-    border-radius: 10px;
+    margin-bottom: 10px;
 
     font-size: 15px;
 
-    outline: none;
-
-    transition: .2s;
-
-    box-sizing: border-box;
-
 }
 
-.modal-input:focus {
 
-    border-color: #0ea5e9;
-
-}
 
 .modal-textarea {
 
     width: 100%;
 
-    resize: vertical;
+    box-sizing: border-box;
 
-    min-height: 120px;
+    resize: none;
 
-    padding: 14px;
+    background: #16384f;
 
-    border-radius: 10px;
+    color: white;
 
-    border: 1px solid #d6d6d6;
-
-    font-size: 15px;
-
-    font-family: inherit;
+    border: none;
 
     outline: none;
 
-    transition: .2s;
+    border-radius: 12px;
 
-    box-sizing: border-box;
+    padding: 15px;
+
+    font-size: 15px;
+
+    line-height: 1.8;
 
 }
+
+
+
+.modal-textarea::placeholder {
+
+    color: #b0bec5;
+
+}
+
+
 
 .modal-textarea:focus {
 
-    border-color: #0ea5e9;
+    box-shadow: 0 0 0 2px #1976d2;
 
 }
 
-/* ---------- Footer ---------- */
+
+
+
+
+
 
 .modal-footer {
 
     display: flex;
 
-    justify-content: flex-end;
+    gap: 15px;
 
-    gap: 12px;
+    padding: 20px 25px;
 
-    padding: 22px 28px;
+    background: rgba(0, 0, 0, .1);
 
-    border-top: 1px solid #ececec;
+    border-radius: 0 0 20px 20px;
 
 }
 
-/* ---------- Buttons ---------- */
+
+
+
+
+.modal-footer button {
+
+    flex: 1;
+
+    border: none;
+
+    padding: 13px;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    font-size: 16px;
+
+    transition: .3s;
+
+}
+
+
+
+
+
 
 .cancel-btn {
 
-    border: none;
-
-    background: #e5e7eb;
-
-    color: #222;
-
-    padding: 11px 22px;
-
-    border-radius: 10px;
-
-    cursor: pointer;
-
-    transition: .2s;
-
-}
-
-.cancel-btn:hover {
-
-    background: #d1d5db;
-
-}
-
-.confirm-btn {
-
-    border: none;
-
-    background: #2563eb;
+    background: #78909c;
 
     color: white;
 
-    padding: 11px 24px;
+}
 
-    border-radius: 10px;
 
-    cursor: pointer;
 
-    transition: .2s;
+.cancel-btn:hover {
+
+    background: #607d8b;
 
 }
+
+
+
+
+
+
+.confirm-btn {
+
+    background: #00c853;
+
+    color: white;
+
+}
+
+
 
 .confirm-btn:hover {
 
-    background: #1d4ed8;
+    background: #00a844;
 
 }
 
-.confirm-btn:disabled,
 
-.cancel-btn:disabled {
+
+
+
+.modal-footer button:disabled {
 
     opacity: .6;
 
@@ -346,44 +370,53 @@
 
 }
 
-/* ---------- Responsive ---------- */
 
-@media(max-width:768px) {
 
-    .modal {
 
-        max-width: 100%;
 
-        border-radius: 15px;
 
-    }
 
-    .modal-body {
+.modal::-webkit-scrollbar {
 
-        padding: 20px;
+    width: 8px;
 
-    }
+}
 
-    .modal-header {
 
-        padding: 18px 20px;
+.modal::-webkit-scrollbar-thumb {
 
-    }
+    background: #1976d2;
+
+    border-radius: 10px;
+
+}
+
+
+
+
+
+@media(max-width:600px) {
+
 
     .modal-footer {
-
-        padding: 18px 20px;
 
         flex-direction: column;
 
     }
 
-    .cancel-btn,
 
-    .confirm-btn {
+    .modal-header h2 {
 
-        width: 100%;
+        font-size: 20px;
 
     }
+
+
+    .modal-body {
+
+        padding: 15px;
+
+    }
+
 
 }

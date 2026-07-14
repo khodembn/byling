@@ -1,20 +1,63 @@
 .modal {
 
-    width: 700px;
-
-    max-height: 80vh;
+    max-height: 85vh;
 
     overflow-y: auto;
 
-    background: #143447;
+}
 
-    border-radius: 24px;
 
-    padding: 30px;
+
+
+
+.modal h2 {
+
+    text-align: center;
+
+    margin-bottom: 20px;
 
 }
 
+
+
+
+
+.modal input[type="text"] {
+
+    width: 100%;
+
+    padding: 13px 15px;
+
+    border: none;
+
+    outline: none;
+
+    border-radius: 12px;
+
+    background: #16384f;
+
+    color: white;
+
+    margin-bottom: 20px;
+
+    font-size: 15px;
+
+}
+
+
+
+.modal input::placeholder {
+
+    color: #b0bec5;
+
+}
+
+
+
+
+
 .product-card {
+
 
     display: flex;
 
@@ -22,96 +65,78 @@
 
     align-items: center;
 
-    padding: 20px;
-
-    margin-bottom: 18px;
-
-    border-radius: 18px;
+    gap: 15px;
 
     background: #1d415d;
 
-    transition: .25s;
+    padding: 15px;
+
+    border-radius: 15px;
+
+    margin-bottom: 15px;
+
+    border: 1px solid rgba(255, 255, 255, .1);
+
+    transition: .3s;
 
 }
+
+
 
 .product-card:hover {
 
-    background: #234c69;
+    background: #2a5878;
+
+    transform: translateY(-2px);
 
 }
 
-.product-info h3 {
 
-    color: white;
 
-    margin-bottom: 8px;
 
-}
 
-.product-info p {
-
-    color: #c9d6df;
-
-    margin-bottom: 12px;
-
-}
-
-.product-meta {
-
-    display: flex;
-
-    gap: 20px;
-
-    color: #FFD54F;
-
-    font-size: 14px;
-
-}
-
-.select-btn {
-
-    width: 110px;
-
-    height: 42px;
-
-    border: none;
-
-    border-radius: 14px;
-
-    background: #78C26D;
-
-    color: white;
-
-    cursor: pointer;
-
-}
-
+/* بخش عکس و اطلاعات */
 
 .product-left {
+
 
     display: flex;
 
     align-items: center;
 
-    gap: 18px;
+    gap: 15px;
+
+    flex: 1;
 
 }
+
+
+
+
+
+/* عکس */
 
 .product-image {
 
-    width: 90px;
+    width: 75px;
 
-    height: 90px;
+    height: 75px;
 
-    border-radius: 18px;
+    border-radius: 12px;
 
     overflow: hidden;
 
-    flex-shrink: 0;
+    background: #16384f;
 
-    background: #234d6b;
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
 
 }
+
+
 
 .product-image img {
 
@@ -123,22 +148,208 @@
 
 }
 
+
+
 .product-placeholder {
 
-    width: 100%;
+    font-size: 35px;
 
-    height: 100%;
+}
+
+
+
+
+
+/* اطلاعات */
+
+.product-info h3 {
+
+    margin: 0 0 8px;
+
+    color: white;
+
+    font-size: 18px;
+
+}
+
+
+
+.product-info p {
+
+    color: #d0d8dc;
+
+    font-size: 14px;
+
+    margin: 5px 0;
+
+    line-height: 1.6;
+
+}
+
+
+
+
+.product-meta {
 
     display: flex;
 
-    align-items: center;
+    gap: 15px;
 
-    justify-content: center;
+    margin-top: 8px;
 
-    font-size: 34px;
+}
 
-    color: #FFD54F;
 
-    background: #295473;
+
+.product-meta span {
+
+    background: rgba(255, 255, 255, .1);
+
+    padding: 5px 10px;
+
+    border-radius: 8px;
+
+    font-size: 13px;
+
+}
+
+
+
+
+
+/* دکمه انتخاب */
+
+.select-btn {
+
+
+    background: #1976d2;
+
+    color: white;
+
+    border: none;
+
+    padding: 10px 18px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    transition: .3s;
+
+}
+
+
+
+.select-btn:hover {
+
+    background: #1565c0;
+
+}
+
+
+
+
+/* محصول قبلا اضافه شده */
+
+.select-btn:disabled {
+
+
+    background: #78909c;
+
+    cursor: not-allowed;
+
+    opacity: .8;
+
+}
+
+
+
+
+
+/* دکمه بستن */
+
+.modal>button:last-child {
+
+
+    width: 100%;
+
+    background: #e53935;
+
+    color: white;
+
+    border: none;
+
+    padding: 12px;
+
+    border-radius: 12px;
+
+    margin-top: 15px;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+}
+
+
+
+.modal>button:last-child:hover {
+
+    background: #c62828;
+
+}
+
+
+
+
+
+/* اسکرول مودال */
+
+.modal::-webkit-scrollbar {
+
+    width: 8px;
+
+}
+
+
+.modal::-webkit-scrollbar-thumb {
+
+    background: #1976d2;
+
+    border-radius: 10px;
+
+}
+
+
+
+
+
+@media(max-width:600px) {
+
+
+    .product-card {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .product-left {
+
+        width: 100%;
+
+    }
+
+
+    .select-btn {
+
+        width: 100%;
+
+    }
+
 
 }

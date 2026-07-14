@@ -6,7 +6,7 @@ import {
   getAllCampaigns,
   getCampaignById,
   getMyCampaigns,
-  getCampaignProducts,
+
   requestPayment,
   startPurchasing,
   readyForDelivery,
@@ -16,7 +16,9 @@ import {
   checkPurchasingController,
   getResidentCampaigns,
   updateCampaignController,
-  deleteCampaignController
+  deleteCampaignController,
+
+
 
 } from "../controllers/campaign.controller.js";
 
@@ -52,16 +54,12 @@ router.delete(
 );
 
 
+
 router.get("/", getAllCampaigns);
 router.get(
   "/my-campaigns",
   authMiddleware,
   getMyCampaigns
-);
-router.get(
-  "/:id/products",
-  authMiddleware,
-  getCampaignProducts
 );
 
 router.get(

@@ -174,25 +174,6 @@ export const getMyCampaigns = async (req, res) => {
   }
 };
 
-export const getCampaignProducts = async (req, res) => {
-  try {
-    const result = await campaignService.getCampaignProducts(
-      Number(req.params.id),
-      req.user
-    );
-
-    res.json({
-      success: true,
-      products: result,
-    });
-  } catch (error) {
-    res.status(403).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
 export const requestPayment = async (
   req,
   res

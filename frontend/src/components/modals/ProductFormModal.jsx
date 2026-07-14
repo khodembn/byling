@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-
+import "../../styles/ProductTable.css";
 export default function ProductFormModal({
 
     open,

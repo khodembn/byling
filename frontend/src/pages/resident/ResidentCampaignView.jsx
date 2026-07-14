@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { getCampaignProducts } from "../../api/campaignApi";
+import { getCampaignProducts } from "../../api/campaignProductApi";
 import {
     getMyOrder,
     createOrUpdateOrder,

@@ -3,15 +3,19 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { toast } from "react-toastify";
 
+import {
+  getCampaign,
+  updateCampaign,
+  deleteCampaign,
+} from "../../api/campaignApi";
 
 import {
   getCampaignProducts,
   addCampaignProduct,
-  getCampaign,
-
-
-} from "../../api/campaignApi";
-
+  updateCampaignProduct,
+  deleteCampaignProduct,
+} from "../../api/campaignProductApi";
+import "../../styles/CampaignDetails.css";
 
 import ProductTable from "../../components/campaign/ProductTable";
 import ProductPickerModal from "../../components/modals/ProductPickerModal";
@@ -27,32 +31,38 @@ export default function CampaignDetails() {
   const navigate = useNavigate();
 
 
-  const [products, setProducts] = useState([]);
+  const [campaign, setCampaign] =
+    useState(null);
 
-  const [campaign, setCampaign] = useState(null);
+  const [products, setProducts] =
+    useState([]);
 
 
-  const [loading, setLoading] = useState(true);
-
+  const [loading, setLoading] =
+    useState(true);
 
 
   const [pickerOpen, setPickerOpen] =
     useState(false);
 
 
-
   const [formOpen, setFormOpen] =
     useState(false);
-
 
 
   const [paymentModalOpen, setPaymentModalOpen] =
     useState(false);
 
 
-
   const [selectedProduct, setSelectedProduct] =
     useState(null);
+
+
+
+  const canEdit =
+    campaign &&
+    ["DRAFT", "ACTIVE"]
+      .includes(campaign.status);
 
 
 
@@ -67,11 +77,12 @@ export default function CampaignDetails() {
 
       setCampaign(data);
 
-    }
 
-    catch (err) {
+    } catch (error) {
 
-      console.log(err);
+      toast.error(
+        "خطا در دریافت کمپین"
+      );
 
     }
 
@@ -88,20 +99,14 @@ export default function CampaignDetails() {
       const data =
         await getCampaignProducts(id);
 
-
       setProducts(data);
 
-    }
 
-    catch (err) {
+    } catch (error) {
 
-      console.error(err);
-
-    }
-
-    finally {
-
-      setLoading(false);
+      toast.error(
+        "خطا در دریافت محصولات"
+      );
 
     }
 
@@ -113,9 +118,18 @@ export default function CampaignDetails() {
 
   useEffect(() => {
 
-    fetchCampaign();
+    const load = async () => {
 
-    fetchProducts();
+      await fetchCampaign();
+
+      await fetchProducts();
+
+      setLoading(false);
+
+    };
+
+
+    load();
 
   }, [id]);
 
@@ -129,6 +143,7 @@ export default function CampaignDetails() {
 
     try {
 
+
       await addCampaignProduct(
         id,
         data
@@ -136,7 +151,7 @@ export default function CampaignDetails() {
 
 
       toast.success(
-        "محصول با موفقیت اضافه شد"
+        "محصول اضافه شد"
       );
 
 
@@ -148,17 +163,13 @@ export default function CampaignDetails() {
       fetchProducts();
 
 
-    }
 
-    catch (err) {
-
+    } catch (error) {
 
       toast.error(
+        error.response?.data?.message ||
         "خطا در افزودن محصول"
       );
-
-
-      console.error(err);
 
     }
 
@@ -170,15 +181,234 @@ export default function CampaignDetails() {
 
 
 
+
+
+  const handleUpdateProduct = async (data) => {
+
+
+    try {
+
+
+      await updateCampaignProduct(
+        id,
+        selectedProduct.campaignProductId,
+        data
+      );
+
+
+      toast.success(
+        "محصول ویرایش شد"
+      );
+
+
+      setFormOpen(false);
+
+      setSelectedProduct(null);
+
+
+      fetchProducts();
+
+
+
+    } catch (error) {
+
+      toast.error(
+        error.response?.data?.message ||
+        "خطا در ویرایش محصول"
+      );
+
+    }
+
+
+  };
+
+
+
+
+
+
+
+
+  const handleDeleteProduct = async (campaignProductId) => {
+
+
+    if (!window.confirm("محصول حذف شود؟"))
+      return;
+
+
+
+    try {
+
+
+      await deleteCampaignProduct(
+        id,
+        campaignProductId
+      );
+
+
+      toast.success(
+        "محصول حذف شد"
+      );
+
+
+      fetchProducts();
+
+
+
+    } catch (error) {
+
+      toast.error(
+        error.response?.data?.message ||
+        "خطا در حذف محصول"
+      );
+
+    }
+
+
+  };
+
+
+
+
+
+
+
+
+
+  const handleDeleteCampaign = async () => {
+
+
+    if (!window.confirm("کمپین حذف شود؟"))
+      return;
+
+
+    try {
+
+
+      await deleteCampaign(id);
+
+
+      toast.success(
+        "کمپین حذف شد"
+      );
+
+
+      navigate(
+        "/purchase/campaigns"
+      );
+
+
+    } catch (error) {
+
+
+      toast.error(
+        error.response?.data?.message ||
+        "خطا در حذف کمپین"
+      );
+
+
+    }
+
+
+  };
+
+
+
+
+
+
+
+  const handleEditCampaign = async () => {
+
+    if (!campaign)
+      return;
+
+
+    const title =
+      prompt(
+        "عنوان کمپین",
+        campaign.title || ""
+      );
+
+
+
+    const oldDate =
+      campaign.paymentDeadline
+        ?
+        new Date(
+          campaign.paymentDeadline
+        )
+          .toLocaleString("sv-SE")
+          .slice(0, 16)
+        :
+        "";
+
+
+
+    const paymentDeadline =
+      prompt(
+        "مهلت پرداخت",
+        oldDate
+      );
+
+
+
+    if (
+      !title &&
+      !paymentDeadline
+    )
+      return;
+
+
+
+    try {
+
+
+      await updateCampaign(
+        id,
+        {
+          title,
+          paymentDeadline:
+            paymentDeadline
+              ?
+              paymentDeadline.replace(" ", "T")
+              :
+              undefined
+        }
+      );
+
+
+
+      toast.success(
+        "کمپین ویرایش شد"
+      );
+
+
+      await fetchCampaign();
+
+
+
+    } catch (error) {
+
+
+      toast.error(
+        error.response?.data?.message ||
+        "خطا در ویرایش کمپین"
+      );
+
+
+    }
+
+  };
+
+
+
+
+
   if (loading)
 
-    return (
+    return <h2>در حال بارگذاری...</h2>;
 
-      <h2>
-        در حال بارگذاری...
-      </h2>
-
-    );
 
 
 
@@ -187,7 +417,6 @@ export default function CampaignDetails() {
 
 
   return (
-
 
     <div className="campaign-details-page">
 
@@ -198,172 +427,118 @@ export default function CampaignDetails() {
 
 
 
-
-
       {
         campaign && (
-
 
           <div className="campaign-info-card">
 
 
-
-            <div>
-
-
-              <h1>
-
-                {campaign.title}
-
-              </h1>
+            <h2>
+              {campaign.title}
+            </h2>
 
 
 
-
-              <button
-
-                className="back-btn"
-
-                onClick={() =>
-                  navigate("/purchase/campaigns")
-                }
-
-              >
-
-                بازگشت
-
-              </button>
-
-
-
-
-
-              <span>
-
-                {campaign.status}
-
-              </span>
-
-
-
-            </div>
-
-
-
-
-
-            <p>
-
-              ساختمان :
-
-              {" "}
-
-              {
-                campaign.building.buildingName
+            <button
+              className="back-btn"
+              onClick={() =>
+                navigate("/purchase/campaigns")
               }
-
-            </p>
-
-
-
-
-
-            <p>
-
-              مدیر :
-
-              {" "}
-
-              {
-                campaign.manager.fullName
-              }
-
-            </p>
-
-
-
-
-
-            <p>
-
-              ایجاد :
-
-              {" "}
-
-              {
-                new Date(
-                  campaign.createdAt
-                )
-                  .toLocaleDateString("fa-IR")
-              }
-
-            </p>
-
-
+            >
+              بازگشت
+            </button>
 
 
 
             {
-              campaign.paymentDeadline && (
+              canEdit && (
+
+                <>
+
+                  <button
+                    className="edit-btn"
+                    onClick={handleEditCampaign}
+                  >
+                    ✏️ ویرایش
+                  </button>
 
 
-                <p>
+                  <button
+                    className="delete-btn"
+                    onClick={handleDeleteCampaign}
+                  >
+                    🗑 حذف
+                  </button>
 
-                  مهلت پرداخت :
-
-                  {" "}
-
-                  {
-                    new Date(
-                      campaign.paymentDeadline
-                    )
-                      .toLocaleString(
-                        "fa-IR"
-                      )
-                  }
-
-                </p>
-
+                </>
 
               )
             }
 
 
 
+            <p>
+              وضعیت:
+              {" "}
+              {campaign.status}
+            </p>
+
+
+            <p>
+              ساختمان:
+              {" "}
+              {campaign.building?.buildingName}
+            </p>
+
+
+            <p>
+              مدیر:
+              {" "}
+              {campaign.manager?.fullName}
+            </p>
+
+
+            {
+              campaign.paymentDeadline && (
+
+                <p>
+                  مهلت پرداخت:
+                  {" "}
+                  {
+                    new Date(
+                      campaign.paymentDeadline
+                    )
+                      .toLocaleString("fa-IR")
+                  }
+                </p>
+
+              )
+            }
 
 
 
             {
               campaign.status === "ACTIVE" && (
 
-
                 <button
-
                   className="payment-request-btn"
-
                   onClick={() =>
                     setPaymentModalOpen(true)
                   }
-
                 >
-
                   💳 درخواست پرداخت
-
                 </button>
 
-
               )
+
             }
 
 
 
           </div>
 
-
         )
       }
-
-
 
 
 
@@ -374,12 +549,25 @@ export default function CampaignDetails() {
 
         products={products}
 
+        campaignStatus={
+          campaign?.status
+        }
+
         onAddProduct={() =>
           setPickerOpen(true)
         }
 
-      />
+        onEditProduct={(product) => {
 
+          setSelectedProduct(product);
+
+          setFormOpen(true);
+
+        }}
+
+        onDeleteProduct={handleDeleteProduct}
+
+      />
 
 
 
@@ -398,23 +586,17 @@ export default function CampaignDetails() {
 
         onSelect={(product) => {
 
-
           setSelectedProduct(product);
-
 
           setPickerOpen(false);
 
-
           setFormOpen(true);
 
-
         }}
-
 
         campaignProducts={products}
 
       />
-
 
 
 
@@ -428,7 +610,6 @@ export default function CampaignDetails() {
 
         product={selectedProduct}
 
-
         onClose={() => {
 
           setFormOpen(false);
@@ -437,8 +618,13 @@ export default function CampaignDetails() {
 
         }}
 
-
-        onSubmit={handleAddProduct}
+        onSubmit={
+          selectedProduct?.campaignProductId
+            ?
+            handleUpdateProduct
+            :
+            handleAddProduct
+        }
 
       />
 
@@ -454,11 +640,9 @@ export default function CampaignDetails() {
 
         campaignId={id}
 
-
         onClose={() =>
           setPaymentModalOpen(false)
         }
-
 
         onSuccess={() => {
 
@@ -474,11 +658,9 @@ export default function CampaignDetails() {
 
 
 
-
-
     </div>
 
-
   );
+
 
 }

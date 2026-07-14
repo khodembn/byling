@@ -1,108 +1,248 @@
 
+import "../../styles/ProductTable.css";
 
 export default function ProductTable({
 
-    products,
+    products = [],
 
-    onAddProduct
+    campaignStatus,
+
+    onAddProduct,
+
+    onEditProduct,
+
+    onDeleteProduct
 
 }) {
+
+
+    const canManage =
+        ["DRAFT", "ACTIVE"].includes(campaignStatus);
+
+
 
     return (
 
         <>
 
+
             <div className="product-header">
 
+
                 <h2>
-
                     محصولات کمپین
-
                 </h2>
 
-                <button
-                    onClick={onAddProduct}
-                >
 
-                    + افزودن محصول
 
-                </button>
+                {
+                    canManage && (
+
+                        <button
+                            className="add-product-btn"
+                            onClick={onAddProduct}
+                        >
+                            + افزودن محصول
+                        </button>
+
+                    )
+                }
+
 
             </div>
 
-            <table>
 
-                <thead>
 
-                    <tr>
 
-                        <th>محصول</th>
 
-                        <th>قیمت فروشگاه</th>
+            {
+                products.length === 0 ? (
 
-                        <th>قیمت عمده</th>
+                    <div className="empty-products">
 
-                        <th>حد نصاب</th>
+                        محصولی برای این کمپین ثبت نشده است
 
-                        <th>سفارش فعلی</th>
+                    </div>
 
-                        <th>وضعیت</th>
 
-                    </tr>
+                ) : (
 
-                </thead>
 
-                <tbody>
+                    <table>
 
-                    {products.map(product => (
 
-                        <tr
-                            key={product.campaignProductId}
-                        >
+                        <thead>
 
-                            <td>
+                            <tr>
 
-                                {product.productName}
+                                <th>محصول</th>
 
-                            </td>
+                                <th>قیمت فروشگاه</th>
 
-                            <td>
+                                <th>قیمت عمده</th>
 
-                                {product.marketPrice}
+                                <th>حد نصاب</th>
 
-                            </td>
+                                <th>سفارش فعلی</th>
 
-                            <td>
+                                <th>وضعیت</th>
 
-                                {product.bulkPrice}
 
-                            </td>
+                                {
+                                    canManage && (
 
-                            <td>
+                                        <th>
+                                            عملیات
+                                        </th>
 
-                                {product.thresholdQuantity}
+                                    )
+                                }
 
-                            </td>
 
-                            <td>
+                            </tr>
 
-                                {product.currentQuantity}
 
-                            </td>
+                        </thead>
 
-                            <td>
 
-                                {product.status}
 
-                            </td>
 
-                        </tr>
 
-                    ))}
+                        <tbody>
 
-                </tbody>
 
-            </table>
+                            {
+                                products.map(product => (
+
+
+                                    <tr
+                                        key={
+                                            product.campaignProductId
+                                        }
+                                    >
+
+
+                                        <td>
+                                            {product.productName}
+                                        </td>
+
+
+
+                                        <td>
+
+                                            {
+                                                Number(
+                                                    product.marketPrice
+                                                )
+                                                    .toLocaleString("fa-IR")
+                                            }
+
+                                        </td>
+
+
+
+                                        <td>
+
+                                            {
+                                                Number(
+                                                    product.bulkPrice
+                                                )
+                                                    .toLocaleString("fa-IR")
+                                            }
+
+                                        </td>
+
+
+
+                                        <td>
+                                            {
+                                                product.thresholdQuantity
+                                            }
+                                        </td>
+
+
+
+                                        <td>
+                                            {
+                                                product.currentQuantity
+                                            }
+                                        </td>
+
+
+
+                                        <td>
+                                            {
+                                                product.status
+                                            }
+                                        </td>
+
+
+
+
+
+                                        {
+                                            canManage && (
+
+                                                <td className="product-actions">
+
+
+                                                    <button
+
+                                                        className="edit-product-btn"
+
+                                                        onClick={() =>
+                                                            onEditProduct(product)
+                                                        }
+
+                                                    >
+                                                        ✏️ ویرایش
+                                                    </button>
+
+
+
+
+
+                                                    <button
+
+                                                        className="delete-product-btn"
+
+                                                        onClick={() =>
+                                                            onDeleteProduct(
+                                                                product.campaignProductId
+                                                            )
+                                                        }
+
+                                                    >
+                                                        🗑 حذف
+                                                    </button>
+
+
+                                                </td>
+
+                                            )
+                                        }
+
+
+
+
+                                    </tr>
+
+
+                                ))
+                            }
+
+
+                        </tbody>
+
+
+                    </table>
+
+
+                )
+
+            }
+
+
 
         </>
 

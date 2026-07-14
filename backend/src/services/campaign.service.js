@@ -127,25 +127,21 @@ export const updateCampaign = async (
 
 };
 
-
 export const deleteCampaign = async (
   user,
   campaignId
 ) => {
 
 
+  const id = Number(campaignId);
+
+
+
   const campaign =
     await prisma.campaign.findUnique({
 
       where: {
-        campaignId: Number(campaignId)
-      },
-
-
-      include: {
-
-        campaignProducts: true
-
+        campaignId: id
       }
 
     });
@@ -176,17 +172,16 @@ export const deleteCampaign = async (
 
 
 
-
   if (
-    campaign.status !== "DRAFT"
+    !["DRAFT", "ACTIVE"]
+      .includes(campaign.status)
   ) {
 
     throw new Error(
-      "فقط کمپین پیش‌نویس قابل حذف است."
+      "این کمپین در وضعیت فعلی قابل حذف نیست."
     );
 
   }
-
 
 
 
@@ -195,8 +190,7 @@ export const deleteCampaign = async (
     await prisma.userOrder.count({
 
       where: {
-        campaignId:
-          Number(campaignId)
+        campaignId: id
       }
 
     });
@@ -215,27 +209,28 @@ export const deleteCampaign = async (
 
 
 
-
   await prisma.$transaction(
     async (tx) => {
 
 
+      // حذف محصولات متصل به کمپین
+
       await tx.campaignProduct.deleteMany({
 
         where: {
-          campaignId:
-            Number(campaignId)
+          campaignId: id
         }
 
       });
 
 
 
+      // حذف خود کمپین
+
       await tx.campaign.delete({
 
         where: {
-          campaignId:
-            Number(campaignId)
+          campaignId: id
         }
 
       });
@@ -250,8 +245,10 @@ export const deleteCampaign = async (
 
   return {
 
+    success: true,
+
     message:
-      "کمپین حذف شد."
+      "کمپین با موفقیت حذف شد."
 
   };
 
@@ -374,52 +371,10 @@ export const getMyCampaigns = async (user) => {
 };
 
 
-export const getCampaignProducts = async (campaignId, user) => {
-  const campaign = await prisma.campaign.findUnique({
-    where: { campaignId },
-  });
-
-  if (!campaign) {
-    throw new Error("کمپین پیدا نشد");
-  }
 
 
-  if (campaign.buildingId !== user.buildingId) {
-    throw new Error("دسترسی ندارید");
-  }
 
-  const products = await prisma.campaignProduct.findMany({
-    where: { campaignId },
-    include: {
-      product: true,
-    },
-  });
 
-  return products.map((p) => ({
-    campaignProductId: p.campaignProductId,
-    productId: p.product.productId,
-    productName: p.product.productName,
-    imageUrl: p.product.imageUrl,
-
-    marketPrice: Number(p.marketPriceSnapshot),
-    bulkPrice: Number(p.bulkPrice),
-    shippingCost: Number(p.shippingCost ?? 0),
-
-    saving:
-      Number(p.marketPriceSnapshot) -
-      Number(p.bulkPrice),
-
-    savingPercent:
-      ((Number(p.marketPriceSnapshot) -
-        Number(p.bulkPrice)) /
-        Number(p.marketPriceSnapshot)) *
-      100,
-
-    thresholdQuantity: p.thresholdQuantity,
-    currentQuantity: p.currentQuantity,
-    status: p.status,
-  }));
-};
 
 export const requestPayment = async (
   user,

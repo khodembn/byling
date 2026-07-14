@@ -1,10 +1,13 @@
+/* RequestPaymentModal.css */
+
+
 .modal-overlay {
 
     position: fixed;
 
     inset: 0;
 
-    background: rgba(0, 0, 0, 0.45);
+    background: rgba(0, 0, 0, .55);
 
     display: flex;
 
@@ -12,27 +15,55 @@
 
     align-items: center;
 
-    z-index: 1000;
+    z-index: 2000;
+
+    direction: rtl;
 
 }
 
 
 
+/* modal */
+
 .payment-modal {
 
-    width: 420px;
+    width: 450px;
 
-    background: #ffffff;
+    max-width: 90%;
+
+    background: #1d415d;
 
     border-radius: 18px;
 
     padding: 25px;
 
-    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+    color: white;
 
-    direction: rtl;
+    box-shadow: 0 15px 45px rgba(0, 0, 0, .35);
 
-    animation: modalShow 0.25s ease;
+    animation: paymentModalShow .25s ease;
+
+}
+
+
+
+@keyframes paymentModalShow {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(-20px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+    }
 
 }
 
@@ -42,13 +73,37 @@
 
     text-align: center;
 
-    margin-bottom: 25px;
+    margin-bottom: 18px;
 
-    color: #333;
+    font-size: 23px;
 
 }
 
 
+
+/* description */
+
+.payment-description {
+
+    background: rgba(255, 255, 255, .08);
+
+    padding: 14px;
+
+    border-radius: 12px;
+
+    line-height: 1.8;
+
+    color: #e0f2fe;
+
+    font-size: 14px;
+
+    margin-bottom: 20px;
+
+}
+
+
+
+/* form */
 
 .payment-info {
 
@@ -66,9 +121,9 @@
 
     font-size: 14px;
 
-    color: #555;
+    color: #dbeafe;
 
-    margin-top: 8px;
+    margin-top: 5px;
 
 }
 
@@ -82,77 +137,87 @@
 
     border-radius: 10px;
 
-    border: 1px solid #ddd;
+    border: none;
 
-    font-size: 15px;
+    outline: none;
 
-    box-sizing: border-box;
+    font-family: inherit;
+
+    font-size: 14px;
+
+    background: #f8fafc;
+
+    color: #333;
 
 }
 
 
+
+.payment-info input:focus {
+
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, .4);
+
+}
+
+
+
+/* disabled inputs */
 
 .payment-info input:disabled {
 
-    background: #f5f5f5;
-
-    color: #777;
-
     cursor: not-allowed;
 
-}
-
-
-
-.payment-info input[type="datetime-local"] {
-
-    direction: ltr;
+    opacity: .85;
 
 }
 
 
 
-
+/* actions */
 
 .modal-actions {
 
     display: flex;
 
-    justify-content: space-between;
+    justify-content: flex-start;
 
-    gap: 15px;
+    gap: 12px;
 
-    margin-top: 30px;
+    margin-top: 25px;
 
 }
 
 
 
-.modal-actions button {
+.cancel-btn,
 
-    flex: 1;
-
-    padding: 12px;
-
-    border-radius: 10px;
+.submit-btn {
 
     border: none;
 
+    border-radius: 10px;
+
+    padding: 12px 20px;
+
     cursor: pointer;
 
-    font-size: 15px;
+    font-family: inherit;
 
-    transition: 0.2s;
+    font-size: 14px;
+
+    transition: .2s;
 
 }
 
 
 
+/* cancel */
+
 .cancel-btn {
 
-    background: #eee;
+    background: #64748b;
 
-    color: #555;
+    color: white;
 
 }
 
@@ -160,17 +225,21 @@
 
 .cancel-btn:hover {
 
-    background: #ddd;
+    background: #475569;
 
 }
 
 
 
+/* submit */
+
 .submit-btn {
 
-    background: #2563eb;
+    background: #38bdf8;
 
-    color: white;
+    color: #082f49;
+
+    font-weight: bold;
 
 }
 
@@ -178,7 +247,9 @@
 
 .submit-btn:hover {
 
-    background: #1d4ed8;
+    background: #0ea5e9;
+
+    transform: translateY(-2px);
 
 }
 
@@ -186,85 +257,10 @@
 
 .submit-btn:disabled {
 
-    opacity: 0.6;
+    opacity: .6;
 
     cursor: not-allowed;
 
-}
-
-
-
-
-
-.payment-request-btn {
-
-    margin-top: 20px;
-
-    padding: 12px 22px;
-
-    border: none;
-
-    border-radius: 12px;
-
-    background: #16a34a;
-
-    color: white;
-
-    font-size: 16px;
-
-    cursor: pointer;
-
-    transition: 0.2s;
-
-}
-
-
-
-.payment-request-btn:hover {
-
-    background: #15803d;
-
-}
-
-
-
-
-
-@keyframes modalShow {
-
-    from {
-
-        opacity: 0;
-
-        transform: translateY(-20px);
-
-    }
-
-
-    to {
-
-        opacity: 1;
-
-        transform: translateY(0);
-
-    }
-
-}
-
-.payment-description {
-
-    background: #f1f5f9;
-
-    border-radius: 12px;
-
-    padding: 12px;
-
-    font-size: 13px;
-
-    color: #475569;
-
-    line-height: 1.8;
-
-    margin-bottom: 20px;
+    transform: none;
 
 }

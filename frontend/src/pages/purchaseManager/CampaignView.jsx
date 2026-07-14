@@ -3,8 +3,13 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import {
     getCampaign,
-    getCampaignProducts,
 } from "../../api/campaignApi";
+
+import {
+    getCampaignProducts,
+} from "../../api/campaignProductApi";
+
+import "../../styles/CampaignView.css";
 
 export default function CampaignView() {
 
