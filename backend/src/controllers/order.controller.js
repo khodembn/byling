@@ -127,7 +127,78 @@ export const getMyOrdersController = async (
   }
 
 };
+export const getManagerOrders = async (req, res, next) => {
 
+  try {
+
+    const orders = await service.getManagerOrders(
+
+      req.user
+
+    );
+
+    res.json({
+
+      success: true,
+
+      count: orders.length,
+
+      orders,
+
+    });
+
+  } catch (err) {
+
+    res.status(400).json({
+
+      success: false,
+
+      message: err.message,
+
+    });
+
+  }
+
+};
+
+export const getManagerOrderDetails = async (
+  req,
+  res,
+  next
+) => {
+
+  try {
+
+    const data =
+      await service.getManagerOrderDetails(
+
+        req.params.orderId,
+
+        req.user
+
+      );
+
+    res.json({
+
+      success: true,
+
+      data,
+
+    });
+
+  } catch (err) {
+
+    res.status(400).json({
+
+      success: false,
+
+      message: err.message,
+
+    });
+
+  }
+
+};
 
 export const cancelSubmittedOrderController =
   async (req, res) => {

@@ -1,5 +1,6 @@
 import express from "express";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
+import { roleMiddleware } from "../middlewares/role.middleware.js";
 import {
   createOrUpdateOrder,
   getMyOrder,
@@ -7,9 +8,12 @@ import {
   getOrderPreview,
   cancelSubmittedOrderController,
   getCart,
-  getMyOrdersController
+  getMyOrdersController,
+  getManagerOrders,
+  getManagerOrderDetails
 }
   from "../controllers/order.controller.js";
+
 const router = express.Router();
 
 
@@ -34,7 +38,29 @@ router.get(
   authMiddleware,
   getMyOrdersController
 );
+router.get(
 
+  "/manager",
+
+  authMiddleware,
+
+  roleMiddleware("PURCHASE_MANAGER"),
+
+  getManagerOrders
+
+);
+
+router.get(
+
+  "/manager/:orderId",
+
+  authMiddleware,
+
+  roleMiddleware("PURCHASE_MANAGER"),
+
+  getManagerOrderDetails
+
+);
 router.delete(
   "/:orderId/cancel",
   authMiddleware,

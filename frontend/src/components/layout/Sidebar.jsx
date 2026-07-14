@@ -25,7 +25,15 @@ export default function Sidebar() {
 
         {user?.role === "PURCHASE_MANAGER" ? (
           <>
+
+
+            <Link to="/purchase/profile">پروفایل</Link>
+
+
             <Link to="/purchase/dashboard">داشبورد</Link>
+
+
+
 
             <Link to="/purchase/campaigns">
               کمپین‌ها
@@ -38,53 +46,70 @@ export default function Sidebar() {
             <Link to="/purchase/residents">
               ساکنین
             </Link>
-          </>
-        ) : (
-          <>
-            <Link to="/resident/dashboard">
-              داشبورد
+
+            <Link to="/purchase/payments">
+              پرداخت  ها
             </Link>
 
-            <Link to="/resident/campaigns">
-              کمپین‌ها
-            </Link>
-
-            <Link to="/resident/orders">
-              سفارش‌های من
-            </Link>
-            <Link to="/resident/cart">
-
-              سبد خرید
-
-              {
-
-                cartCount > 0 &&
-
-                (
-
-                  <span className="cart-badge">
-
-                    {cartCount}
-
-                  </span>
-
-                )
-
-              }
-
-            </Link>
-
-            <Link to="/resident/payments">
-              پرداخت ها
-            </Link>
-
-            <Link to="/resident/notifications">
+            <Link to="/purchase/notifications">
               اعلان ها
             </Link>
-
-
           </>
-        )}
+        ) :
+
+
+          (
+            <>
+
+
+
+              <Link to="/resident/profile">
+                پروفایل
+              </Link>
+              <Link to="/resident/dashboard">
+                داشبورد
+              </Link>
+
+              <Link to="/resident/campaigns">
+                کمپین‌ها
+              </Link>
+
+              <Link to="/resident/orders">
+                سفارش‌های من
+              </Link>
+              <Link to="/resident/cart">
+
+                سبد خرید
+
+                {
+
+                  cartCount > 0 &&
+
+                  (
+
+                    <span className="cart-badge">
+
+                      {cartCount}
+
+                    </span>
+
+                  )
+
+                }
+
+              </Link>
+
+              <Link to="/resident/payments">
+                پرداخت ها
+              </Link>
+
+              <Link to="/resident/notifications">
+                اعلان ها
+              </Link>
+
+
+            </>
+          )}
 
       </nav>
 

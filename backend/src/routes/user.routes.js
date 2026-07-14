@@ -1,18 +1,32 @@
 import express from "express";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { roleMiddleware } from "../middlewares/role.middleware.js";
-import { 
+import {
   transferManagerController,
   getResidentsController,
-  deleteAccountController
- }
+  deleteAccountController,
+  getProfile,
+  updateProfile,
+  getManagerPaymentInfo,
+  updateManagerPaymentInfo
+}
   from "../controllers/user.controller.js";
 
 
 const router = express.Router();
 
 
+router.get(
+  "/profile",
+  authMiddleware,
+  getProfile
+);
 
+router.patch(
+  "/profile",
+  authMiddleware,
+  updateProfile
+);
 router.get(
   "/manager-test",
   authMiddleware,
@@ -24,13 +38,24 @@ router.get(
     });
   }
 );
+router.get(
+  "/manager/payment-info",
+  authMiddleware,
+  getManagerPaymentInfo
+);
 
+
+router.patch(
+  "/manager/payment-info",
+  authMiddleware,
+  updateManagerPaymentInfo
+);
 
 router.post(
 
-"/transfer-manager",
-authMiddleware,
-transferManagerController
+  "/transfer-manager",
+  authMiddleware,
+  transferManagerController
 
 );
 
@@ -42,12 +67,14 @@ router.get(
 
 router.delete(
 
-"/me",
+  "/me",
 
-authMiddleware,
+  authMiddleware,
 
-deleteAccountController
+  deleteAccountController
 
 );
+
+
 
 export default router;

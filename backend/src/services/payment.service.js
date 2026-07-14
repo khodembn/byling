@@ -412,6 +412,206 @@ export const getMyPayments = async (user) => {
 
 };
 
+export const getManagerPayments = async (user) => {
+
+  const payments = await prisma.payment.findMany({
+
+    where: {
+
+      userOrder: {
+
+        campaign: {
+
+          managerUserId: user.userId,
+
+        },
+
+      },
+
+    },
+
+    include: {
+
+      userOrder: {
+
+        include: {
+
+          user: {
+
+            select: {
+
+              userId: true,
+
+              fullName: true,
+
+            },
+
+          },
+
+          campaign: {
+
+            select: {
+
+              campaignId: true,
+
+              title: true,
+
+            },
+
+          },
+
+        },
+
+      },
+
+    },
+
+    orderBy: {
+
+      createdAt: "desc",
+
+    },
+
+  });
+
+  return payments.map((payment) => ({
+
+    paymentId: payment.paymentId,
+
+    residentId: payment.userOrder.user.userId,
+
+    residentName: payment.userOrder.user.fullName,
+
+    campaignId: payment.userOrder.campaign.campaignId,
+
+    campaignTitle: payment.userOrder.campaign.title,
+
+    amount: Number(payment.amount),
+
+    createdAt: payment.createdAt,
+
+    paymentStatus: payment.paymentStatus,
+
+  }));
+
+};
+
+export const getPaymentById = async (paymentId, user) => {
+
+  const payment = await prisma.payment.findUnique({
+
+    where: {
+      paymentId: Number(paymentId),
+    },
+
+    include: {
+
+      userOrder: {
+
+        include: {
+
+          user: {
+
+            select: {
+
+              userId: true,
+              fullName: true,
+              mobile: true,
+
+            },
+
+          },
+
+          campaign: {
+
+            select: {
+
+              campaignId: true,
+              title: true,
+              managerUserId: true,
+
+            },
+
+          },
+
+          orderItems: {
+
+            include: {
+
+              campaignProduct: {
+
+                include: {
+
+                  product: true,
+
+                },
+
+              },
+
+            },
+
+          },
+
+        },
+
+      },
+
+    },
+
+  });
+
+  if (!payment) {
+
+    throw new Error("پرداخت پیدا نشد.");
+
+  }
+
+  // فقط مسئول خرید همان کمپین بتواند مشاهده کند
+  if (payment.userOrder.campaign.managerUserId !== user.userId) {
+
+    throw new Error("دسترسی غیرمجاز.");
+
+  }
+
+  return {
+
+    paymentId: payment.paymentId,
+
+    paymentStatus: payment.paymentStatus,
+
+    transactionRef: payment.transactionRef,
+
+    receiptImage: payment.receiptImage,
+
+    amount: Number(payment.amount),
+
+    createdAt: payment.createdAt,
+
+    resident: {
+
+      residentId: payment.userOrder.user.userId,
+
+      residentName: payment.userOrder.user.fullName,
+
+      mobile: payment.userOrder.user.mobile,
+
+    },
+
+    campaign: {
+
+      campaignId: payment.userOrder.campaign.campaignId,
+
+      campaignTitle: payment.userOrder.campaign.title,
+
+    },
+
+    preview: calculateInvoice(payment.userOrder),
+
+  };
+
+};
+
+
 export const getPendingPayments = async (user) => {
 
   const payments = await prisma.payment.findMany({

@@ -10,6 +10,13 @@ import Campaigns from "./pages/purchaseManager/Campaigns";
 import CreateCampaign from "./pages/purchaseManager/CreateCampaign";
 import CampaignDetails from "./pages/purchaseManager/CampaignDetails";
 import CampaignView from "./pages/purchaseManager/CampaignView";
+import Payments from "./pages/purchaseManager/Payments";
+import PaymentDetails from "./pages/purchaseManager/PaymentDetails";
+import ManagerOrders from "./pages/purchaseManager/ManagerOrders";
+import ManagerOrderDetails from "./pages/purchaseManager/ManagerOrderDetails";
+import CampaignManagement from "./pages/purchaseManager/CampaignManagement";
+import ManagerProfile from "./pages/purchaseManager/ManagerProfile";
+import ManagerNotifications from "./pages/purchaseManager/ManagerNotifications";
 
 import ResidentLayout from "./layouts/ResidentLayout";
 import PurchaseManagerLayout from "./layouts/PurchaseManagerLayout";
@@ -20,7 +27,7 @@ import ResidentOrders from "./pages/resident/ResidentOrders";
 import PaymentPage from "./pages/resident/PaymentPage";
 import ResidentPayments from "./pages/resident/ResidentPayments";
 import ResidentNotifications from "./pages/resident/ResidentNotifications";
-
+import ResidentProfile from "./pages/resident/ResidentProfile";
 
 import PrivateRoute from "./routes/privateRoutes";
 import RoleRoute from "./routes/RoleRoute";
@@ -98,6 +105,11 @@ function App() {
           element={<ResidentNotifications />}
         />
 
+        <Route
+          path="/resident/profile"
+          element={<ResidentProfile />}
+        />
+
       </Route>
 
       {/* Purchase Manager */}
@@ -115,29 +127,80 @@ function App() {
           path="/purchase/dashboard"
           element={<PurchaseDashboard />}
         />
+
+
+        <Route
+          path="/purchase/campaigns"
+          element={<Campaigns />}
+        />
+
+        <Route
+          path="/purchase/campaign/create"
+          element={<CreateCampaign />}
+        />
+
+        <Route
+          path="/purchase/campaign/:id"
+          element={<CampaignDetails />}
+        />
+        <Route
+
+          path="/purchase/campaign/:id/view"
+
+          element={<CampaignView />}
+
+        />
+        <Route
+
+          path="/purchase/payments"
+
+          element={<Payments />}
+
+        />
+
+        <Route
+
+          path="/purchase/payments/:paymentId"
+
+          element={<PaymentDetails />}
+
+        />
+
+        <Route
+
+          path="/purchase/orders"
+
+          element={<ManagerOrders />}
+
+        />
+
+        <Route
+          path="/purchase/order/:orderId"
+          element={<ManagerOrderDetails />}
+        />
+
+
+        <Route
+          path="/purchase/campaign/:id/manage"
+          element={<CampaignManagement />}
+        />
+
+
+
+        <Route
+          path="/purchase/profile"
+          element={<ManagerProfile />}
+        />
+        <Route
+          path="/purchase/notifications"
+          element={
+            <ManagerNotifications />
+          }
+        />
+
       </Route>
 
-      <Route
-        path="/purchase/campaigns"
-        element={<Campaigns />}
-      />
 
-      <Route
-        path="/purchase/campaign/create"
-        element={<CreateCampaign />}
-      />
-
-      <Route
-        path="/purchase/campaign/:id"
-        element={<CampaignDetails />}
-      />
-      <Route
-
-        path="/purchase/campaign/:id/view"
-
-        element={<CampaignView />}
-
-      />
 
     </Routes>
   );

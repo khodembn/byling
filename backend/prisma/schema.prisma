@@ -58,6 +58,7 @@ enum NotificationType {
   PAYMENT_REJECTED
   REOPEN_THRESHOLD
   DELIVERY_READY
+  CAMPAIGN_COMPLETED
   GENERAL
 }
 
@@ -106,6 +107,10 @@ model User {
 
   deletedAt DateTime?
 
+  paymentCardNumber String?
+  
+  paymentCardHolder String?
+
   buildingId Int
 
   building   Building @relation(fields: [buildingId], references: [buildingId])
@@ -130,7 +135,7 @@ model Campaign {
   paymentDeadline DateTime?
 paymentCardNumber String?
 paymentCardHolder String?
-paymentMessage    String?
+
 
 reopenedCount Int @default(0)
 completedAt DateTime?

@@ -7,7 +7,9 @@ import {
   getPaymentPreview,
   approvePayment,
   rejectPayment,
-  getMyPayments
+  getMyPayments,
+  getPaymentDetails,
+  getManagerPayments
 } from "../controllers/payment.controller.js";
 
 
@@ -35,13 +37,35 @@ router.get(
 
 router.get(
 
+  "/manager",
+
+  authMiddleware,
+
+  roleMiddleware("PURCHASE_MANAGER"),
+
+  getManagerPayments
+
+);
+
+router.get(
+
   "/pending",
   authMiddleware,
   roleMiddleware("PURCHASE_MANAGER"),
   paymentController.getPendingPayments
 
 );
+router.get(
 
+  "/:paymentId",
+
+  authMiddleware,
+
+  roleMiddleware("PURCHASE_MANAGER"),
+
+  getPaymentDetails
+
+);
 router.patch(
   "/:paymentId/approve",
   authMiddleware,

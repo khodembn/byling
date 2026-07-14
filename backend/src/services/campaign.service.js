@@ -33,8 +33,230 @@ export const createCampaign = async (
   };
 };
 
+export const updateCampaign = async (
+  user,
+  campaignId,
+  data
+) => {
 
 
+  const campaign =
+    await prisma.campaign.findUnique({
+
+      where: {
+        campaignId: Number(campaignId)
+      }
+
+    });
+
+
+
+  if (!campaign) {
+
+    throw new Error(
+      "کمپین پیدا نشد"
+    );
+
+  }
+
+
+
+  if (
+    campaign.managerUserId !== user.userId
+  ) {
+
+    throw new Error(
+      "دسترسی ندارید"
+    );
+
+  }
+
+
+
+
+  if (
+    ![
+      "DRAFT",
+      "ACTIVE"
+    ].includes(
+      campaign.status
+    )
+  ) {
+
+    throw new Error(
+      "در این وضعیت امکان ویرایش کمپین وجود ندارد."
+    );
+
+  }
+
+
+
+
+
+  const updatedCampaign =
+    await prisma.campaign.update({
+
+      where: {
+        campaignId: Number(campaignId)
+      },
+
+
+      data: {
+
+
+        title:
+          data.title,
+
+
+        paymentDeadline:
+          data.paymentDeadline
+            ?
+            new Date(data.paymentDeadline)
+            :
+            undefined,
+
+
+      }
+
+    });
+
+
+
+  return updatedCampaign;
+
+
+};
+
+
+export const deleteCampaign = async (
+  user,
+  campaignId
+) => {
+
+
+  const campaign =
+    await prisma.campaign.findUnique({
+
+      where: {
+        campaignId: Number(campaignId)
+      },
+
+
+      include: {
+
+        campaignProducts: true
+
+      }
+
+    });
+
+
+
+  if (!campaign) {
+
+    throw new Error(
+      "کمپین پیدا نشد"
+    );
+
+  }
+
+
+
+
+  if (
+    campaign.managerUserId !== user.userId
+  ) {
+
+    throw new Error(
+      "دسترسی ندارید"
+    );
+
+  }
+
+
+
+
+
+  if (
+    campaign.status !== "DRAFT"
+  ) {
+
+    throw new Error(
+      "فقط کمپین پیش‌نویس قابل حذف است."
+    );
+
+  }
+
+
+
+
+
+  const orders =
+    await prisma.userOrder.count({
+
+      where: {
+        campaignId:
+          Number(campaignId)
+      }
+
+    });
+
+
+
+
+  if (orders > 0) {
+
+    throw new Error(
+      "کمپین دارای سفارش است و قابل حذف نیست."
+    );
+
+  }
+
+
+
+
+
+  await prisma.$transaction(
+    async (tx) => {
+
+
+      await tx.campaignProduct.deleteMany({
+
+        where: {
+          campaignId:
+            Number(campaignId)
+        }
+
+      });
+
+
+
+      await tx.campaign.delete({
+
+        where: {
+          campaignId:
+            Number(campaignId)
+        }
+
+      });
+
+
+    }
+  );
+
+
+
+
+
+  return {
+
+    message:
+      "کمپین حذف شد."
+
+  };
+
+
+};
 
 
 export const getResidentCampaigns = async (userId) => {
@@ -199,81 +421,159 @@ export const getCampaignProducts = async (campaignId, user) => {
   }));
 };
 
-
 export const requestPayment = async (
   user,
   campaignId,
   data
 ) => {
 
-  const {
-    paymentDeadline,
-    paymentMessage,
-  } = data;
+  const { paymentDeadline } = data;
 
-  const campaign = await prisma.campaign.findUnique({
-    where: {
-      campaignId: Number(campaignId),
-    },
-    include: {
-      campaignProducts: {
-        include: {
-          product: true,
-        },
+  if (!paymentDeadline) {
+
+    throw new Error(
+      "مهلت پرداخت را وارد کنید."
+    );
+
+  }
+
+  const manager =
+    await prisma.user.findUnique({
+
+      where: {
+
+        userId: user.userId,
+
       },
-    },
-  });
+
+      select: {
+
+        paymentCardNumber: true,
+
+        paymentCardHolder: true,
+
+      },
+
+    });
+
+  if (!manager) {
+
+    throw new Error("کاربر پیدا نشد.");
+
+  }
+
+  if (
+    !manager.paymentCardNumber ||
+    !manager.paymentCardHolder
+  ) {
+
+    throw new Error(
+      "ابتدا اطلاعات کارت خود را در پروفایل تکمیل کنید."
+    );
+
+  }
+
+  const campaign =
+    await prisma.campaign.findUnique({
+
+      where: {
+
+        campaignId: Number(campaignId),
+
+      },
+
+      include: {
+
+        campaignProducts: {
+
+          include: {
+
+            product: true,
+
+          },
+
+        },
+
+      },
+
+    });
 
   if (!campaign) {
-    throw new Error("کمپین پیدا نشد");
+
+    throw new Error("کمپین پیدا نشد.");
+
   }
 
-  if (campaign.managerUserId !== user.userId) {
-    throw new Error("دسترسی ندارید");
+  if (
+    campaign.managerUserId !==
+    user.userId
+  ) {
+
+    throw new Error("دسترسی ندارید.");
+
   }
 
-  if (campaign.status !== "ACTIVE") {
+  if (
+    campaign.status !== "ACTIVE"
+  ) {
+
     throw new Error(
       "کمپین در وضعیت قابل ارسال درخواست پرداخت نیست."
     );
+
   }
 
-  // فقط محصولاتی که به حد نصاب رسیده‌اند
   const readyProducts =
     campaign.campaignProducts.filter(
-      (item) =>
-        item.status === "THRESHOLD_REACHED"
+
+      item =>
+        item.status ===
+        "THRESHOLD_REACHED"
+
     );
 
   if (readyProducts.length === 0) {
+
     throw new Error(
       "هیچ محصولی به حد نصاب نرسیده است."
     );
+
   }
 
-  // Map<userId, [productName1, productName2,...]>
   const users = new Map();
 
   for (const campaignProduct of readyProducts) {
 
     const orderItems =
       await prisma.orderItem.findMany({
+
         where: {
+
           campaignProductId:
             campaignProduct.campaignProductId,
 
           userOrder: {
+
             status: "SUBMITTED",
+
           },
+
         },
 
         include: {
+
           userOrder: {
+
             include: {
+
               user: true,
+
             },
+
           },
+
         },
+
       });
 
     for (const item of orderItems) {
@@ -282,7 +582,9 @@ export const requestPayment = async (
         item.userOrder.user.userId;
 
       if (!users.has(userId)) {
+
         users.set(userId, []);
+
       }
 
       users
@@ -295,29 +597,33 @@ export const requestPayment = async (
 
   }
 
-  // ارسال فقط یک نوتیف برای هر کاربر
   for (const [userId, products] of users) {
 
-    const productList = products
-      .map((p) => `• ${p}`)
-      .join("\n");
+    const productList =
+      products
+        .map(
+          product => `• ${product}`
+        )
+        .join("\n");
 
-    const finalMessage = `
-${paymentMessage ?? ""}
+    const notificationMessage = `
 
------------------------
-
-محصولات آماده پرداخت:
+محصولات زیر آماده پرداخت هستند:
 
 ${productList}
 
------------------------
+----------------------------
 
-پیش فاکتور شما آماده شده است.
+پیش‌فاکتور شما آماده شده است.
 
-لطفاً وارد بخش سفارشات شوید،
-پیش فاکتور را مشاهده کنید،
-پرداخت را انجام دهید و تصویر فیش واریزی را بارگذاری نمایید.
+لطفاً وارد بخش سفارش‌های من شوید،
+پیش‌فاکتور را مشاهده کنید،
+پرداخت را انجام دهید
+و تصویر فیش واریزی را بارگذاری نمایید.
+
+مهلت پرداخت:
+${new Date(paymentDeadline).toLocaleString("fa-IR")}
+
 `;
 
     await createNotification({
@@ -326,58 +632,75 @@ ${productList}
 
       title: "درخواست پرداخت",
 
-      message: finalMessage.trim(),
+      message:
+        notificationMessage.trim(),
 
       type: "PAYMENT_REQUEST",
+
     });
 
   }
 
-  // تغییر وضعیت محصولات
   await prisma.campaignProduct.updateMany({
-    where: {
-      campaignId: campaign.campaignId,
 
-      status: "THRESHOLD_REACHED",
+    where: {
+
+      campaignId:
+        campaign.campaignId,
+
+      status:
+        "THRESHOLD_REACHED",
+
     },
 
     data: {
-      status: "AWAITING_PAYMENT",
+
+      status:
+        "AWAITING_PAYMENT",
+
     },
+
   });
 
-  // تغییر وضعیت کمپین
   await prisma.campaign.update({
+
     where: {
-      campaignId: campaign.campaignId,
+
+      campaignId:
+        campaign.campaignId,
+
     },
 
     data: {
 
-      status: "AWAITING_PAYMENT",
+      status:
+        "AWAITING_PAYMENT",
 
       paymentDeadline:
-        paymentDeadline
-          ? new Date(paymentDeadline)
-          : null,
+        new Date(paymentDeadline),
 
-      paymentMessage:
-        paymentMessage ?? null,
+      paymentCardNumber:
+        manager.paymentCardNumber,
+
+      paymentCardHolder:
+        manager.paymentCardHolder,
 
     },
+
   });
 
   return {
 
     success: true,
 
-    message: `درخواست پرداخت برای ${users.size} کاربر ارسال شد.`,
+    message:
+      `درخواست پرداخت برای ${users.size} ساکن ارسال شد.`,
 
   };
 
 };
 
-export const updatePaymentInfo = async (
+/*export const updatePaymentInfo = async (
   campaignId,
   user,
   data
@@ -451,7 +774,11 @@ export const updatePaymentInfo = async (
 
   return updatedCampaign;
 
-};
+};*/
+
+
+
+
 
 export const cancelUnpaidOrders = async (
   user,
@@ -519,80 +846,78 @@ export const cancelUnpaidOrders = async (
 
   });
 
-  if (unpaidOrders.length === 0) {
-    throw new Error(
-      "هیچ سفارش پرداخت‌ نشده‌ای برای لغو وجود ندارد."
-    );
-  }
-  await prisma.$transaction(async (tx) => {
+  if (unpaidOrders.length > 0) {
 
-    for (const order of unpaidOrders) {
+    await prisma.$transaction(async (tx) => {
 
-      await tx.userOrder.update({
+      for (const order of unpaidOrders) {
 
-        where: {
-          userOrderId: order.userOrderId,
-        },
-
-        data: {
-          status: "CANCELLED",
-        },
-
-      });
-
-
-      if (
-        order.payment &&
-        order.payment.paymentStatus === "PENDING"
-      ) {
-
-        await tx.payment.update({
+        await tx.userOrder.update({
 
           where: {
-            paymentId: order.payment.paymentId,
+            userOrderId: order.userOrderId,
           },
 
           data: {
-
-            paymentStatus: "REJECTED",
-
-            rejectReason:
-              "مهلت پرداخت به پایان رسید.",
-
-            reviewedAt: new Date(),
-
+            status: "CANCELLED",
           },
 
         });
 
-      }
+        if (
+          order.payment &&
+          order.payment.paymentStatus === "PENDING"
+        ) {
 
-      for (const item of order.orderItems) {
+          await tx.payment.update({
 
-        await tx.campaignProduct.update({
+            where: {
+              paymentId: order.payment.paymentId,
+            },
 
-          where: {
-            campaignProductId:
-              item.campaignProductId,
-          },
+            data: {
 
-          data: {
+              paymentStatus: "REJECTED",
 
-            currentQuantity: {
+              rejectReason:
+                "مهلت پرداخت به پایان رسید.",
 
-              decrement: item.quantity,
+              reviewedAt: new Date(),
 
             },
 
-          },
+          });
 
-        });
+        }
+
+        for (const item of order.orderItems) {
+
+          await tx.campaignProduct.update({
+
+            where: {
+              campaignProductId:
+                item.campaignProductId,
+            },
+
+            data: {
+
+              currentQuantity: {
+
+                decrement: item.quantity,
+
+              },
+
+            },
+
+          });
+
+        }
 
       }
 
-    }
+    });
 
-  });
+  }
 
   const products =
     await prisma.campaignProduct.findMany({
@@ -609,44 +934,49 @@ export const cancelUnpaidOrders = async (
 
     });
 
+  const thresholdLostProducts =
+    products
+      .filter(
+        (product) =>
+          product.currentQuantity <
+          product.thresholdQuantity
+      )
+      .map((product) => ({
+
+        campaignProductId:
+          product.campaignProductId,
+
+        productName:
+          product.product.productName,
+
+        currentQuantity:
+          product.currentQuantity,
+
+        thresholdQuantity:
+          product.thresholdQuantity,
+
+        missingQuantity:
+          product.thresholdQuantity -
+          product.currentQuantity,
+
+      }));
+
   return {
 
     success: true,
 
-    cancelledOrders: unpaidOrders.length,
+    cancelledOrders:
+      unpaidOrders.length,
 
-    products: products.map((product) => ({
+    thresholdLost:
+      thresholdLostProducts.length > 0,
 
-      campaignProductId:
-        product.campaignProductId,
-
-      productName:
-        product.product.productName,
-
-      currentQuantity:
-        product.currentQuantity,
-
-      thresholdQuantity:
-        product.thresholdQuantity,
-
-      missingQuantity: Math.max(
-        0,
-        product.thresholdQuantity -
-        product.currentQuantity
-      ),
-
-      thresholdReached:
-        product.currentQuantity >=
-        product.thresholdQuantity,
-
-    })),
+    products:
+      thresholdLostProducts,
 
   };
 
 };
-
-
-
 
 export const reopenCampaign = async (
   user,
@@ -1190,12 +1520,9 @@ export const readyForDelivery = async (
 
   };
 
-};
-
-export const completeCampaign = async (
+}; export const completeCampaign = async (
   user,
-  campaignId,
-  message
+  campaignId
 ) => {
 
   const campaign =
@@ -1213,15 +1540,18 @@ export const completeCampaign = async (
 
     });
 
+
   if (!campaign) {
     throw new Error("کمپین پیدا نشد.");
   }
+
 
   if (
     campaign.managerUserId !== user.userId
   ) {
     throw new Error("شما دسترسی ندارید.");
   }
+
 
   if (
     campaign.status !== "READY_FOR_DELIVERY"
@@ -1231,9 +1561,13 @@ export const completeCampaign = async (
     );
   }
 
+
+
   await prisma.$transaction(async (tx) => {
 
-    // کمپین تکمیل شود
+
+    // تغییر وضعیت کمپین
+
     await tx.campaign.update({
 
       where: {
@@ -1250,7 +1584,10 @@ export const completeCampaign = async (
 
     });
 
-    // سفارش‌های آماده تحویل، تحویل شده شوند
+
+
+    // تحویل شدن سفارش‌ها
+
     await tx.userOrder.updateMany({
 
       where: {
@@ -1269,30 +1606,44 @@ export const completeCampaign = async (
 
     });
 
+
   });
 
-  // فقط برای سفارش‌هایی که تحویل شده‌اند نوتیف بفرست
-  const deliveryOrders =
-    campaign.orders.filter(
-      order =>
-        order.status === "READY_FOR_DELIVERY"
-    );
 
-  for (const order of deliveryOrders) {
+
+  const users =
+    [
+      ...new Set(
+        campaign.orders.map(
+          order => order.userId
+        )
+      )
+    ];
+
+
+
+  for (const userId of users) {
+
 
     await createNotification({
 
-      userId: order.userId,
+      userId,
 
-      title: "کمپین با موفقیت به پایان رسید",
+      title:
+        "پایان کمپین خرید گروهی",
 
-      message,
+      message:
+        "کمپین خرید گروهی با موفقیت به پایان رسید. از همراهی شما سپاسگزاریم.",
 
-      type: "GENERAL",
+      type:
+        "CAMPAIGN_COMPLETED",
 
     });
 
+
   }
+
+
 
   return {
 

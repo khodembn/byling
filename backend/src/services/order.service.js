@@ -599,6 +599,284 @@ export const getMyOrders = async (user) => {
 
 };
 
+export const getManagerOrders = async (user) => {
+
+  const orders = await prisma.userOrder.findMany({
+
+    where: {
+
+      campaign: {
+
+        managerUserId: user.userId,
+
+      },
+
+      status: {
+
+        not: "CART",
+
+      },
+
+    },
+
+    include: {
+
+      user: {
+
+        select: {
+
+          userId: true,
+
+          fullName: true,
+
+          mobile: true,
+
+        },
+
+      },
+
+      campaign: {
+
+        select: {
+
+          campaignId: true,
+
+          title: true,
+
+        },
+
+      },
+
+      payment: {
+
+        select: {
+
+          paymentStatus: true,
+
+        },
+
+      },
+
+      orderItems: {
+
+        include: {
+
+          campaignProduct: {
+
+            include: {
+
+              product: true,
+
+            },
+
+          },
+
+        },
+
+      },
+
+    },
+
+    orderBy: {
+
+      createdAt: "desc",
+
+    },
+
+  });
+
+  return orders.map((order) => {
+
+    const preview = calculateInvoice(order);
+
+    return {
+
+      orderId: order.userOrderId,
+
+      residentId: order.user.userId,
+
+      residentName: order.user.fullName,
+
+      residentMobile: order.user.mobile,
+
+      campaignId: order.campaign.campaignId,
+
+      campaignTitle: order.campaign.title,
+
+      status: order.status,
+
+      paymentStatus: order.payment?.paymentStatus ?? null,
+
+      payableAmount: preview.payableAmount,
+
+      createdAt: order.createdAt,
+
+    };
+
+  });
+
+};
+
+export const getManagerOrderDetails = async (
+  orderId,
+  user
+) => {
+
+  const order =
+    await prisma.userOrder.findFirst({
+
+      where: {
+
+        userOrderId: Number(orderId),
+
+        campaign: {
+
+          managerUserId: user.userId,
+
+        },
+
+      },
+
+      include: {
+
+        user: {
+
+          select: {
+
+            userId: true,
+
+            fullName: true,
+
+            mobile: true,
+
+          },
+
+        },
+
+        campaign: {
+
+          select: {
+
+            campaignId: true,
+
+            title: true,
+
+          },
+
+        },
+
+        payment: {
+
+          select: {
+
+            paymentId: true,
+
+            paymentStatus: true,
+
+            transactionRef: true,
+
+            receiptImage: true,
+
+            rejectReason: true,
+
+            amount: true,
+
+            createdAt: true,
+
+          },
+
+        },
+
+        orderItems: {
+
+          include: {
+
+            campaignProduct: {
+
+              include: {
+
+                product: true,
+
+              },
+
+            },
+
+          },
+
+        },
+
+      },
+
+    });
+
+  if (!order) {
+
+    throw new Error("سفارش پیدا نشد.");
+
+  }
+
+  return {
+
+    orderId: order.userOrderId,
+
+    status: order.status,
+
+    paymentStatus:
+      order.payment?.paymentStatus ?? null,
+
+    createdAt: order.createdAt,
+
+    resident: {
+
+      residentId: order.user.userId,
+
+      fullName: order.user.fullName,
+
+      mobile: order.user.mobile,
+
+    },
+
+    campaign: {
+
+      campaignId: order.campaign.campaignId,
+
+      campaignTitle: order.campaign.title,
+
+    },
+
+    payment: order.payment
+      ? {
+
+        paymentId: order.payment.paymentId,
+
+        paymentStatus:
+          order.payment.paymentStatus,
+
+        transactionRef:
+          order.payment.transactionRef,
+
+        receiptImage:
+          order.payment.receiptImage,
+
+        rejectReason:
+          order.payment.rejectReason,
+
+        amount:
+          Number(order.payment.amount),
+
+        createdAt:
+          order.payment.createdAt,
+
+      }
+      : null,
+
+    preview:
+      calculateInvoice(order),
+
+  };
+
+};
+
 
 export const cancelSubmittedOrder = async (
   user,

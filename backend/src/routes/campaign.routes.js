@@ -8,14 +8,15 @@ import {
   getMyCampaigns,
   getCampaignProducts,
   requestPayment,
-  updatePaymentInfo,
   startPurchasing,
   readyForDelivery,
   completeCampaign,
   cancelUnpaidOrders,
   reopenCampaign,
   checkPurchasingController,
-  getResidentCampaigns
+  getResidentCampaigns,
+  updateCampaignController,
+  deleteCampaignController
 
 } from "../controllers/campaign.controller.js";
 
@@ -33,6 +34,23 @@ router.get(
   roleMiddleware("RESIDENT"),
   getResidentCampaigns
 );
+
+
+router.patch(
+  "/:campaignId",
+  authMiddleware,
+  roleMiddleware("PURCHASE_MANAGER"),
+  updateCampaignController
+);
+
+
+router.delete(
+  "/:campaignId",
+  authMiddleware,
+  roleMiddleware("PURCHASE_MANAGER"),
+  deleteCampaignController
+);
+
 
 router.get("/", getAllCampaigns);
 router.get(
@@ -59,12 +77,15 @@ router.post(
 );
 
 
-router.patch(
+/*router.patch(
   "/:campaignId/payment-info",
   authMiddleware,
   roleMiddleware("PURCHASE_MANAGER"),
   updatePaymentInfo
-);
+);*/
+
+
+
 router.post(
   "/:campaignId/check-purchasing",
   authMiddleware,

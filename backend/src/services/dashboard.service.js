@@ -242,6 +242,12 @@ export const getManagerDashboard = async (user) => {
   if (!manager) {
     throw new Error("کاربر پیدا نشد.");
   }
+  console.log({
+    userId: manager.userId,
+    role: manager.role,
+    buildingId: manager.buildingId,
+    building: manager.building
+  });
 
   const [
 
@@ -270,164 +276,97 @@ export const getManagerDashboard = async (user) => {
     activeCampaigns,
 
   ] = await Promise.all([
-      // کمپین فعال
-prisma.campaign.findFirst({
+    // کمپین فعال
+    prisma.campaign.findFirst({
 
-  where: {
+      where: {
 
-    buildingId: manager.buildingId,
+        buildingId: manager.buildingId,
 
-    status: {
+        status: {
 
-      in: [
+          in: [
 
-        "ACTIVE",
+            "ACTIVE",
 
-        "AWAITING_PAYMENT",
+            "AWAITING_PAYMENT",
 
-        "PURCHASING",
+            "PURCHASING",
 
-      ],
+          ],
 
-    },
-
-  },
-
-  orderBy: {
-
-    createdAt: "desc",
-
-  },
-
-}),
-
-// تعداد اعضا
-prisma.user.count({
-
-  where: {
-
-    buildingId: manager.buildingId,
-
-    role: "RESIDENT",
-
-  },
-
-}),
-
-// تعداد کمپین‌ها
-prisma.campaign.count({
-
-  where: {
-
-    buildingId: manager.buildingId,
-
-  },
-
-}),
-
-
-// تعداد سفارش‌ها
-prisma.userOrder.count({
-
-  where: {
-
-    campaign: {
-
-      buildingId: manager.buildingId,
-
-    },
-
-  },
-
-}),
-
-// آخرین سفارش‌ها
-prisma.userOrder.findMany({
-
-  take: 5,
-
-  orderBy: {
-
-    createdAt: "desc",
-
-  },
-
-  where: {
-
-    campaign: {
-
-      buildingId: manager.buildingId,
-
-    },
-
-  },
-
-  include: {
-
-    user: {
-
-      select: {
-
-        userId: true,
-
-        fullName: true,
+        },
 
       },
 
-    },
+      orderBy: {
 
-    campaign: {
-
-      select: {
-
-        title: true,
+        createdAt: "desc",
 
       },
 
-    },
+    }),
 
-    invoice: {
+    // تعداد اعضا
+    prisma.user.count({
 
-      select: {
+      where: {
 
-        finalAmount: true,
+        buildingId: manager.buildingId,
+
+        role: "RESIDENT",
 
       },
 
-    },
+    }),
 
-  },
+    // تعداد کمپین‌ها
+    prisma.campaign.count({
 
-}),
-
-// آخرین پرداخت‌ها
-prisma.payment.findMany({
-
-  take: 5,
-
-  orderBy: {
-
-    createdAt: "desc",
-
-  },
-
-  where: {
-
-    userOrder: {
-
-      campaign: {
+      where: {
 
         buildingId: manager.buildingId,
 
       },
 
-    },
+    }),
 
-  },
 
-  include: {
+    // تعداد سفارش‌ها
+    prisma.userOrder.count({
 
-    userOrder: {
+      where: {
+
+        campaign: {
+
+          buildingId: manager.buildingId,
+
+        },
+
+      },
+
+    }),
+
+    // آخرین سفارش‌ها
+    prisma.userOrder.findMany({
+
+      take: 5,
+
+      orderBy: {
+
+        createdAt: "desc",
+
+      },
+
+      where: {
+
+        campaign: {
+
+          buildingId: manager.buildingId,
+
+        },
+
+      },
 
       include: {
 
@@ -453,269 +392,336 @@ prisma.payment.findMany({
 
         },
 
-      },
+        invoice: {
 
-    },
+          select: {
 
-  },
+            finalAmount: true,
 
-}),
+          },
 
-// اعلان‌ها
-prisma.notification.findMany({
-
-  where: {
-
-    userId: manager.userId,
-
-  },
-
-  take: 3,
-
-  orderBy: {
-
-    createdAt: "desc",
-
-  },
-
-}),
-
-// پرداخت‌های منتظر تایید
-prisma.payment.count({
-
-  where: {
-
-    paymentStatus: "PENDING",
-
-    userOrder: {
-
-      campaign: {
-
-        managerUserId: manager.userId,
+        },
 
       },
 
-    },
+    }),
 
-  },
+    // آخرین پرداخت‌ها
+    prisma.payment.findMany({
 
-}),
+      take: 5,
+
+      orderBy: {
+
+        createdAt: "desc",
+
+      },
+
+      where: {
+
+        userOrder: {
+
+          campaign: {
+
+            buildingId: manager.buildingId,
+
+          },
+
+        },
+
+      },
+
+      include: {
+
+        userOrder: {
+
+          include: {
+
+            user: {
+
+              select: {
+
+                userId: true,
+
+                fullName: true,
+
+              },
+
+            },
+
+            campaign: {
+
+              select: {
+
+                title: true,
+
+              },
+
+            },
+
+          },
+
+        },
+
+      },
+
+    }),
+
+    // اعلان‌ها
+    prisma.notification.findMany({
+
+      where: {
+
+        userId: manager.userId,
+
+      },
+
+      take: 3,
+
+      orderBy: {
+
+        createdAt: "desc",
+
+      },
+
+    }),
+
+    // پرداخت‌های منتظر تایید
+    prisma.payment.count({
+
+      where: {
+
+        paymentStatus: "PENDING",
+
+        userOrder: {
+
+          campaign: {
+
+            managerUserId: manager.userId,
+
+          },
+
+        },
+
+      },
+
+    }),
 
 
-// آماده تحویل
-prisma.userOrder.count({
+    // آماده تحویل
+    prisma.userOrder.count({
 
-  where: {
+      where: {
 
-    status: "READY_FOR_DELIVERY",
+        status: "READY_FOR_DELIVERY",
 
-    campaign: {
+        campaign: {
 
-      managerUserId: manager.userId,
+          managerUserId: manager.userId,
 
-    },
+        },
 
-  },
+      },
 
-}),
+    }),
 
-// کمپین‌های تکمیل شده
-prisma.campaign.count({
+    // کمپین‌های تکمیل شده
+    prisma.campaign.count({
 
-  where: {
+      where: {
 
-    buildingId: manager.buildingId,
+        buildingId: manager.buildingId,
 
-    status: "COMPLETED",
+        status: "COMPLETED",
 
-  },
+      },
 
-}),
+    }),
 
-// کمپین‌های در حال خرید
-prisma.campaign.count({
+    // کمپین‌های در حال خرید
+    prisma.campaign.count({
 
-  where: {
+      where: {
 
-    buildingId: manager.buildingId,
+        buildingId: manager.buildingId,
 
-    status: "PURCHASING",
+        status: "PURCHASING",
 
-  },
+      },
 
-}),
+    }),
 
-// کمپین‌های فعال
-prisma.campaign.count({
+    // کمپین‌های فعال
+    prisma.campaign.count({
 
-  where: {
+      where: {
 
-    buildingId: manager.buildingId,
+        buildingId: manager.buildingId,
 
-    status: {
+        status: {
 
-      in: [
+          in: [
 
-        "ACTIVE",
+            "ACTIVE",
 
-        "AWAITING_PAYMENT",
+            "AWAITING_PAYMENT",
 
-      ],
+          ],
 
-    },
+        },
 
-  },
+      },
 
-}),
-
-
-
-   ]
- )
+    }),
 
 
-const formattedOrders =
-  latestOrders.map((order) => ({
 
-    userId:
-      order.user.userId,
+  ]
+  )
 
-    fullName:
-      order.user.fullName,
 
-    campaignTitle:
-      order.campaign.title,
+  const formattedOrders =
+    latestOrders.map((order) => ({
 
-    finalAmount:
-      order.invoice?.finalAmount,
+      userId:
+        order.user.userId,
 
-    status:
-      order.status,
+      fullName:
+        order.user.fullName,
 
-  }));
+      campaignTitle:
+        order.campaign.title,
+
+      finalAmount:
+        order.invoice?.finalAmount,
+
+      status:
+        order.status,
+
+    }));
 
   const formattedPayments =
-  latestPayments.map((payment) => ({
+    latestPayments.map((payment) => ({
 
-    userId:
-      payment.userOrder.user.userId,
+      userId:
+        payment.userOrder.user.userId,
 
-    fullName:
-      payment.userOrder.user.fullName,
+      fullName:
+        payment.userOrder.user.fullName,
 
-    campaignTitle:
-      payment.userOrder.campaign.title,
+      campaignTitle:
+        payment.userOrder.campaign.title,
 
-    amount:
-      payment.amount,
+      amount:
+        payment.amount,
 
-    paymentStatus:
-      payment.paymentStatus,
+      paymentStatus:
+        payment.paymentStatus,
 
-  }));
+    }));
 
   const buildingStatus = {
 
-  activeResidents:
-    residentCount,
+    activeResidents:
+      residentCount,
 
-  activeCampaigns,
+    activeCampaigns,
 
-  completedCampaigns,
+    completedCampaigns,
 
-  waitingPayments:
+    waitingPayments:
+      pendingPayments,
+
+    purchasingCampaigns,
+
+    readyDeliveries:
+      readyForDelivery,
+
+  };
+
+  const pendingActions = {
+
     pendingPayments,
 
-  purchasingCampaigns,
-
-  readyDeliveries:
     readyForDelivery,
 
-};
+    needStartPurchasing:
+      activeCampaign?.status ===
+      "AWAITING_PAYMENT",
 
-const pendingActions = {
+  };
 
-  pendingPayments,
+  const needAttention =
 
-  readyForDelivery,
+    pendingPayments > 0 ||
 
-  needStartPurchasing:
-    activeCampaign?.status ===
-    "AWAITING_PAYMENT",
+    readyForDelivery > 0 ||
 
-};
+    pendingActions.needStartPurchasing;
 
-const needAttention =
 
-  pendingPayments > 0 ||
-
-  readyForDelivery > 0 ||
-
-  pendingActions.needStartPurchasing;
-
-  
 
   const quickActions = {
 
-  createCampaign: true, // همیشه برای مدیر فعاله
+    createCampaign: true, // همیشه برای مدیر فعاله
 
-  checkPayments: pendingPayments > 0,
+    checkPayments: pendingPayments > 0,
 
-  startPurchasing: activeCampaign?.status === "AWAITING_PAYMENT",
+    startPurchasing: activeCampaign?.status === "AWAITING_PAYMENT",
 
-  readyForDelivery: readyForDelivery > 0,
+    readyForDelivery: readyForDelivery > 0,
 
-  deliverOrders: readyForDelivery > 0,
+    deliverOrders: readyForDelivery > 0,
 
-};
+  };
 
-return {
+  return {
 
-  profile: {
+    profile: {
 
-    fullName: manager.fullName,
+      fullName: manager.fullName,
 
-    buildingName: manager.building.buildingName,
+      buildingName: manager.building.buildingName,
 
-  },
+    },
 
-  buildingStatus,
+    buildingStatus,
 
-  statistics: {
+    statistics: {
 
-    residentCount,
+      residentCount,
 
-    campaignCount,
+      campaignCount,
 
-    totalOrders,
+      totalOrders,
 
-  },
+    },
 
-  pendingActions: {
+    pendingActions: {
 
-    pendingPayments:
+      pendingPayments:
 
-      pendingActions.pendingPayments,
+        pendingActions.pendingPayments,
 
-    readyForDelivery:
+      readyForDelivery:
 
-      pendingActions.readyForDelivery,
+        pendingActions.readyForDelivery,
 
-    needStartPurchasing:
+      needStartPurchasing:
 
-      pendingActions.needStartPurchasing,
+        pendingActions.needStartPurchasing,
 
-    needAttention,
+      needAttention,
 
-  },
+    },
 
-  quickActions,
+    quickActions,
 
-  activeCampaign:
+    activeCampaign:
 
-    activeCampaign
+      activeCampaign
 
-      ? {
+        ? {
 
           campaignId:
 
@@ -735,47 +741,47 @@ return {
 
         }
 
-      : null,
+        : null,
 
-  latestOrders:
+    latestOrders:
 
-    formattedOrders,
+      formattedOrders,
 
-  latestPayments:
+    latestPayments:
 
-    formattedPayments,
+      formattedPayments,
 
-  notifications:
+    notifications:
 
-    notifications.map(
+      notifications.map(
 
-      (notification) => ({
+        (notification) => ({
 
-        notificationId:
+          notificationId:
 
-          notification.notificationId,
+            notification.notificationId,
 
-        title:
+          title:
 
-          notification.title,
+            notification.title,
 
-        message:
+          message:
 
-          notification.message,
+            notification.message,
 
-        isRead:
+          isRead:
 
-          notification.isRead,
+            notification.isRead,
 
-        createdAt:
+          createdAt:
 
-          notification.createdAt,
+            notification.createdAt,
 
-      })
+        })
 
-    ),
+      ),
 
-};
+  };
 
 };
 

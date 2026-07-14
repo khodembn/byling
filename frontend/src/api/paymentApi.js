@@ -40,3 +40,48 @@ export const getMyPayments = async () => {
     return res.data.data;
 
 };
+
+export const getManagerPayments = async () => {
+
+    const res = await api.get("/payment/manager");
+
+    return res.data.payments;
+
+};
+
+export const getPaymentDetails = async (paymentId) => {
+
+    const res =
+        await api.get(`/payment/${paymentId}`);
+
+    return res.data.data;
+
+};
+
+export const approvePayment = async (paymentId) => {
+
+    const res =
+        await api.patch(
+            `/payment/${paymentId}/approve`
+        );
+
+    return res.data;
+
+};
+
+export const rejectPayment = async (
+    paymentId,
+    rejectReason
+) => {
+
+    const res =
+        await api.patch(
+            `/payment/${paymentId}/reject`,
+            {
+                rejectReason,
+            }
+        );
+
+    return res.data;
+
+};

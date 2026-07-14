@@ -1,67 +1,67 @@
 import * as dashboardService from "../services/dashboard.service.js";
 
 export const getResidentDashboardController =
-async (req, res) => {
+  async (req, res) => {
 
-  try {
+    try {
 
-    const result =
-      await dashboardService.getResidentDashboard(
-        req.user
-      );
+      const result =
+        await dashboardService.getResidentDashboard(
+          req.user
+        );
 
-    res.json({
+      res.json({
 
-      success: true,
+        success: true,
 
-      data: result,
+        data: result,
 
-    });
+      });
 
-  } catch (err) {
+    } catch (err) {
+      console.log("DASHBOARD ERROR =>", err);
+      res.status(400).json({
 
-    res.status(400).json({
+        success: false,
 
-      success: false,
+        message: err.message,
 
-      message: err.message,
+      });
 
-    });
+    }
 
-  }
-
-};
+  };
 
 
 
 export const getManagerDashboardController =
-async (req, res) => {
+  async (req, res) => {
 
-  try {
+    try {
 
-    const result =
-      await dashboardService.getManagerDashboard(
-        req.user
-      );
+      const result =
+        await dashboardService.getManagerDashboard(
+          req.user
+        );
 
-    res.json({
+      res.json({
 
-      success: true,
+        success: true,
 
-      data: result,
+        data: result,
 
-    });
+      });
 
-  } catch (err) {
+    } catch (err) {
 
-    res.status(400).json({
+      res.status(400).json({
 
-      success: false,
+        success: false,
 
-      message: err.message,
+        message: err.message,
 
-    });
+      });
 
-  }
+    }
 
-};
+  };

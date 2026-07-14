@@ -1,0 +1,384 @@
+.order-details-page {
+
+    padding: 30px;
+
+}
+
+.details-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+
+}
+
+.details-header h1 {
+
+    color: #1d415d;
+
+    font-size: 30px;
+
+    font-weight: 800;
+
+}
+
+.back-btn {
+
+    background: #1d415d;
+
+    color: #fff;
+
+    border: none;
+
+    padding: 10px 22px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    transition: .25s;
+
+}
+
+.back-btn:hover {
+
+    background: #234d6c;
+
+}
+
+.details-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+
+    gap: 25px;
+
+    margin-bottom: 30px;
+
+}
+
+.info-card {
+
+    background: #1d415d;
+
+    color: #fff;
+
+    border-radius: 20px;
+
+    padding: 28px;
+
+}
+
+.info-card h3 {
+
+    color: #FFD54F;
+
+    margin-bottom: 20px;
+
+}
+
+.info-card p {
+
+    margin-bottom: 12px;
+
+    font-size: 15px;
+
+    line-height: 1.8;
+
+}
+
+.info-card strong {
+
+    color: #FFD54F;
+
+}
+
+.products-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    margin-top: 20px;
+
+    background: #fff;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow: 0 5px 20px rgba(0, 0, 0, .08);
+
+}
+
+.products-table thead {
+
+    background: #1d415d;
+
+}
+
+.products-table th {
+
+    color: #FFD54F;
+
+    padding: 18px;
+
+    text-align: center;
+
+}
+
+.products-table td {
+
+    padding: 18px;
+
+    text-align: center;
+
+    border-bottom: 1px solid #eee;
+
+}
+
+.products-table tbody tr:hover {
+
+    background: #f8fbfd;
+
+}
+
+.summary-card {
+
+    margin-top: 30px;
+
+    background: #1d415d;
+
+    color: #fff;
+
+    border-radius: 20px;
+
+    padding: 30px;
+
+}
+
+.summary-card h3 {
+
+    color: #FFD54F;
+
+    margin-bottom: 20px;
+
+}
+
+.summary-card p {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 14px;
+
+    font-size: 16px;
+
+}
+
+.summary-card strong {
+
+    color: #FFD54F;
+
+    font-size: 18px;
+
+}
+
+.payment-card {
+
+    margin-top: 30px;
+
+    background: #fff;
+
+    border-radius: 20px;
+
+    padding: 30px;
+
+    box-shadow: 0 5px 20px rgba(0, 0, 0, .08);
+
+}
+
+.payment-card h3 {
+
+    color: #1d415d;
+
+    margin-bottom: 20px;
+
+}
+
+.payment-card p {
+
+    margin-bottom: 12px;
+
+    color: #444;
+
+    line-height: 1.8;
+
+}
+
+.payment-card strong {
+
+    color: #1d415d;
+
+}
+
+.status {
+
+    display: inline-block;
+
+    padding: 6px 14px;
+
+    border-radius: 50px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+}
+
+.status.pending {
+
+    background: #fff6d5;
+
+    color: #b8860b;
+
+}
+
+.status.approved {
+
+    background: #ddf8e5;
+
+    color: #2e7d32;
+
+}
+
+.status.rejected {
+
+    background: #ffe2e2;
+
+    color: #c62828;
+
+}
+
+.details-btn {
+
+    display: inline-block;
+
+    margin-top: 20px;
+
+    background: #1d415d;
+
+    color: #fff;
+
+    text-decoration: none;
+
+    padding: 12px 24px;
+
+    border-radius: 10px;
+
+    transition: .25s;
+
+}
+
+.details-btn:hover {
+
+    background: #234d6c;
+
+}
+
+.cancel-order-btn {
+
+    margin-top: 18px;
+
+    background: #c62828;
+
+    color: #fff;
+
+    border: none;
+
+    padding: 12px 24px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    transition: .25s;
+
+}
+
+.cancel-order-btn:hover {
+
+    background: #d32f2f;
+
+}
+
+.no-payment {
+
+    margin-top: 30px;
+
+    background: #fff;
+
+    padding: 35px;
+
+    text-align: center;
+
+    border-radius: 20px;
+
+    color: #777;
+
+    font-size: 18px;
+
+    box-shadow: 0 5px 20px rgba(0, 0, 0, .08);
+
+}
+
+@media(max-width:768px) {
+
+    .details-header {
+
+        flex-direction: column;
+
+        gap: 15px;
+
+    }
+
+    .details-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .products-table {
+
+        display: block;
+
+        overflow-x: auto;
+
+        white-space: nowrap;
+
+    }
+
+    .summary-card p {
+
+        flex-direction: column;
+
+        gap: 6px;
+
+    }
+
+    .details-btn,
+    .cancel-order-btn {
+
+        width: 100%;
+
+        text-align: center;
+
+    }
+
+}

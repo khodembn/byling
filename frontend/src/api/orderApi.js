@@ -61,3 +61,21 @@ export const cancelOrder = async (orderId) => {
     return res.data;
 
 };
+
+export const getManagerOrders = async () => {
+
+    const res = await api.get("/order/manager");
+
+    return res.data.orders;
+
+};
+
+export const getManagerOrderDetails = async (orderId) => {
+
+    const res = await api.get(
+        `/order/manager/${orderId}`
+    );
+
+    return res.data.data;
+
+};

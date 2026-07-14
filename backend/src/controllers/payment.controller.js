@@ -32,7 +32,72 @@ export const uploadReceipt = async (
 
 };
 
+export const getManagerPayments = async (req, res, next) => {
 
+  try {
+
+    const payments = await paymentService.getManagerPayments(
+
+      req.user
+
+    );
+
+    res.json({
+
+      success: true,
+
+      count: payments.length,
+
+      payments,
+
+    });
+
+  } catch (error) {
+
+    res.status(400).json({
+
+      success: false,
+
+      message: error.message,
+
+    });
+
+  }
+};
+
+export const getPaymentDetails = async (req, res) => {
+
+  try {
+
+    const data = await paymentService.getPaymentById(
+
+      req.params.paymentId,
+
+      req.user
+
+    );
+
+    res.json({
+
+      success: true,
+
+      data,
+
+    });
+
+  } catch (error) {
+
+    res.status(400).json({
+
+      success: false,
+
+      message: error.message,
+
+    });
+
+  }
+
+};
 
 export const getMyPayments = async (req, res, next) => {
 

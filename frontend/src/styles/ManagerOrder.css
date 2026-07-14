@@ -1,0 +1,231 @@
+.orders-page {
+
+    padding: 30px;
+
+}
+
+.page-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+
+}
+
+.page-header h1 {
+
+    color: #1d415d;
+
+    font-size: 30px;
+
+    font-weight: 800;
+
+}
+
+.orders-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    background: #fff;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+}
+
+.orders-table thead {
+
+    background: #1d415d;
+
+}
+
+.orders-table th {
+
+    color: #FFD54F;
+
+    padding: 18px;
+
+    text-align: center;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+}
+
+.orders-table td {
+
+    padding: 18px;
+
+    text-align: center;
+
+    border-bottom: 1px solid #eee;
+
+    color: #444;
+
+}
+
+.orders-table tbody tr {
+
+    transition: .25s;
+
+}
+
+.orders-table tbody tr:hover {
+
+    background: #f8fbfd;
+
+}
+
+.status {
+
+    display: inline-block;
+
+    padding: 6px 14px;
+
+    border-radius: 50px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+}
+
+/* وضعیت سفارش */
+
+.status.submitted {
+
+    background: #fff6d5;
+
+    color: #b8860b;
+
+}
+
+.status.paid {
+
+    background: #ddf8e5;
+
+    color: #2e7d32;
+
+}
+
+.status.delivered {
+
+    background: #d8f1ff;
+
+    color: #1565c0;
+
+}
+
+.status.cancelled {
+
+    background: #ffe2e2;
+
+    color: #c62828;
+
+}
+
+/* وضعیت پرداخت */
+
+.status.pending {
+
+    background: #fff6d5;
+
+    color: #b8860b;
+
+}
+
+.status.approved {
+
+    background: #ddf8e5;
+
+    color: #2e7d32;
+
+}
+
+.status.rejected {
+
+    background: #ffe2e2;
+
+    color: #c62828;
+
+}
+
+.status.none {
+
+    background: #ececec;
+
+    color: #666;
+
+}
+
+.details-btn {
+
+    background: #1d415d;
+
+    color: #fff;
+
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 10px 20px;
+
+    cursor: pointer;
+
+    transition: .25s;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+}
+
+.details-btn:hover {
+
+    background: #234d6c;
+
+    transform: translateY(-2px);
+
+}
+
+.empty-box {
+
+    background: #fff;
+
+    border-radius: 20px;
+
+    padding: 50px;
+
+    text-align: center;
+
+    color: #777;
+
+    font-size: 18px;
+
+    box-shadow: 0 8px 25px rgba(0, 0, 0, .08);
+
+}
+
+@media (max-width: 900px) {
+
+    .orders-table {
+
+        display: block;
+
+        overflow-x: auto;
+
+        white-space: nowrap;
+
+    }
+
+}

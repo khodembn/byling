@@ -1,6 +1,13 @@
 import * as campaignService from "../services/campaign.service.js";
 
+
+
+
+
+
+
 export const createCampaign = async (req, res) => {
+
 
 
 
@@ -17,6 +24,84 @@ export const createCampaign = async (req, res) => {
       message: error.message,
     });
   }
+};
+
+export const updateCampaignController = async (
+  req,
+  res
+) => {
+
+  try {
+
+    const result =
+      await campaignService.updateCampaign(
+        req.user,
+        req.params.campaignId,
+        req.body
+      );
+
+
+    res.json({
+
+      success: true,
+
+      data: result
+
+    });
+
+
+  }
+  catch (err) {
+
+    res.status(400).json({
+
+      success: false,
+
+      message: err.message
+
+    });
+
+  }
+
+};
+
+
+export const deleteCampaignController = async (
+  req,
+  res
+) => {
+
+  try {
+
+    const result =
+      await campaignService.deleteCampaign(
+        req.user,
+        req.params.campaignId
+      );
+
+
+    res.json({
+
+      success: true,
+
+      data: result
+
+    });
+
+
+  }
+  catch (err) {
+
+    res.status(400).json({
+
+      success: false,
+
+      message: err.message
+
+    });
+
+  }
+
 };
 
 export const getAllCampaigns = async (req, res) => {
@@ -142,7 +227,7 @@ export const requestPayment = async (
 
 };
 
-export const updatePaymentInfo =
+/*export const updatePaymentInfo =
   async (req, res, next) => {
 
     try {
@@ -178,7 +263,12 @@ export const updatePaymentInfo =
       });
     }
 
-  };
+  };*/
+
+
+
+
+
 export const cancelUnpaidOrders = async (
   req,
   res

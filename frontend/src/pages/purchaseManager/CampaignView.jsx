@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import {
     getCampaign,
@@ -14,7 +14,9 @@ export default function CampaignView() {
 
     const [products, setProducts] = useState([]);
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true)
+
+    const navigate = useNavigate();
 
     useEffect(() => {
 
@@ -55,7 +57,19 @@ export default function CampaignView() {
         <div>
 
             <h1>{campaign.title}</h1>
+            <button
 
+                className="back-btn"
+
+                onClick={() =>
+                    navigate("/purchase/campaigns")
+                }
+
+            >
+
+                بازگشت
+
+            </button>
             <p>
 
                 وضعیت:

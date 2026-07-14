@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { getCampaigns } from "../../api/campaignApi";
+import {
+  getCampaigns,
+  completeCampaign
+} from "../../api/campaignApi";
+
 import { Link } from "react-router-dom";
 import "../../styles/campaigns.css";
 
@@ -9,6 +13,8 @@ export default function Campaigns() {
 
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
+
+  const [loadingComplete, setLoadingComplete] = useState(null);
 
   useEffect(() => {
     const fetchCampaigns = async () => {
@@ -42,6 +48,7 @@ export default function Campaigns() {
     return matchSearch && matchStatus;
   });
 
+
   const getStatusLabel = (status) => {
     switch (status) {
       case "DRAFT":
@@ -70,7 +77,50 @@ export default function Campaigns() {
     }
   };
 
+  const handleCompleteCampaign = async (campaignId) => {
 
+    const confirmComplete =
+      window.confirm(
+        "آیا مطمئن هستید که می‌خواهید کمپین را پایان دهید؟"
+      );
+
+
+    if (!confirmComplete)
+      return;
+
+
+    try {
+
+      setLoadingComplete(campaignId);
+
+
+      await completeCampaign(campaignId);
+
+
+      alert(
+        "کمپین با موفقیت تکمیل شد."
+      );
+
+
+      const data = await getCampaigns();
+
+      setCampaigns(data);
+
+
+    } catch (err) {
+
+      alert(
+        err.response?.data?.message ||
+        err.message
+      );
+
+    } finally {
+
+      setLoadingComplete(null);
+
+    }
+
+  };
 
   return (
     <>
@@ -191,8 +241,8 @@ export default function Campaigns() {
 
 
 
-
                 <td>
+
                   <Link
                     to={`/purchase/campaign/${campaign.campaignId}/view`}
                     className="action-btn view-btn"
@@ -200,12 +250,77 @@ export default function Campaigns() {
                     مشاهده
                   </Link>
 
-                  <Link
-                    to={`/purchase/campaign/${campaign.campaignId}`}
-                    className="action-btn edit-btn"
-                  >
-                    ویرایش
-                  </Link>
+
+                  {(campaign.status === "DRAFT" ||
+                    campaign.status === "ACTIVE") && (
+
+                      <Link
+                        to={`/purchase/campaign/${campaign.campaignId}`}
+                        className="action-btn edit-btn"
+                      >
+                        ویرایش
+                      </Link>
+
+                    )}
+
+
+
+                  {campaign.status === "AWAITING_PAYMENT" && (
+
+                    <Link
+                      to={`/purchase/campaign/${campaign.campaignId}/manage`}
+                      className="action-btn manage-btn"
+                    >
+                      مدیریت کمپین
+                    </Link>
+
+                  )}
+
+
+
+                  {campaign.status === "PURCHASING" && (
+
+                    <Link
+                      to={`/purchase/campaign/${campaign.campaignId}/manage`}
+                      className="action-btn delivery-btn"
+                    >
+                      آماده تحویل
+                    </Link>
+
+                  )}
+
+
+
+                  {campaign.status === "READY_FOR_DELIVERY" && (
+
+                    <button
+
+                      onClick={() =>
+                        handleCompleteCampaign(
+                          campaign.campaignId
+                        )
+                      }
+
+                      className="action-btn complete-btn"
+
+                      disabled={
+                        loadingComplete === campaign.campaignId
+                      }
+
+                    >
+
+                      {
+                        loadingComplete === campaign.campaignId
+                          ? "در حال پایان..."
+                          : "پایان خرید"
+                      }
+
+                    </button>
+
+                  )}
+
+
+
                 </td>
               </tr>
             ))}
