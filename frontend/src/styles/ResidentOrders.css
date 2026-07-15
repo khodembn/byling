@@ -1,0 +1,229 @@
+/* =========================
+   Resident Orders
+========================= */
+
+.orders-page {
+    min-height: calc(100vh - 100px);
+    padding: 35px 25px;
+    color: white;
+}
+
+.orders-page h1 {
+    font-size: 30px;
+    margin-bottom: 30px;
+    font-weight: 700;
+    color: white;
+}
+
+/* =========================
+   Order Card
+========================= */
+
+.order-card {
+    background: rgba(255, 255, 255, .08);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, .15);
+    border-radius: 22px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
+    transition: .3s;
+}
+
+.order-card:hover {
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, .11);
+}
+
+/* =========================
+   Header
+========================= */
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    gap: 20px;
+}
+
+.order-header h2 {
+    color: #FFD54F;
+    font-size: 22px;
+    margin: 0;
+}
+
+.order-header span {
+    background: #2fa4ff;
+    color: white;
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* =========================
+   Products
+========================= */
+
+.products {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 25px;
+}
+
+.order-product {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 15px;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, .06);
+}
+
+.order-product img {
+    width: 75px;
+    height: 75px;
+    border-radius: 14px;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, .12);
+}
+
+.order-product h4 {
+    margin-bottom: 8px;
+    color: white;
+    font-size: 17px;
+}
+
+.order-product p {
+    color: #d9e7f2;
+    font-size: 14px;
+}
+
+/* =========================
+   Price Box
+========================= */
+
+.price-box {
+    background: rgba(255, 255, 255, .06);
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 25px;
+}
+
+.price-box p {
+    color: #dbe8f3;
+    margin-bottom: 12px;
+}
+
+.price-box b {
+    color: #FFD54F;
+}
+
+.price-box h3 {
+    color: #27e37b;
+    font-size: 22px;
+}
+
+/* =========================
+   Actions
+========================= */
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.actions button {
+    border: none;
+    border-radius: 12px;
+    padding: 11px 22px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .3s;
+}
+
+/* مشاهده */
+
+.actions button:not(.cancel):not(.pay) {
+    background: #2fa4ff;
+    color: white;
+}
+
+.actions button:not(.cancel):not(.pay):hover {
+    background: #1687db;
+    transform: translateY(-2px);
+}
+
+/* پرداخت */
+
+.actions .pay {
+    background: #27ae60;
+    color: white;
+}
+
+.actions .pay:hover {
+    background: #1e8449;
+    transform: translateY(-2px);
+}
+
+/* لغو */
+
+.actions .cancel {
+    background: #e74c3c;
+    color: white;
+}
+
+.actions .cancel:hover {
+    background: #c0392b;
+    transform: translateY(-2px);
+}
+
+/* =========================
+   Loading
+========================= */
+
+.orders-page>div:first-child {
+    text-align: center;
+    color: white;
+    font-size: 20px;
+    margin-top: 60px;
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 768px) {
+
+    .orders-page {
+        padding: 25px 15px;
+    }
+
+    .order-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .order-product {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .order-product img {
+        width: 100%;
+        height: 180px;
+    }
+
+    .actions {
+        flex-direction: column;
+    }
+
+    .actions button {
+        width: 100%;
+    }
+}

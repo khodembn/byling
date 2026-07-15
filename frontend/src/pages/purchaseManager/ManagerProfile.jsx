@@ -19,6 +19,7 @@ import {
 } from "../../api/userApi";
 
 
+import "../../styles/ManagerProfile.css";
 
 export default function ManagerProfile() {
 

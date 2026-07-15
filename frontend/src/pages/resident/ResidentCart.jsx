@@ -8,7 +8,7 @@ import {
 } from "../../api/orderApi";
 
 import PreviewModal from "../../components/modals/PreviewModal";
-
+import "../../styles/ResidentCart.css";
 
 export default function ResidentCart() {
 

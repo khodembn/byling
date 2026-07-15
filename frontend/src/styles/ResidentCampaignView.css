@@ -1,0 +1,330 @@
+/* =========================
+   Resident Campaign View
+========================= */
+
+.resident-campaign-view {
+
+    min-height: calc(100vh - 100px);
+
+    padding: 35px;
+
+    color: white;
+
+}
+
+.resident-campaign-view h1 {
+
+    font-size: 30px;
+
+    margin-bottom: 30px;
+
+    font-weight: 700;
+
+    color: white;
+
+}
+
+.resident-campaign-view>p {
+
+    text-align: center;
+
+    background: rgba(255, 255, 255, .08);
+
+    border: 1px solid rgba(255, 255, 255, .15);
+
+    border-radius: 18px;
+
+    padding: 30px;
+
+    color: #dbe8f3;
+
+}
+
+
+/* =========================
+   Products Grid
+========================= */
+
+.resident-campaign-view {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(310px, 1fr));
+
+    gap: 25px;
+
+}
+
+.resident-campaign-view h1 {
+
+    grid-column: 1/-1;
+
+}
+
+.resident-campaign-view>p {
+
+    grid-column: 1/-1;
+
+}
+
+
+/* =========================
+   Product Card
+========================= */
+
+.resident-product-card {
+
+    background: rgba(255, 255, 255, .08);
+
+    backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(255, 255, 255, .15);
+
+    border-radius: 22px;
+
+    padding: 22px;
+
+    box-shadow:
+
+        0 10px 30px rgba(0, 0, 0, .3);
+
+    transition: .3s;
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+.resident-product-card:hover {
+
+    transform: translateY(-5px);
+
+    background: rgba(255, 255, 255, .12);
+
+}
+
+
+/* =========================
+   Image
+========================= */
+
+.resident-product-card img {
+
+    width: 140px;
+
+    height: 140px;
+
+    object-fit: cover;
+
+    margin: 0 auto 20px;
+
+    border-radius: 18px;
+
+    background: white;
+
+}
+
+.product-placeholder {
+
+    width: 140px;
+
+    height: 140px;
+
+    margin: 0 auto 20px;
+
+    border-radius: 18px;
+
+    background: #16364e;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-size: 60px;
+
+}
+
+
+/* =========================
+   Title
+========================= */
+
+.resident-product-card h2 {
+
+    text-align: center;
+
+    color: #FFD54F;
+
+    margin-bottom: 18px;
+
+    font-size: 22px;
+
+}
+
+
+/* =========================
+   Info
+========================= */
+
+.resident-product-card p {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 10px 0;
+
+    border-bottom:
+
+        1px solid rgba(255, 255, 255, .08);
+
+    color: #e2edf5;
+
+    font-size: 14px;
+
+}
+
+.resident-product-card p:last-of-type {
+
+    border: none;
+
+}
+
+
+/* =========================
+   Quantity
+========================= */
+
+.quantity-box {
+
+    margin-top: auto;
+
+    padding-top: 20px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 15px;
+
+}
+
+.quantity-box span {
+
+    width: 48px;
+
+    height: 42px;
+
+    border-radius: 12px;
+
+    background: #16364e;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-weight: bold;
+
+    font-size: 18px;
+
+    color: white;
+
+}
+
+.quantity-box button {
+
+    width: 42px;
+
+    height: 42px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: #FFD54F;
+
+    color: #143447;
+
+    font-size: 24px;
+
+    font-weight: 900;
+
+    cursor: pointer;
+
+    transition: .3s;
+
+}
+
+.quantity-box button:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+
+        0 8px 20px rgba(255, 213, 79, .35);
+
+}
+
+.quantity-box button:active {
+
+    transform: scale(.95);
+
+}
+
+
+/* =========================
+   Loading
+========================= */
+
+h2 {
+
+    text-align: center;
+
+    color: white;
+
+    margin-top: 40px;
+
+}
+
+
+/* =========================
+   Responsive
+========================= */
+
+@media(max-width:768px) {
+
+    .resident-campaign-view {
+
+        padding: 20px;
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .resident-product-card {
+
+        padding: 18px;
+
+    }
+
+    .resident-product-card img,
+
+    .product-placeholder {
+
+        width: 120px;
+
+        height: 120px;
+
+    }
+
+}

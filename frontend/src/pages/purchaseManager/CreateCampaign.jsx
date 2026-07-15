@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createCampaign } from "../../api/campaignApi";
 
+import "../../styles/CreateCampaign.css";
+
 export default function CreateCampaign() {
   const navigate = useNavigate();
 

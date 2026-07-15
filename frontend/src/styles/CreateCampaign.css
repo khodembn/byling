@@ -1,0 +1,382 @@
+/* =========================
+   Create Campaign Page
+========================= */
+
+
+.create-campaign-page {
+
+
+    min-height: 100vh;
+
+
+    display: flex;
+
+
+    flex-direction: column;
+
+
+    align-items: center;
+
+
+    padding: 40px 25px;
+
+
+    background: #0f2d44;
+
+
+    color: white;
+
+
+    font-family: "Vazirmatn", "Tahoma", sans-serif;
+
+
+}
+
+
+
+
+/* =========================
+   TITLE
+========================= */
+
+
+.create-campaign-page h1 {
+
+
+    color: white;
+
+
+    font-size: 32px;
+
+
+    font-weight: 800;
+
+
+    margin-bottom: 30px;
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   FORM CARD
+========================= */
+
+
+.create-campaign-page form {
+
+
+    width: 100%;
+
+
+    max-width: 520px;
+
+
+    background: rgba(255, 255, 255, .08);
+
+
+    backdrop-filter: blur(24px);
+
+
+    border-radius: 28px;
+
+
+    padding: 35px;
+
+
+    border:
+
+        1px solid rgba(255, 255, 255, .18);
+
+
+    box-shadow:
+
+
+        0 30px 60px rgba(0, 0, 0, .35);
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   INPUT GROUP
+========================= */
+
+
+.create-campaign-page form div {
+
+
+    display: flex;
+
+
+    flex-direction: column;
+
+
+    margin-bottom: 25px;
+
+
+}
+
+
+
+
+.create-campaign-page label {
+
+
+    color: #d5dbe3;
+
+
+    margin-bottom: 10px;
+
+
+    font-size: 15px;
+
+
+    font-weight: 700;
+
+
+}
+
+
+
+
+
+
+/* =========================
+   INPUT
+========================= */
+
+
+.create-campaign-page input {
+
+
+    width: 100%;
+
+
+    height: 55px;
+
+
+    padding: 0 18px;
+
+
+    border-radius: 15px;
+
+
+    border:
+
+        1px solid rgba(255, 255, 255, .15);
+
+
+    background: rgba(255, 255, 255, .10);
+
+
+    color: white;
+
+
+    font-size: 16px;
+
+
+    outline: none;
+
+
+    transition: .3s;
+
+
+}
+
+
+
+
+
+.create-campaign-page input::placeholder {
+
+
+    color: #d7d7d7;
+
+
+}
+
+
+
+
+
+.create-campaign-page input:focus {
+
+
+    border-color: #FFD54F;
+
+
+    background: rgba(255, 255, 255, .15);
+
+
+    box-shadow:
+
+
+        0 0 18px rgba(255, 213, 79, .25);
+
+
+}
+
+
+
+
+
+/* Date */
+
+.create-campaign-page input[type="datetime-local"] {
+
+
+    color: white;
+
+
+}
+
+
+
+
+
+
+/* =========================
+   BUTTON
+========================= */
+
+
+.create-campaign-page button {
+
+
+    width: 100%;
+
+
+    height: 55px;
+
+
+    margin-top: 10px;
+
+
+    border: none;
+
+
+    border-radius: 15px;
+
+
+    background: #FFD54F;
+
+
+    color: #143447;
+
+
+    font-size: 17px;
+
+
+    font-weight: 800;
+
+
+    cursor: pointer;
+
+
+    transition: .3s;
+
+
+    box-shadow:
+
+
+        0 12px 35px rgba(255, 213, 79, .3);
+
+
+}
+
+
+
+
+
+.create-campaign-page button:hover {
+
+
+    transform: translateY(-3px);
+
+
+    box-shadow:
+
+
+        0 15px 40px rgba(255, 213, 79, .45);
+
+
+}
+
+
+
+
+
+/* Disabled */
+
+
+.create-campaign-page button:disabled {
+
+
+    opacity: .6;
+
+
+    cursor: not-allowed;
+
+
+    transform: none;
+
+
+}
+
+
+
+
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+
+@media(max-width:600px) {
+
+
+    .create-campaign-page {
+
+
+        padding: 25px 15px;
+
+
+    }
+
+
+
+
+    .create-campaign-page form {
+
+
+        padding: 25px 20px;
+
+
+    }
+
+
+
+
+    .create-campaign-page h1 {
+
+
+        font-size: 26px;
+
+
+    }
+
+
+
+}

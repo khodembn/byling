@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getResidentCampaigns } from "../../api/residentApi";
 
+
+import "../../styles/ResidentCampaigns.css";
+
 export default function ResidentCampaigns() {
     const [campaigns, setCampaigns] = useState([]);
     const [loading, setLoading] = useState(true);

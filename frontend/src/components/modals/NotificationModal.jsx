@@ -1,6 +1,6 @@
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 
-
+import "../../styles/Notifications.css";
 export default function LatestNotificationModal({
     notification,
     onClose

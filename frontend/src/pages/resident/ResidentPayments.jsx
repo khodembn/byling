@@ -5,7 +5,7 @@ import {
 } from "../../api/paymentApi";
 import api from "../../api/axios";
 
-
+import "../../styles/ResidentPayments.css";
 const paymentStatusMap = {
     PENDING: {
         text: "🟡 در حال بررسی",

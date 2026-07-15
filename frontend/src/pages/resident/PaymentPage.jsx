@@ -13,7 +13,7 @@ import {
     uploadReceipt
 } from "../../api/paymentApi";
 
-
+import "../../styles/PaymentPage.css";
 
 export default function PaymentPage() {
 

@@ -8,7 +8,7 @@ import {
 } from "../../api/orderApi";
 
 import { useCart } from "../../contexts/CartContext";
-
+import "../../styles/ResidentCampaignView.css";
 
 export default function ResidentCampaignView() {
 
@@ -227,7 +227,7 @@ export default function ResidentCampaignView() {
 
     return (
 
-        <div>
+        <div className="resident-campaign-view">
 
             <h1>
 

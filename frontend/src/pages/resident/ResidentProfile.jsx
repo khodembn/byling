@@ -10,7 +10,8 @@ import {
     deleteAccount
 } from "../../api/userApi";
 
-
+import "../../styles/ResidentProfile.css";
+//import "../../styles/Profile.css";
 
 export default function ResidentProfile() {
 

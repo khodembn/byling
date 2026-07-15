@@ -4,6 +4,7 @@ import {
     cancelOrder
 } from "../../api/orderApi";
 
+import "../../styles/ResidentOrders.css";
 import PreviewModal from "../../components/modals/PreviewModal";
 import { useNavigate } from "react-router-dom";
 

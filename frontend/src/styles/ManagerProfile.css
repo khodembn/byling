@@ -1,0 +1,555 @@
+/* =========================
+   Manager Profile Page
+========================= */
+
+
+.manager-profile-page {
+
+
+    min-height: 100vh;
+
+
+    padding: 40px 25px;
+
+
+    background: #0f2d44;
+
+
+    color: white;
+
+
+    font-family: "Vazirmatn", "Tahoma", sans-serif;
+
+
+}
+
+
+
+
+/* =========================
+   TITLE
+========================= */
+
+
+.manager-profile-page h1 {
+
+
+    color: white;
+
+
+    font-size: 32px;
+
+
+    font-weight: 800;
+
+
+    margin-bottom: 30px;
+
+
+}
+
+
+
+.manager-profile-page h3 {
+
+
+    color: #FFD54F;
+
+
+    font-size: 20px;
+
+
+    margin-bottom: 20px;
+
+
+}
+
+
+
+
+/* =========================
+   GLASS SECTIONS
+========================= */
+
+
+.manager-profile-page form,
+.manager-profile-page>div:not(.danger-zone) {
+
+
+    background: rgba(255, 255, 255, .08);
+
+
+    backdrop-filter: blur(24px);
+
+
+    border-radius: 25px;
+
+
+    padding: 30px;
+
+
+    margin-bottom: 25px;
+
+
+    border:
+
+        1px solid rgba(255, 255, 255, .18);
+
+
+    box-shadow:
+
+
+        0 25px 50px rgba(0, 0, 0, .3);
+
+
+}
+
+
+
+
+
+
+/* =========================
+   LABEL
+========================= */
+
+
+.manager-profile-page label {
+
+
+    display: block;
+
+
+    color: #d5dbe3;
+
+
+    font-weight: 700;
+
+
+    margin-bottom: 8px;
+
+
+    margin-top: 15px;
+
+
+}
+
+
+
+
+
+/* =========================
+   INPUT
+========================= */
+
+
+.manager-profile-page input,
+.manager-profile-page select {
+
+
+    width: 100%;
+
+
+    height: 52px;
+
+
+    margin-bottom: 15px;
+
+
+    padding: 0 18px;
+
+
+    border-radius: 14px;
+
+
+    border:
+
+        1px solid rgba(255, 255, 255, .15);
+
+
+    background: rgba(255, 255, 255, .10);
+
+
+    color: white;
+
+
+    outline: none;
+
+
+    font-size: 15px;
+
+
+    transition: .3s;
+
+
+}
+
+
+
+
+.manager-profile-page input::placeholder {
+
+
+    color: #d7d7d7;
+
+
+}
+
+
+
+
+
+.manager-profile-page input:focus,
+.manager-profile-page select:focus {
+
+
+    border-color: #FFD54F;
+
+
+    box-shadow:
+
+
+        0 0 18px rgba(255, 213, 79, .25);
+
+
+}
+
+
+
+
+.manager-profile-page input:disabled {
+
+
+    opacity: .6;
+
+
+    cursor: not-allowed;
+
+
+}
+
+
+
+
+
+.manager-profile-page select option {
+
+
+    background: #143447;
+
+
+    color: white;
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+
+.manager-profile-page button {
+
+
+    height: 52px;
+
+
+    padding: 0 25px;
+
+
+    border: none;
+
+
+    border-radius: 15px;
+
+
+    background: #FFD54F;
+
+
+    color: #143447;
+
+
+    font-weight: 800;
+
+
+    font-size: 15px;
+
+
+    cursor: pointer;
+
+
+    transition: .3s;
+
+
+    margin-top: 10px;
+
+
+}
+
+
+
+
+.manager-profile-page button:hover {
+
+
+    transform: translateY(-2px);
+
+
+    box-shadow:
+
+
+        0 12px 30px rgba(255, 213, 79, .35);
+
+
+}
+
+
+
+
+
+.manager-profile-page button:disabled {
+
+
+    opacity: .6;
+
+
+    cursor: not-allowed;
+
+
+}
+
+
+
+
+
+
+/* =========================
+   DIVIDER
+========================= */
+
+
+.manager-profile-page hr {
+
+
+    border: none;
+
+
+    height: 1px;
+
+
+    background: rgba(255, 255, 255, .15);
+
+
+    margin: 30px 0;
+
+
+}
+
+
+
+
+
+
+/* =========================
+   CARD SECTION
+========================= */
+
+
+.manager-profile-page>div h3 {
+
+
+    border-bottom:
+
+        1px solid rgba(255, 255, 255, .15);
+
+
+    padding-bottom: 15px;
+
+
+}
+
+
+
+
+
+/* =========================
+   DANGER ZONE
+========================= */
+
+
+.danger-zone {
+
+
+    background: rgba(255, 80, 80, .12) !important;
+
+
+    border:
+
+        1px solid rgba(255, 100, 100, .25) !important;
+
+
+}
+
+
+
+
+
+.danger-zone h3 {
+
+
+    color: #ff8b8b;
+
+
+}
+
+
+
+
+.danger-zone button {
+
+
+    background: #ff5252;
+
+
+    color: white;
+
+
+}
+
+
+
+
+.danger-zone button:hover {
+
+
+    background: #e53935;
+
+
+    box-shadow:
+
+
+        0 12px 30px rgba(255, 82, 82, .35);
+
+
+}
+
+
+
+
+
+/* =========================
+   LOADING
+========================= */
+
+
+.manager-profile-page h2 {
+
+
+    color: white;
+
+
+    text-align: center;
+
+
+    margin-top: 50px;
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+
+@media(max-width:700px) {
+
+
+    .manager-profile-page {
+
+
+        padding: 25px 15px;
+
+
+    }
+
+
+
+    .manager-profile-page h1 {
+
+
+        font-size: 26px;
+
+
+    }
+
+
+
+    .manager-profile-page form,
+    .manager-profile-page>div:not(.danger-zone) {
+
+
+        padding: 20px;
+
+
+    }
+
+
+}
+
+/* راست چین کردن کل صفحه */
+.manager-profile-page {
+    direction: rtl;
+    text-align: right;
+}
+
+
+/* عنوان‌ها */
+.manager-profile-page h1,
+.manager-profile-page h3 {
+    text-align: right;
+}
+
+
+/* فرم و کارت‌ها */
+.manager-profile-page form,
+.manager-profile-page>div:not(.danger-zone) {
+    text-align: right;
+}
+
+
+/* لیبل‌ها */
+.manager-profile-page label {
+    text-align: right;
+}
+
+
+/* متن داخل input و select */
+.manager-profile-page input,
+.manager-profile-page select {
+    text-align: right;
+    direction: rtl;
+}
+
+
+/* گزینه‌های select */
+.manager-profile-page select option {
+    text-align: right;
+}
+
+
+/* دکمه‌ها وسط بمانند */
+.manager-profile-page button {
+    text-align: center;
+}

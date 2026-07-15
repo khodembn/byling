@@ -5,7 +5,7 @@ import {
 } from "../../api/campaignApi";
 
 import { Link } from "react-router-dom";
-import "../../styles/campaigns.css";
+import "../../styles/ManagerCampaigns.css";
 
 export default function Campaigns() {
   const [campaigns, setCampaigns] = useState([]);

@@ -1,0 +1,432 @@
+/* =========================
+   Resident Payment Page
+========================= */
+
+
+.payment-page {
+
+
+    min-height: 100vh;
+
+
+    padding: 40px 25px;
+
+
+    background: #0f2d44;
+
+
+    color: white;
+
+
+    font-family: "Vazirmatn", "Tahoma", sans-serif;
+
+
+    display: flex;
+
+
+    flex-direction: column;
+
+
+    align-items: center;
+
+
+}
+
+
+
+
+
+
+/* =========================
+   TITLE
+========================= */
+
+
+.payment-page h1 {
+
+
+    color: white;
+
+
+    font-size: 32px;
+
+
+    font-weight: 800;
+
+
+    margin-bottom: 30px;
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   FORM CARD
+========================= */
+
+
+.payment-page form {
+
+
+    width: 100%;
+
+
+    max-width: 500px;
+
+
+    background: rgba(255, 255, 255, .08);
+
+
+    backdrop-filter: blur(24px);
+
+
+    border-radius: 25px;
+
+
+    padding: 35px;
+
+
+    border:
+
+        1px solid rgba(255, 255, 255, .18);
+
+
+    box-shadow:
+
+
+        0 25px 50px rgba(0, 0, 0, .3);
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   LABEL
+========================= */
+
+
+.payment-page label {
+
+
+    display: block;
+
+
+    color: #d5dbe3;
+
+
+    font-size: 15px;
+
+
+    font-weight: 700;
+
+
+    margin-bottom: 10px;
+
+
+    margin-top: 18px;
+
+
+}
+
+
+
+
+
+
+/* =========================
+   INPUTS
+========================= */
+
+
+.payment-page input {
+
+
+    width: 100%;
+
+
+    height: 52px;
+
+
+    padding: 0 18px;
+
+
+    border-radius: 14px;
+
+
+    border:
+
+        1px solid rgba(255, 255, 255, .18);
+
+
+    background: rgba(255, 255, 255, .10);
+
+
+    color: white;
+
+
+    font-size: 15px;
+
+
+    outline: none;
+
+
+    transition: .3s;
+
+
+}
+
+
+
+
+
+.payment-page input:focus {
+
+
+    border-color: #FFD54F;
+
+
+    box-shadow:
+
+
+        0 0 18px rgba(255, 213, 79, .25);
+
+
+}
+
+
+
+
+
+
+/* File Input */
+
+
+.payment-page input[type="file"] {
+
+
+    padding: 12px;
+
+
+    cursor: pointer;
+
+
+}
+
+
+
+
+
+
+.payment-page input::file-selector-button {
+
+
+    background: #FFD54F;
+
+
+    color: #143447;
+
+
+    border: none;
+
+
+    border-radius: 10px;
+
+
+    padding: 8px 14px;
+
+
+    font-weight: bold;
+
+
+    cursor: pointer;
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   BUTTON
+========================= */
+
+
+.payment-page button {
+
+
+    width: 100%;
+
+
+    height: 52px;
+
+
+    margin-top: 30px;
+
+
+    border: none;
+
+
+    border-radius: 15px;
+
+
+    background: #FFD54F;
+
+
+    color: #143447;
+
+
+    font-size: 17px;
+
+
+    font-weight: 800;
+
+
+    cursor: pointer;
+
+
+    transition: .3s;
+
+
+}
+
+
+
+
+
+.payment-page button:hover {
+
+
+    transform: translateY(-2px);
+
+
+    box-shadow:
+
+
+        0 12px 30px rgba(255, 213, 79, .35);
+
+
+}
+
+
+
+
+
+.payment-page button:disabled {
+
+
+    opacity: .6;
+
+
+    cursor: not-allowed;
+
+
+    transform: none;
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   SUCCESS MESSAGE
+========================= */
+
+
+.payment-page>div {
+
+
+    margin-top: 25px;
+
+
+    width: 100%;
+
+
+    max-width: 500px;
+
+
+    padding: 18px;
+
+
+    background: rgba(39, 174, 96, .15);
+
+
+    border:
+
+        1px solid rgba(39, 174, 96, .35);
+
+
+    border-radius: 16px;
+
+
+    text-align: center;
+
+
+    color: #7dffad;
+
+
+    font-weight: 700;
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+
+@media(max-width:600px) {
+
+
+    .payment-page {
+
+
+        padding: 25px 15px;
+
+
+    }
+
+
+
+    .payment-page h1 {
+
+
+        font-size: 26px;
+
+
+    }
+
+
+
+    .payment-page form {
+
+
+        padding: 25px;
+
+
+    }
+
+
+}

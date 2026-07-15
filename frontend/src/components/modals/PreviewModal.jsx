@@ -1,3 +1,5 @@
+import "../../styles/PreviewModal.css";
+
 export default function PreviewModal({
     preview,
     campaignTitle,
