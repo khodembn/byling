@@ -1,0 +1,266 @@
+/* RequestPaymentModal.css */
+
+
+.modal-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0, 0, 0, .55);
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    z-index: 2000;
+
+    direction: rtl;
+
+}
+
+
+
+/* modal */
+
+.payment-modal {
+
+    width: 450px;
+
+    max-width: 90%;
+
+    background: #1d415d;
+
+    border-radius: 18px;
+
+    padding: 25px;
+
+    color: white;
+
+    box-shadow: 0 15px 45px rgba(0, 0, 0, .35);
+
+    animation: paymentModalShow .25s ease;
+
+}
+
+
+
+@keyframes paymentModalShow {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(-20px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+    }
+
+}
+
+
+
+.payment-modal h2 {
+
+    text-align: center;
+
+    margin-bottom: 18px;
+
+    font-size: 23px;
+
+}
+
+
+
+/* description */
+
+.payment-description {
+
+    background: rgba(255, 255, 255, .08);
+
+    padding: 14px;
+
+    border-radius: 12px;
+
+    line-height: 1.8;
+
+    color: #e0f2fe;
+
+    font-size: 14px;
+
+    margin-bottom: 20px;
+
+}
+
+
+
+/* form */
+
+.payment-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+}
+
+
+
+.payment-info label {
+
+    font-size: 14px;
+
+    color: #dbeafe;
+
+    margin-top: 5px;
+
+}
+
+
+
+.payment-info input {
+
+    width: 100%;
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    border: none;
+
+    outline: none;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    background: #f8fafc;
+
+    color: #333;
+
+}
+
+
+
+.payment-info input:focus {
+
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, .4);
+
+}
+
+
+
+/* disabled inputs */
+
+.payment-info input:disabled {
+
+    cursor: not-allowed;
+
+    opacity: .85;
+
+}
+
+
+
+/* actions */
+
+.modal-actions {
+
+    display: flex;
+
+    justify-content: flex-start;
+
+    gap: 12px;
+
+    margin-top: 25px;
+
+}
+
+
+
+.cancel-btn,
+
+.submit-btn {
+
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 12px 20px;
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    transition: .2s;
+
+}
+
+
+
+/* cancel */
+
+.cancel-btn {
+
+    background: #64748b;
+
+    color: white;
+
+}
+
+
+
+.cancel-btn:hover {
+
+    background: #475569;
+
+}
+
+
+
+/* submit */
+
+.submit-btn {
+
+    background: #38bdf8;
+
+    color: #082f49;
+
+    font-weight: bold;
+
+}
+
+
+
+.submit-btn:hover {
+
+    background: #0ea5e9;
+
+    transform: translateY(-2px);
+
+}
+
+
+
+.submit-btn:disabled {
+
+    opacity: .6;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+}

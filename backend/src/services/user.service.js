@@ -275,13 +275,13 @@ export const deleteAccount = async (
 
       where: {
 
-        userId:user.userId
+        userId: user.userId
 
       }
 
     });
 
-  if(!dbUser){
+  if (!dbUser) {
 
     throw new Error(
       "کاربر پیدا نشد."
@@ -289,9 +289,9 @@ export const deleteAccount = async (
 
   }
 
-  if(
-    dbUser.role==="PURCHASE_MANAGER"
-  ){
+  if (
+    dbUser.role === "PURCHASE_MANAGER"
+  ) {
 
     throw new Error(
 
@@ -304,13 +304,13 @@ export const deleteAccount = async (
   const activeOrders =
     await prisma.userOrder.findFirst({
 
-      where:{
+      where: {
 
-        userId:dbUser.userId,
+        userId: dbUser.userId,
 
-        status:{
+        status: {
 
-          in:[
+          in: [
             "CART",
             "SUBMITTED",
             "PAID"
@@ -322,7 +322,7 @@ export const deleteAccount = async (
 
     });
 
-  if(activeOrders){
+  if (activeOrders) {
 
     throw new Error(
 
@@ -334,28 +334,327 @@ export const deleteAccount = async (
 
   await prisma.user.update({
 
-    where:{
+    where: {
 
-      userId:dbUser.userId
+      userId: dbUser.userId
 
     },
 
-    data:{
+    data: {
 
-      isDeleted:true,
+      isDeleted: true,
 
-      deletedAt:new Date()
+      deletedAt: new Date()
 
     }
 
   });
 
-  return{
+  return {
 
-    success:true,
+    success: true,
 
-    message:"حساب کاربری با موفقیت حذف شد."
+    message: "حساب کاربری با موفقیت حذف شد."
 
   };
+
+};
+
+
+
+export const getUserProfile = async (user) => {
+
+
+  const profile = await prisma.user.findUnique({
+
+    where: {
+
+      userId: user.userId,
+
+    },
+
+
+    select: {
+
+      userId: true,
+
+      fullName: true,
+
+      mobile: true,
+
+      email: true,
+
+      floorNumber: true,
+
+      unitNumber: true,
+
+      role: true,
+
+
+      building: {
+
+        select: {
+
+          buildingId: true,
+
+          buildingName: true,
+
+          postalCode: true,
+
+          address: true,
+
+        },
+
+      },
+
+    },
+
+  });
+
+
+
+  if (!profile) {
+
+    throw new Error(
+      "کاربر پیدا نشد."
+    );
+
+  }
+
+
+
+  return profile;
+
+
+};
+
+export const updateUserProfile = async (user, data) => {
+
+
+  const allowedFields = {
+
+    fullName: data.fullName,
+
+    email: data.email,
+
+    floorNumber: data.floorNumber,
+
+    unitNumber: data.unitNumber,
+
+  };
+
+
+
+  // حذف فیلدهای undefined
+  Object.keys(allowedFields).forEach(
+    key => {
+
+      if (
+        allowedFields[key] === undefined
+      ) {
+
+        delete allowedFields[key];
+
+      }
+
+    }
+  );
+
+
+
+  const updatedUser =
+    await prisma.user.update({
+
+
+      where: {
+
+        userId: user.userId,
+
+      },
+
+
+      data: allowedFields,
+
+
+      select: {
+
+        userId: true,
+
+        fullName: true,
+
+        mobile: true,
+
+        email: true,
+
+        floorNumber: true,
+
+        unitNumber: true,
+
+        role: true,
+
+
+        building: {
+
+          select: {
+
+            buildingName: true,
+
+            postalCode: true,
+
+            address: true,
+
+          },
+
+        },
+
+      },
+
+
+    });
+
+
+
+  return updatedUser;
+
+
+};
+
+export const getManagerPaymentInfo = async (user) => {
+
+
+  const dbUser =
+    await prisma.user.findUnique({
+
+      where: {
+
+        userId: user.userId,
+
+      },
+
+      select: {
+
+        role: true,
+
+        paymentCardNumber: true,
+
+        paymentCardHolder: true,
+
+      },
+
+    });
+
+
+  if (!dbUser) {
+
+    throw new Error(
+      "کاربر پیدا نشد."
+    );
+
+  }
+
+
+  if (
+    dbUser.role !== "PURCHASE_MANAGER"
+  ) {
+
+    throw new Error(
+      "فقط مسئول خرید به این بخش دسترسی دارد."
+    );
+
+  }
+
+
+  return {
+
+    paymentCardNumber:
+      dbUser.paymentCardNumber,
+
+    paymentCardHolder:
+      dbUser.paymentCardHolder,
+
+  };
+
+
+};
+
+
+export const updateManagerPaymentInfo = async (
+  user,
+  data
+) => {
+
+
+  const dbUser =
+    await prisma.user.findUnique({
+
+      where: {
+
+        userId: user.userId
+
+      },
+
+    });
+
+
+  if (!dbUser) {
+
+    throw new Error(
+      "کاربر پیدا نشد."
+    );
+
+  }
+
+
+  if (
+    dbUser.role !== "PURCHASE_MANAGER"
+  ) {
+
+    throw new Error(
+      "فقط مسئول خرید می‌تواند اطلاعات کارت را تغییر دهد."
+    );
+
+  }
+
+
+  const updatedUser =
+    await prisma.user.update({
+
+      where: {
+
+        userId: user.userId,
+
+      },
+
+
+      data: {
+
+
+        paymentCardNumber:
+          data.paymentCardNumber,
+
+
+        paymentCardHolder:
+          data.paymentCardHolder,
+
+
+      },
+
+
+      select: {
+
+
+        paymentCardNumber: true,
+
+        paymentCardHolder: true,
+
+
+      }
+
+
+    });
+
+
+  return updatedUser;
+
 
 };

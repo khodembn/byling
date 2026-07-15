@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import api from "../api/axios";
-import "../styles/login.css";
+import api from "../../api/axios";
+import "../../styles/login.css";
 
 export default function Register() {
 

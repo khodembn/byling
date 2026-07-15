@@ -1,0 +1,476 @@
+/* =========================
+   Manager Payments Page
+========================= */
+
+
+.payments-page {
+
+
+    min-height: 100vh;
+
+
+    padding: 40px 25px;
+
+
+    background: #0f2d44;
+
+
+    color: white;
+
+
+    font-family: "Vazirmatn", "Tahoma", sans-serif;
+
+
+}
+
+
+
+
+/* =========================
+   HEADER
+========================= */
+
+
+.page-header {
+
+
+    display: flex;
+
+
+    justify-content: space-between;
+
+
+    align-items: center;
+
+
+    margin-bottom: 30px;
+
+
+}
+
+
+
+.page-header h1 {
+
+
+    color: white;
+
+
+    font-size: 32px;
+
+
+    font-weight: 800;
+
+
+}
+
+
+
+
+
+
+/* =========================
+   EMPTY BOX
+========================= */
+
+
+.empty-box {
+
+
+    background: rgba(255, 255, 255, .08);
+
+
+    backdrop-filter: blur(20px);
+
+
+    border-radius: 20px;
+
+
+    padding: 30px;
+
+
+    text-align: center;
+
+
+    color: #d5dbe3;
+
+
+    border:
+
+        1px solid rgba(255, 255, 255, .15);
+
+
+    box-shadow:
+
+
+        0 20px 40px rgba(0, 0, 0, .25);
+
+
+}
+
+
+
+
+
+
+/* =========================
+   TABLE
+========================= */
+
+
+.payments-table {
+
+
+    width: 100%;
+
+
+    border-collapse: collapse;
+
+
+    background: rgba(255, 255, 255, .08);
+
+
+    backdrop-filter: blur(20px);
+
+
+    border-radius: 25px;
+
+
+    overflow: hidden;
+
+
+    box-shadow:
+
+
+        0 25px 50px rgba(0, 0, 0, .3);
+
+
+}
+
+
+
+
+
+.payments-table th {
+
+
+    padding: 18px;
+
+
+    background: #16364e;
+
+
+    color: #FFD54F;
+
+
+    font-size: 15px;
+
+
+    text-align: center;
+
+
+}
+
+
+
+
+
+
+.payments-table td {
+
+
+    padding: 16px;
+
+
+    text-align: center;
+
+
+    color: white;
+
+
+    border-bottom:
+
+        1px solid rgba(255, 255, 255, .12);
+
+
+}
+
+
+
+
+
+
+.payments-table tbody tr {
+
+
+    transition: .3s;
+
+
+}
+
+
+
+
+
+.payments-table tbody tr:hover {
+
+
+    background: rgba(255, 255, 255, .08);
+
+
+}
+
+
+
+
+
+
+/* =========================
+   STATUS
+========================= */
+
+
+.status {
+
+
+    display: inline-flex;
+
+
+    align-items: center;
+
+
+    justify-content: center;
+
+
+    padding: 8px 15px;
+
+
+    border-radius: 20px;
+
+
+    font-size: 13px;
+
+
+    font-weight: 700;
+
+
+}
+
+
+
+
+
+.status.pending {
+
+
+    background: rgba(255, 193, 7, .18);
+
+
+    color: #ffd54f;
+
+
+    border:
+
+        1px solid rgba(255, 213, 79, .35);
+
+
+}
+
+
+
+
+
+.status.approved {
+
+
+    background: rgba(39, 174, 96, .18);
+
+
+    color: #5dff9b;
+
+
+    border:
+
+        1px solid rgba(39, 174, 96, .35);
+
+
+}
+
+
+
+
+
+.status.rejected {
+
+
+    background: rgba(255, 82, 82, .18);
+
+
+    color: #ff8b8b;
+
+
+    border:
+
+        1px solid rgba(255, 82, 82, .35);
+
+
+}
+
+
+
+
+
+
+/* =========================
+   DETAILS BUTTON
+========================= */
+
+
+.details-btn {
+
+
+    background: #2fa4ff;
+
+
+    color: white;
+
+
+    border: none;
+
+
+    padding: 10px 22px;
+
+
+    border-radius: 13px;
+
+
+    font-weight: 800;
+
+
+    cursor: pointer;
+
+
+    transition: .3s;
+
+
+}
+
+
+
+
+
+.details-btn:hover {
+
+
+    background: #1687db;
+
+
+    transform: translateY(-2px);
+
+
+    box-shadow:
+
+
+        0 10px 25px rgba(47, 164, 255, .35);
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   LOADING
+========================= */
+
+
+.payments-page h2 {
+
+
+    color: white;
+
+
+    text-align: center;
+
+
+    margin-top: 50px;
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+
+@media(max-width:900px) {
+
+
+    .page-header {
+
+
+        flex-direction: column;
+
+
+        align-items: flex-start;
+
+
+        gap: 15px;
+
+
+    }
+
+
+
+    .payments-table {
+
+
+        min-width: 850px;
+
+
+        display: block;
+
+
+        overflow-x: auto;
+
+
+    }
+
+
+}
+
+
+
+@media(max-width:600px) {
+
+
+    .payments-page {
+
+
+        padding: 25px 15px;
+
+
+    }
+
+
+
+    .page-header h1 {
+
+
+        font-size: 26px;
+
+
+    }
+
+
+
+}

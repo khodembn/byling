@@ -1,0 +1,276 @@
+.product-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin: 25px 0 20px;
+
+}
+
+
+
+.product-header h2 {
+
+    color: white;
+
+    font-size: 24px;
+
+    margin: 0;
+
+}
+
+
+
+
+
+
+.add-product-btn {
+
+    background: #1976d2;
+
+    color: white;
+
+    border: none;
+
+    padding: 12px 22px;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+    transition: .3s;
+
+}
+
+
+
+.add-product-btn:hover {
+
+    background: #1565c0;
+
+    transform: translateY(-2px);
+
+}
+
+
+
+
+
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    background: #234d6c;
+
+    border-radius: 16px;
+
+    overflow: hidden;
+
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .25);
+
+}
+
+
+
+thead {
+
+    background: #16384f;
+
+}
+
+
+
+th {
+
+    padding: 15px;
+
+    color: white;
+
+    font-size: 15px;
+
+    text-align: center;
+
+}
+
+
+
+td {
+
+    padding: 14px;
+
+    color: white;
+
+    text-align: center;
+
+    border-bottom: 1px solid rgba(255, 255, 255, .12);
+
+}
+
+
+
+
+
+tbody tr {
+
+    transition: .3s;
+
+}
+
+
+
+tbody tr:hover {
+
+    background: rgba(255, 255, 255, .08);
+
+}
+
+
+
+
+
+
+.product-actions {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 8px;
+
+}
+
+
+
+.product-actions button {
+
+    border: none;
+
+    padding: 8px 14px;
+
+    border-radius: 9px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    transition: .3s;
+
+}
+
+
+
+
+
+
+.edit-product-btn {
+
+    background: #ffc107;
+
+    color: #222;
+
+}
+
+
+
+.edit-product-btn:hover {
+
+    background: #ffca28;
+
+    transform: scale(1.05);
+
+}
+
+
+
+
+
+
+.delete-product-btn {
+
+    background: #e53935;
+
+    color: white;
+
+}
+
+
+
+.delete-product-btn:hover {
+
+    background: #c62828;
+
+    transform: scale(1.05);
+
+}
+
+
+
+
+
+
+
+.empty-products {
+
+    background: #234d6c;
+
+    color: white;
+
+    padding: 30px;
+
+    text-align: center;
+
+    border-radius: 16px;
+
+    font-size: 18px;
+
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .2);
+
+}
+
+
+
+
+
+
+
+@media(max-width:768px) {
+
+
+    .product-header {
+
+        flex-direction: column;
+
+        gap: 15px;
+
+        align-items: stretch;
+
+    }
+
+
+    table {
+
+        display: block;
+
+        overflow-x: auto;
+
+        white-space: nowrap;
+
+    }
+
+
+    .product-actions {
+
+        flex-direction: column;
+
+    }
+
+
+}

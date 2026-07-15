@@ -6,38 +6,49 @@ const generateSlug = (text) => {
   return text
     .toLowerCase()
     .trim()
-    .replace(/\s+/g, "-") 
+    .replace(/\s+/g, "-")
     .replace(/[^\w\u0600-\u06FF-]/g, "")
 };
 
-export const createProduct = async (data) => {
+;
+
+export const createProduct = async (req) => {
+  const data = req.body;
+
   const name = data.productName.trim();
 
-   const slug = generateSlug(name);
+  const slug = generateSlug(name);
 
   const existing = await prisma.product.findFirst({
-    where: { slug },
+    where: {
+      slug,
+    },
   });
 
   if (existing) {
     throw new Error("این محصول قبلاً ثبت شده است");
   }
 
-// ساخت محصول
+  const imageUrl = req.file
+    ? `/uploads/products/${req.file.filename}`
+    : null;
 
   const product = await prisma.product.create({
     data: {
       productName: name,
       slug,
       unit: data.unit,
-      weightPerUnit: data.weightPerUnit,
+      weightPerUnit: Number(data.weightPerUnit),
       description: data.description,
-      imageUrl: data.imageUrl,
+      imageUrl: req.file
+        ? `/uploads/products/${req.file.filename}`
+        : null,
     },
   });
 
   return {
     success: true,
+    message: "محصول با موفقیت ایجاد شد.",
     product,
   };
 };

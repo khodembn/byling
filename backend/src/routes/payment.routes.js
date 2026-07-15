@@ -3,9 +3,13 @@ import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { roleMiddleware } from "../middlewares/role.middleware.js";
 import upload from "../middlewares/upload.middleware.js";
 import * as paymentController from "../controllers/payment.controller.js";
-import {getPaymentPreview,
-        approvePayment,
-        rejectPayment
+import {
+  getPaymentPreview,
+  approvePayment,
+  rejectPayment,
+  getMyPayments,
+  getPaymentDetails,
+  getManagerPayments
 } from "../controllers/payment.controller.js";
 
 
@@ -13,7 +17,7 @@ import {getPaymentPreview,
 const router = express.Router();
 
 router.post(
-  "/upload-receipt/:campaignId",
+  "/upload-receipt/:orderId",
   authMiddleware,
   upload.single("receiptImage"),
   paymentController.uploadReceipt
@@ -25,16 +29,43 @@ router.get(
   roleMiddleware("RESIDENT"),
   getPaymentPreview
 );
+router.get(
+  "/my-payments",
+  authMiddleware,
+  getMyPayments
+);
 
 router.get(
 
-"/pending",
-authMiddleware,
-roleMiddleware("PURCHASE_MANAGER"),
-paymentController.getPendingPayments
+  "/manager",
+
+  authMiddleware,
+
+  roleMiddleware("PURCHASE_MANAGER"),
+
+  getManagerPayments
 
 );
 
+router.get(
+
+  "/pending",
+  authMiddleware,
+  roleMiddleware("PURCHASE_MANAGER"),
+  paymentController.getPendingPayments
+
+);
+router.get(
+
+  "/:paymentId",
+
+  authMiddleware,
+
+  roleMiddleware("PURCHASE_MANAGER"),
+
+  getPaymentDetails
+
+);
 router.patch(
   "/:paymentId/approve",
   authMiddleware,

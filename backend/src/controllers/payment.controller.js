@@ -9,7 +9,7 @@ export const uploadReceipt = async (
 
     const result =
       await paymentService.uploadReceipt(
-        Number(req.params.campaignId),
+        Number(req.params.orderId),
         req.user,
         req.body,
         req.file
@@ -32,23 +32,52 @@ export const uploadReceipt = async (
 
 };
 
-
-
-export const getPaymentPreview =
-async (req, res, next) => {
+export const getManagerPayments = async (req, res, next) => {
 
   try {
 
-    const data =
-      await paymentService.getPaymentPreview(
+    const payments = await paymentService.getManagerPayments(
 
-        req.user,
+      req.user
 
-        req.params.campaignId
+    );
 
-      );
+    res.json({
 
-    res.status(200).json({
+      success: true,
+
+      count: payments.length,
+
+      payments,
+
+    });
+
+  } catch (error) {
+
+    res.status(400).json({
+
+      success: false,
+
+      message: error.message,
+
+    });
+
+  }
+};
+
+export const getPaymentDetails = async (req, res) => {
+
+  try {
+
+    const data = await paymentService.getPaymentById(
+
+      req.params.paymentId,
+
+      req.user
+
+    );
+
+    res.json({
 
       success: true,
 
@@ -56,9 +85,35 @@ async (req, res, next) => {
 
     });
 
+  } catch (error) {
+
+    res.status(400).json({
+
+      success: false,
+
+      message: error.message,
+
+    });
+
   }
 
-catch (err) {
+};
+
+export const getMyPayments = async (req, res, next) => {
+
+  try {
+
+    const payments = await paymentService.getMyPayments(req.user);
+
+    res.status(200).json({
+
+      success: true,
+
+      data: payments,
+
+    });
+
+  } catch (err) {
     res.status(400).json({
       success: false,
       message: err.message,
@@ -67,22 +122,55 @@ catch (err) {
 
 };
 
-export const getPendingPayments = async (req,res,next)=>{
+export const getPaymentPreview =
+  async (req, res, next) => {
 
-    try{
+    try {
 
-        const result =
-        await paymentService.getPendingPayments(req.user);
+      const data =
+        await paymentService.getPaymentPreview(
 
-        res.json({
+          req.user,
 
-            success:true,
+          req.params.campaignId
 
-            ...result
+        );
 
-        });
+      res.status(200).json({
+
+        success: true,
+
+        data,
+
+      });
 
     }
+
+    catch (err) {
+      res.status(400).json({
+        success: false,
+        message: err.message,
+      });
+    }
+
+  };
+
+export const getPendingPayments = async (req, res, next) => {
+
+  try {
+
+    const result =
+      await paymentService.getPendingPayments(req.user);
+
+    res.json({
+
+      success: true,
+
+      ...result
+
+    });
+
+  }
 
   catch (err) {
     res.status(400).json({
@@ -95,32 +183,32 @@ export const getPendingPayments = async (req,res,next)=>{
 
 
 export const approvePayment =
-async(req,res,next)=>{
+  async (req, res, next) => {
 
-try{
+    try {
 
-const result=
-await paymentService.approvePayment(
+      const result =
+        await paymentService.approvePayment(
 
-req.params.paymentId,
+          req.params.paymentId,
 
-req.user
+          req.user
 
-);
+        );
 
-res.json(result);
+      res.json(result);
 
-}
+    }
 
- catch (err) {
-    res.status(400).json({
-      success: false,
-      message: err.message,
-    });
-  }
+    catch (err) {
+      res.status(400).json({
+        success: false,
+        message: err.message,
+      });
+    }
 
 
-};
+  };
 
 export const rejectPayment = async (
   req,
@@ -143,7 +231,7 @@ export const rejectPayment = async (
 
     res.json(result);
 
-  } 
+  }
   catch (err) {
     res.status(400).json({
       success: false,

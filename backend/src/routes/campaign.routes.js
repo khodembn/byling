@@ -6,15 +6,19 @@ import {
   getAllCampaigns,
   getCampaignById,
   getMyCampaigns,
-  getCampaignProducts,
+
   requestPayment,
-  updatePaymentInfo,
   startPurchasing,
   readyForDelivery,
   completeCampaign,
   cancelUnpaidOrders,
   reopenCampaign,
-  checkPurchasingController
+  checkPurchasingController,
+  getResidentCampaigns,
+  updateCampaignController,
+  deleteCampaignController,
+
+
 
 } from "../controllers/campaign.controller.js";
 
@@ -26,6 +30,29 @@ router.post(
   roleMiddleware("PURCHASE_MANAGER"),
   createCampaign
 );
+router.get(
+  "/resident-campaigns",
+  authMiddleware,
+  roleMiddleware("RESIDENT"),
+  getResidentCampaigns
+);
+
+
+router.patch(
+  "/:campaignId",
+  authMiddleware,
+  roleMiddleware("PURCHASE_MANAGER"),
+  updateCampaignController
+);
+
+
+router.delete(
+  "/:campaignId",
+  authMiddleware,
+  roleMiddleware("PURCHASE_MANAGER"),
+  deleteCampaignController
+);
+
 
 
 router.get("/", getAllCampaigns);
@@ -34,14 +61,9 @@ router.get(
   authMiddleware,
   getMyCampaigns
 );
-router.get(
-  "/:id/products",
-  authMiddleware,
-  getCampaignProducts
-);
 
 router.get(
-  "/:id", 
+  "/:id",
   authMiddleware,
   getCampaignById
 );
@@ -53,12 +75,15 @@ router.post(
 );
 
 
-router.patch(
-    "/:campaignId/payment-info",
-    authMiddleware,
-    roleMiddleware("PURCHASE_MANAGER"),
-    updatePaymentInfo
-);
+/*router.patch(
+  "/:campaignId/payment-info",
+  authMiddleware,
+  roleMiddleware("PURCHASE_MANAGER"),
+  updatePaymentInfo
+);*/
+
+
+
 router.post(
   "/:campaignId/check-purchasing",
   authMiddleware,
@@ -99,8 +124,10 @@ router.patch(
   "/:campaignId/reopen",
   authMiddleware,
   roleMiddleware("PURCHASE_MANAGER"),
- reopenCampaign
+  reopenCampaign
 );
+
+
 
 
 export default router;

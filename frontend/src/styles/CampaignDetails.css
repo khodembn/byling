@@ -1,0 +1,382 @@
+/* صفحه اصلی */
+
+.campaign-details-page {
+
+    min-height: 100vh;
+    background: #1d415d;
+    padding: 30px;
+    direction: rtl;
+    color: white;
+    font-family: Vazirmatn, Tahoma, sans-serif;
+
+}
+
+
+/* عنوان صفحه */
+
+.campaign-details-page>h1 {
+
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 32px;
+
+}
+
+
+
+/* کارت اطلاعات کمپین */
+
+.campaign-info-card {
+
+    background: #234d6c;
+
+    border-radius: 18px;
+
+    padding: 25px;
+
+    margin-bottom: 35px;
+
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+
+}
+
+
+
+/* عنوان کمپین */
+
+.campaign-info-card h2 {
+
+    margin-bottom: 20px;
+
+    font-size: 28px;
+
+    color: #fff;
+
+}
+
+
+
+
+/* متن ها */
+
+.campaign-info-card p {
+
+    background: rgba(255, 255, 255, 0.08);
+
+    padding: 12px 15px;
+
+    border-radius: 10px;
+
+    margin: 12px 0;
+
+    font-size: 16px;
+
+}
+
+
+
+
+/* دکمه ها */
+
+.campaign-info-card button {
+
+
+    border: none;
+
+    padding: 10px 18px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    margin: 5px;
+
+    font-size: 15px;
+
+    transition: .3s;
+
+}
+
+
+
+/* برگشت */
+
+.back-btn {
+
+    background: #607d8b;
+
+    color: white;
+
+}
+
+
+
+.back-btn:hover {
+
+    background: #78909c;
+
+}
+
+
+
+
+/* ویرایش */
+
+.edit-btn {
+
+    background: #ffc107;
+
+    color: #222;
+
+}
+
+
+
+.edit-btn:hover {
+
+    background: #ffca28;
+
+}
+
+
+
+/* حذف */
+
+.delete-btn {
+
+    background: #e53935;
+
+    color: white;
+
+}
+
+
+
+.delete-btn:hover {
+
+    background: #c62828;
+
+}
+
+
+
+/* درخواست پرداخت */
+
+.payment-request-btn {
+
+
+    background: #00c853;
+
+    color: white;
+
+    width: 220px;
+
+}
+
+
+
+.payment-request-btn:hover {
+
+    background: #00a844;
+
+}
+
+
+
+/* وضعیت */
+
+.campaign-info-card p:first-of-type {
+
+    font-weight: bold;
+
+}
+
+
+
+
+/* جدول محصولات */
+
+.product-header {
+
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+
+}
+
+
+
+.product-header h2 {
+
+    font-size: 24px;
+
+}
+
+
+
+.product-header button {
+
+
+    background: #1976d2;
+
+    color: white;
+
+    border: none;
+
+    padding: 12px 20px;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+
+}
+
+
+
+.product-header button:hover {
+
+    background: #1565c0;
+
+}
+
+
+
+
+
+/* جدول */
+
+table {
+
+
+    width: 100%;
+
+    background: #234d6c;
+
+    border-radius: 15px;
+
+    overflow: hidden;
+
+    border-collapse: collapse;
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .2);
+
+}
+
+
+
+thead {
+
+
+    background: #16384f;
+
+}
+
+
+
+th {
+
+
+    padding: 15px;
+
+    color: #fff;
+
+    font-size: 15px;
+
+}
+
+
+
+td {
+
+
+    padding: 14px;
+
+    text-align: center;
+
+    border-bottom: 1px solid rgba(255, 255, 255, .1);
+
+}
+
+
+
+
+tbody tr {
+
+
+    transition: .3s;
+
+}
+
+
+
+tbody tr:hover {
+
+
+    background: rgba(255, 255, 255, .08);
+
+}
+
+
+
+
+
+/* مودال ها اگر کلاس عمومی دارند */
+
+.modal {
+
+
+    background: #234d6c;
+
+    color: white;
+
+    border-radius: 15px;
+
+}
+
+
+
+/* موبایل */
+
+@media(max-width:768px) {
+
+
+    .campaign-details-page {
+
+        padding: 15px;
+
+    }
+
+
+    .campaign-info-card {
+
+        padding: 15px;
+
+    }
+
+
+    .product-header {
+
+        flex-direction: column;
+
+        gap: 15px;
+
+    }
+
+
+    table {
+
+        font-size: 13px;
+
+        display: block;
+
+        overflow-x: auto;
+
+    }
+
+
+}

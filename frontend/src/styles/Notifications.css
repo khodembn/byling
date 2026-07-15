@@ -1,0 +1,499 @@
+/* =========================
+   Notifications Page
+========================= */
+
+
+.notifications-page {
+
+
+    min-height: 100vh;
+
+
+    padding: 40px 25px;
+
+
+    background: #0f2d44;
+
+
+    color: white;
+
+
+    font-family: "Vazirmatn", "Tahoma", sans-serif;
+
+
+}
+
+
+
+
+/* =========================
+   TITLE
+========================= */
+
+
+.notifications-page h1 {
+
+
+    color: white;
+
+
+    font-size: 32px;
+
+
+    font-weight: 800;
+
+
+    margin-bottom: 30px;
+
+
+}
+
+
+
+
+/* Empty */
+
+.notifications-page>p {
+
+
+    background: rgba(255, 255, 255, .08);
+
+
+    backdrop-filter: blur(20px);
+
+
+    padding: 25px;
+
+
+    border-radius: 20px;
+
+
+    color: #d5dbe3;
+
+
+    text-align: center;
+
+
+    border:
+
+        1px solid rgba(255, 255, 255, .15);
+
+
+}
+
+
+
+
+
+/* =========================
+   LIST
+========================= */
+
+
+.notifications-list {
+
+
+    display: flex;
+
+
+    flex-direction: column;
+
+
+    gap: 20px;
+
+
+    max-width: 850px;
+
+
+}
+
+
+
+
+
+/* =========================
+   CARD
+========================= */
+
+
+.notification-card {
+
+
+    background: rgba(255, 255, 255, .08);
+
+
+    backdrop-filter: blur(24px);
+
+
+    border-radius: 24px;
+
+
+    padding: 25px;
+
+
+    border:
+
+        1px solid rgba(255, 255, 255, .18);
+
+
+    box-shadow:
+
+
+        0 25px 50px rgba(0, 0, 0, .3);
+
+
+    transition: .3s;
+
+
+}
+
+
+
+
+.notification-card:hover {
+
+
+    transform: translateY(-4px);
+
+
+    background: rgba(255, 255, 255, .12);
+
+
+}
+
+
+
+
+
+/* Unread */
+
+.notification-card.unread {
+
+
+    border-right: 5px solid #FFD54F;
+
+
+}
+
+
+
+
+
+/* Read */
+
+.notification-card.read {
+
+
+    opacity: .7;
+
+
+    border-right: 5px solid #708090;
+
+
+}
+
+
+
+
+
+
+/* =========================
+   HEADER
+========================= */
+
+
+.notification-header {
+
+
+    display: flex;
+
+
+    justify-content: space-between;
+
+
+    align-items: center;
+
+
+    gap: 15px;
+
+
+    margin-bottom: 18px;
+
+
+}
+
+
+
+.notification-header h3 {
+
+
+    color: white;
+
+
+    font-size: 20px;
+
+
+    font-weight: 700;
+
+
+    margin: 0;
+
+
+    display: flex;
+
+
+    align-items: center;
+
+
+    gap: 10px;
+
+
+}
+
+
+
+
+
+/* New Badge */
+
+
+.notification-header span {
+
+
+    background: #FFD54F;
+
+
+    color: #143447;
+
+
+    padding: 6px 14px;
+
+
+    border-radius: 20px;
+
+
+    font-size: 12px;
+
+
+    font-weight: 800;
+
+
+    box-shadow:
+
+
+        0 5px 15px rgba(255, 213, 79, .3);
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+
+.notification-message {
+
+
+    color: #d5dbe3;
+
+
+    line-height: 2;
+
+
+    font-size: 15px;
+
+
+    margin-bottom: 25px;
+
+
+}
+
+
+
+
+
+
+/* =========================
+   FOOTER
+========================= */
+
+
+.notification-footer {
+
+
+    display: flex;
+
+
+    justify-content: space-between;
+
+
+    align-items: center;
+
+
+}
+
+
+
+
+
+.notification-footer small {
+
+
+    color: #b9c8d5;
+
+
+    font-size: 13px;
+
+
+}
+
+
+
+
+
+
+/* =========================
+   READ BUTTON
+========================= */
+
+
+.notification-footer button {
+
+
+    background: #FFD54F;
+
+
+    color: #143447;
+
+
+    border: none;
+
+
+    padding: 10px 22px;
+
+
+    border-radius: 14px;
+
+
+    font-weight: 800;
+
+
+    cursor: pointer;
+
+
+    transition: .3s;
+
+
+}
+
+
+
+
+
+.notification-footer button:hover {
+
+
+    transform: translateY(-2px);
+
+
+    box-shadow:
+
+
+        0 10px 25px rgba(255, 213, 79, .35);
+
+
+}
+
+
+
+
+
+
+/* =========================
+   LOADING
+========================= */
+
+
+.notifications-page h2 {
+
+
+    color: white;
+
+
+    text-align: center;
+
+
+    margin-top: 50px;
+
+
+}
+
+
+
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+
+@media(max-width:600px) {
+
+
+    .notifications-page {
+
+
+        padding: 25px 15px;
+
+
+    }
+
+
+
+    .notifications-page h1 {
+
+
+        font-size: 26px;
+
+
+    }
+
+
+
+    .notification-header {
+
+
+        flex-direction: column;
+
+
+        align-items: flex-start;
+
+
+    }
+
+
+
+
+    .notification-footer {
+
+
+        flex-direction: column;
+
+
+        gap: 15px;
+
+
+        align-items: flex-start;
+
+
+    }
+
+
+
+}

@@ -22,6 +22,33 @@ export const createOrUpdateOrder = async (req, res) => {
 };
 
 
+
+
+
+export const getCart = async (req, res) => {
+  try {
+
+    const cart = await service.getCart(
+      req.user.userId
+    );
+
+
+    res.json({
+      success: true,
+      data: cart,
+    });
+
+
+  } catch (err) {
+
+    res.status(400).json({
+      success: false,
+      message: err.message,
+    });
+
+  }
+};
+
 export const getMyOrder = async (
   req,
   res
@@ -68,22 +95,24 @@ export const submitOrder = async (
 
   }
 };
-
-export const cancelSubmittedOrderController =
-async (req, res) => {
+export const getMyOrdersController = async (
+  req,
+  res,
+  next
+) => {
 
   try {
 
-    const result =
-      await service.cancelSubmittedOrder(
+    const orders =
+      await service.getMyOrders(req.user);
 
-        req.user,
+    res.json({
 
-        req.params.orderId
+      success: true,
 
-      );
+      data: orders,
 
-    res.json(result);
+    });
 
   } catch (err) {
 
@@ -98,6 +127,108 @@ async (req, res) => {
   }
 
 };
+export const getManagerOrders = async (req, res, next) => {
+
+  try {
+
+    const orders = await service.getManagerOrders(
+
+      req.user
+
+    );
+
+    res.json({
+
+      success: true,
+
+      count: orders.length,
+
+      orders,
+
+    });
+
+  } catch (err) {
+
+    res.status(400).json({
+
+      success: false,
+
+      message: err.message,
+
+    });
+
+  }
+
+};
+
+export const getManagerOrderDetails = async (
+  req,
+  res,
+  next
+) => {
+
+  try {
+
+    const data =
+      await service.getManagerOrderDetails(
+
+        req.params.orderId,
+
+        req.user
+
+      );
+
+    res.json({
+
+      success: true,
+
+      data,
+
+    });
+
+  } catch (err) {
+
+    res.status(400).json({
+
+      success: false,
+
+      message: err.message,
+
+    });
+
+  }
+
+};
+
+export const cancelSubmittedOrderController =
+  async (req, res) => {
+
+    try {
+
+      const result =
+        await service.cancelSubmittedOrder(
+
+          req.user,
+
+          req.params.orderId
+
+        );
+
+      res.json(result);
+
+    } catch (err) {
+
+      res.status(400).json({
+
+        success: false,
+
+        message: err.message,
+
+      });
+
+    }
+
+  };
 
 
 export const getOrderPreview = async (
