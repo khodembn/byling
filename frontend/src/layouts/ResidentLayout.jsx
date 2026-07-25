@@ -16,7 +16,7 @@ import useLatestNotification
 import "../styles/navbar.css";
 import "../styles/layout.css";
 import "../styles/sidebar.css";
-import "../styles/notification.css";
+import "../styles/Notifications.css";
 
 
 
