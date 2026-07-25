@@ -429,7 +429,7 @@ export const completeCampaign = async (
 
         req.params.campaignId,
 
-        req.body.message
+
 
       );
 

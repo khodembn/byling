@@ -1,6 +1,10 @@
 import prisma from "../prisma/prisma.js";
 
-export const addProductToCampaign = async (campaignId, data) => {
+export const addProductToCampaign = async (
+  campaignId,
+  user,
+  data
+) => {
   const {
     productId,
     marketPriceSnapshot,

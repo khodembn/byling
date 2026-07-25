@@ -2,78 +2,77 @@ import "../../styles/home.css";
 import heroImage from "../../assets/images/hero.png";
 import { Link } from "react-router-dom";
 
-
-
 export default function Home() {
   return (
     <div className="home">
 
-      {/* NAVBAR */}
+      {/* Header */}
 
-      <nav className="navbar">
+      <header className="navbar">
 
         <div className="logo">
           By<span>ling</span>
         </div>
 
-        <ul className="nav-links">
-          <li>خانه</li>
-          <li>خریدها</li>
-          <li>اطلاعیه‌ها</li>
-          <li>سبد خرید</li>
-        </ul>
-        <Link to="/register">
-        <button className="login-btn">
-          ورود
-        </button>
-</Link>
-        
-      </nav>
+        <div className="auth-buttons">
 
-      {/* HERO */}
-
-      <section className="hero"
-        style={{
-    backgroundImage: `
-      linear-gradient(
-        rgba(15,45,68,.82),
-        rgba(15,45,68,.82)
-      ),
-      url(${heroImage})
-    `
-  }}
-  >
-
-        <div className="hero-overlay">
-
-          <div className="hero-content">
-
-            <span className="hero-badge">
-              خرید گروهی هوشمند
-            </span>
-
-            <h1>
-              خرید گروهی
-              <br />
-              برای اهالی ساختمان
-            </h1>
-
-            <p>
-              با ثبت سفارش همسایه‌ها، قیمت کالا به قیمت عمده می‌رسد
-              و هزینه‌ها بین همه تقسیم می‌شود.
-            </p>
-
-            <button className="hero-btn">
-              شروع خرید
+          <Link to="/login">
+            <button className="login-btn">
+              ورود
             </button>
+          </Link>
 
-          </div>
+          <Link to="/register">
+            <button className="register-btn">
+              ثبت نام
+            </button>
+          </Link>
+
+        </div>
+
+      </header>
+
+      {/* Hero */}
+
+      <section
+        className="hero"
+        style={{
+          backgroundImage: `
+                    linear-gradient(rgba(15,45,68,.85),rgba(15,45,68,.85)),
+                    url(${heroImage})
+                `
+        }}
+      >
+
+        <div className="hero-content">
+
+          <span className="hero-badge">
+            خرید گروهی هوشمند
+          </span>
+
+          <h1>
+            خرید گروهی
+            <br />
+            برای ساکنین ساختمان
+          </h1>
+
+          <p>
+            همسایه‌ها سفارش خود را ثبت می‌کنند،
+            با رسیدن به حد نصاب کالا با قیمت عمده خریداری
+            شده و هزینه ارسال بین همه تقسیم می‌شود.
+          </p>
+
+          <Link to="/register">
+            <button className="hero-btn">
+              شروع رایگان
+            </button>
+          </Link>
 
         </div>
 
       </section>
 
-      {/* FEATURES */}
+      {/* Features */}
 
       <section className="features">
 
@@ -83,25 +82,25 @@ export default function Home() {
 
           <div className="feature-card">
             <div className="icon">💰</div>
-            <h3>کاهش هزینه</h3>
+            <h3>صرفه‌جویی در هزینه</h3>
             <p>
-              خرید مستقیم با قیمت عمده
-            </p>
-          </div>
-
-          <div className="feature-card">
-            <div className="icon">🚚</div>
-            <h3>ارسال یکجا</h3>
-            <p>
-              تحویل درب ساختمان
+              خرید کالا با قیمت عمده
             </p>
           </div>
 
           <div className="feature-card">
             <div className="icon">👥</div>
-            <h3>خرید جمعی</h3>
+            <h3>خرید گروهی</h3>
             <p>
-              همکاری بین همسایه‌ها
+              مشارکت همه ساکنین ساختمان
+            </p>
+          </div>
+
+          <div className="feature-card">
+            <div className="icon">🚚</div>
+            <h3>تحویل یکجا</h3>
+            <p>
+              ارسال سفارش‌ها به ساختمان
             </p>
           </div>
 
@@ -109,11 +108,11 @@ export default function Home() {
 
       </section>
 
-      {/* STEPS */}
+      {/* Steps */}
 
       <section className="steps">
 
-        <h2>نحوه کار</h2>
+        <h2>نحوه عملکرد</h2>
 
         <div className="steps-grid">
 
@@ -141,7 +140,7 @@ export default function Home() {
 
       </section>
 
-      {/* STATS */}
+      {/* Statistics */}
 
       <section className="stats">
 
@@ -157,7 +156,7 @@ export default function Home() {
 
         <div className="stat-box">
           <h3>30%</h3>
-          <p>صرفه‌جویی متوسط</p>
+          <p>میانگین صرفه‌جویی</p>
         </div>
 
       </section>
@@ -167,16 +166,18 @@ export default function Home() {
       <section className="cta">
 
         <h2>
-          آماده‌ای ارزان‌تر خرید کنی؟
+          آماده‌ای خرید هوشمند را شروع کنی؟
         </h2>
 
-        <button>
-          شروع ثبت سفارش
-        </button>
+        <Link to="/register">
+          <button>
+            ثبت نام رایگان
+          </button>
+        </Link>
 
       </section>
 
-      {/* FOOTER */}
+      {/* Footer */}
 
       <footer className="footer">
 
@@ -185,7 +186,7 @@ export default function Home() {
         </div>
 
         <p>
-          © 2026 تمامی حقوق محفوظ است
+          © 2026 تمامی حقوق محفوظ است.
         </p>
 
       </footer>

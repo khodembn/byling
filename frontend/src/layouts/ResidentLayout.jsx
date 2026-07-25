@@ -22,15 +22,20 @@ import "../styles/Notifications.css";
 
 export default function ResidentLayout() {
 
+  console.log("ResidentLayout Render");
+
+  const notificationHook = useLatestNotification();
+
+  console.log(notificationHook);
 
   const {
     latestNotification,
     closeNotification
   }
     =
-    useLatestNotification();
+    notificationHook;
 
-
+  console.log(useLatestNotification);
 
   return (
 

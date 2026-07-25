@@ -8,7 +8,7 @@ import {
 
 export default function useLatestNotification() {
 
-
+    console.log("Hook executed");
     const [
         latestNotification,
         setLatestNotification

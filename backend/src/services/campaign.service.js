@@ -357,6 +357,12 @@ export const getMyCampaigns = async (user) => {
     },
 
     include: {
+      building: {
+        select: {
+          buildingName: true,
+        },
+      },
+
       manager: {
         select: {
           fullName: true,
@@ -369,7 +375,6 @@ export const getMyCampaigns = async (user) => {
     },
   });
 };
-
 
 
 

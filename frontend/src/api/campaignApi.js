@@ -1,7 +1,7 @@
 import api from "./axios";
 
 export const getCampaigns = async () => {
-  const res = await api.get("/campaign");
+  const res = await api.get("/campaign/my-campaigns");
   return res.data.campaigns;
 };
 
@@ -54,7 +54,7 @@ export const requestPayment = async (
   campaignId,
   paymentDeadline
 ) => {
-  const res = await api.patch(
+  const res = await api.post(
     `/campaign/${campaignId}/request-payment`,
     {
       paymentDeadline
@@ -82,7 +82,7 @@ export const startPurchasing = async (
   const res = await api.patch(
     `/campaign/${campaignId}/start-purchasing`,
     {
-      managerMessage,
+      message: managerMessage,
     }
   );
 

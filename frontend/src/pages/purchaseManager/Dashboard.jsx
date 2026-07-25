@@ -162,19 +162,26 @@ export default function PurchaseManagerDashboard() {
           </li>
         </ul>
       </DashboardSection>
-
       {/* کمپین فعال */}
       <DashboardSection title="کمپین فعال">
-        <h4>{dashboard.activeCampaign.title}</h4>
 
-        <p>{dashboard.activeCampaign.status}</p>
+        {dashboard.activeCampaign ? (
+          <>
+            <h4>{dashboard.activeCampaign.title}</h4>
 
-        <p>
-          مهلت پرداخت:{" "}
-          {new Date(
-            dashboard.activeCampaign.paymentDeadline
-          ).toLocaleDateString("fa-IR")}
-        </p>
+            <p>{dashboard.activeCampaign.status}</p>
+
+            <p>
+              مهلت پرداخت:{" "}
+              {new Date(
+                dashboard.activeCampaign.paymentDeadline
+              ).toLocaleDateString("fa-IR")}
+            </p>
+          </>
+        ) : (
+          <p>در حال حاضر کمپین فعالی وجود ندارد.</p>
+        )}
+
       </DashboardSection>
 
       {/* آخرین سفارش‌ها */}

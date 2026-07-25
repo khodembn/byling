@@ -16,6 +16,7 @@ import ManagerOrders from "./pages/purchaseManager/ManagerOrders";
 import ManagerOrderDetails from "./pages/purchaseManager/ManagerOrderDetails";
 import CampaignManagement from "./pages/purchaseManager/CampaignManagement";
 import ManagerProfile from "./pages/purchaseManager/ManagerProfile";
+import Residents from "./pages/purchaseManager/Residents";
 import ManagerNotifications from "./pages/purchaseManager/ManagerNotifications";
 
 import ResidentLayout from "./layouts/ResidentLayout";
@@ -197,7 +198,10 @@ function App() {
             <ManagerNotifications />
           }
         />
-
+        <Route
+          path="/purchase/residents"
+          element={<Residents />}
+        />
       </Route>
 
 

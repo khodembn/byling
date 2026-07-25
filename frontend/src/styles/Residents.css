@@ -1,0 +1,231 @@
+/* =========================
+   Residents Page
+========================= */
+
+.residents-page {
+
+    min-height: 100vh;
+
+    padding: 40px 25px;
+
+    background: #0f2d44;
+
+    color: white;
+
+    font-family: "Vazirmatn", "Tahoma", sans-serif;
+
+}
+
+/* =========================
+   Header
+========================= */
+
+.residents-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 30px;
+
+    gap: 20px;
+
+    flex-wrap: wrap;
+
+}
+
+.residents-header h1 {
+
+    font-size: 32px;
+
+    font-weight: 800;
+
+}
+
+.residents-count {
+
+    background: #FFD54F;
+
+    color: #143447;
+
+    padding: 10px 18px;
+
+    border-radius: 16px;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 8px 20px rgba(255, 213, 79, .25);
+
+}
+
+/* =========================
+   Table Card
+========================= */
+
+.residents-table-card {
+
+    background: rgba(255, 255, 255, .08);
+
+    backdrop-filter: blur(24px);
+
+    border: 1px solid rgba(255, 255, 255, .18);
+
+    border-radius: 24px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 25px 50px rgba(0, 0, 0, .30);
+
+}
+
+/* =========================
+   Table
+========================= */
+
+.residents-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+.residents-table thead {
+
+    background: rgba(255, 255, 255, .10);
+
+}
+
+.residents-table th {
+
+    padding: 20px;
+
+    color: #FFD54F;
+
+    font-size: 16px;
+
+    font-weight: 800;
+
+    text-align: center;
+
+}
+
+.residents-table td {
+
+    padding: 18px;
+
+    text-align: center;
+
+    color: #eef5fb;
+
+    border-top: 1px solid rgba(255, 255, 255, .08);
+
+}
+
+/* =========================
+   Hover
+========================= */
+
+.residents-table tbody tr {
+
+    transition: .3s;
+
+}
+
+.residents-table tbody tr:hover {
+
+    background: rgba(255, 255, 255, .08);
+
+}
+
+/* =========================
+   Unit Badge
+========================= */
+
+.unit-badge {
+
+    display: inline-block;
+
+    background: #FFD54F;
+
+    color: #143447;
+
+    padding: 6px 14px;
+
+    border-radius: 20px;
+
+    font-weight: 800;
+
+    font-size: 13px;
+
+}
+
+/* =========================
+   Floor Badge
+========================= */
+
+.floor-badge {
+
+    display: inline-block;
+
+    background: rgba(255, 255, 255, .12);
+
+    border: 1px solid rgba(255, 255, 255, .15);
+
+    color: white;
+
+    padding: 6px 14px;
+
+    border-radius: 20px;
+
+    font-weight: 700;
+
+}
+
+/* =========================
+   Mobile
+========================= */
+
+@media(max-width:900px) {
+
+    .residents-table-card {
+
+        overflow-x: auto;
+
+    }
+
+    .residents-table {
+
+        min-width: 750px;
+
+    }
+
+}
+
+@media(max-width:600px) {
+
+    .residents-page {
+
+        padding: 25px 15px;
+
+    }
+
+    .residents-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+    .residents-header h1 {
+
+        font-size: 26px;
+
+    }
+
+}
